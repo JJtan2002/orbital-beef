@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -88,7 +89,7 @@ DATABASES = {
         # 'USER': 'yourusername',
         'USER' : 'postgres.irhdctmkmzjkcbhtumap',
         # 'PASSWORD': 'yourpassword',
-        'PASSWORD' : 'DBcctPUC41ZifH5e',
+        'PASSWORD' : 'pIp0NHGstwoz0jRz',
         # 'HOST': 'localhost',
         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
         'PORT': '5432',
