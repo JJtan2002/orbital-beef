@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -79,13 +80,18 @@ WSGI_APPLICATION = 'cashflow.wsgi.application'
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }"""
+# runserver, makemigrations, migrate   not done 
 DATABASES = {
     'default': {
+        # not sure what is the engine, cannot find relevant info
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cashflow_db',
-        'USER': 'yourusername',
-        'PASSWORD': 'yourpassword',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        # 'USER': 'yourusername',
+        'USER' : 'postgres.irhdctmkmzjkcbhtumap',
+        # 'PASSWORD': 'yourpassword',
+        'PASSWORD' : 'pIp0NHGstwoz0jRz',
+        # 'HOST': 'localhost',
+        'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
         'PORT': '5432',
     }
 }
