@@ -90,7 +90,8 @@ const Login = (props) => {
 
                     <button
                         type="submit"
-                        class="focus:outline-none text-white bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
+                        class="focus:outline-none hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 font-bold rounded-lg text-sm px-5 py-2.5 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
+                        style={{backgroundColor: "#66cccc"}}
                     >
                         Submit
                     </button>
