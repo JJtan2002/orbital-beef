@@ -17,7 +17,7 @@ const App = () => {
   const [email, setEmail] = useState("");
 
   return (
-    <div className="md:h-screen bg-purple-100">
+    <div className="md:h-screen #d1fae5">
       <BrowserRouter>
         <ToastContainer />
         <AppNavBar

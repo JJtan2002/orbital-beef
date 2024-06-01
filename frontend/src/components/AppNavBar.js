@@ -2,6 +2,7 @@ import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import UserIcon from "../images/user.png";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import CashFlowIcon from "../images/cashflow.png"
 
 const AppNavBar = (props) => {
     let navigate = useNavigate();
@@ -17,14 +18,14 @@ const AppNavBar = (props) => {
     };
 
     return (
-        <Navbar fluid>
-            <Navbar.Brand href="https://girishgr8.github.io">
+        <Navbar fluid  style={{ backgroundColor: "#99cccc"}}>
+            <Navbar.Brand>
                 <img
-                    src="https://media.geeksforgeeks.org/wp-content/uploads/20210224040124/JSBinCollaborativeJavaScriptDebugging6-300x160.png"
-                    className="mr-3 h-6 sm:h-9"
-                    alt="Flowbite React Logo"
+                    src={CashFlowIcon}
+                    className="mr-4 h-4 sm:h-20"
+                    alt="CashFlow Logo"
                 />
-                <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">GeeksForGeeks</span>
+                <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">CashFlow</span>
             </Navbar.Brand>
             {isLoggedIn && (
                 <div className="flex md:order-2">
@@ -42,7 +43,7 @@ const AppNavBar = (props) => {
                     <Navbar.Toggle />
                 </div>
             )}
-            <Navbar.Collapse style={{ display: 'block', visibility: 'visible', opacity: 1 }}>
+            <Navbar.Collapse style={{ display: 'block', visibility: 'visible', opacity: 1}}>
                 <div className="flex space-x-4 ml-auto">
                     <Navbar.Link href="/" className="text-lg">Home</Navbar.Link>
                     <Navbar.Link href="#" className="text-lg">About</Navbar.Link>
