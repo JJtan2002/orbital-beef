@@ -42,7 +42,7 @@ Managing personal finances can be challenging and time-consuming, often leading 
 Identifying and debugging issues identified from Milestone 1
 
 ### Minimum Viable Product
-Implementation of expense tracking and budget management: Enabling users to categorize and track their expenses and budgets, creating a functional financial management app.
+Implementation of expense tracking and budget management: Enabling users to categorize and track their expenses and budgets, creating a functional financial management app.  
 Implementation of reporting: Enabling users to view and generate a PDF report of their documented budgets and expenses, with the aid of charts and graphs for easier interpretation.
 
 ## Milestone 3
