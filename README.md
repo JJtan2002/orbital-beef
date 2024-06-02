@@ -1,8 +1,8 @@
 # Cashflow
-Web Application: https://orbital-beef-6446.vercel.app/
-Project Log: https://docs.google.com/spreadsheets/d/1fRKyT99eiQhj5aBOOT7uKjaHC7vXyJ32StYWshTvJaA/edit?usp=sharing
-Poster: 
-Video: 
+Web Application: https://orbital-beef-6446.vercel.app/  
+Project Log: https://docs.google.com/spreadsheets/d/1fRKyT99eiQhj5aBOOT7uKjaHC7vXyJ32StYWshTvJaA/edit?usp=sharing  
+Poster:  
+Video:  
 
 ## Level of Achievement
 Apollo
