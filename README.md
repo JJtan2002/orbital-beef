@@ -45,7 +45,7 @@ Identifying and debugging issues identified from Milestone 1
 Implementation of expense tracking and budget management: Enabling users to categorize and track their expenses and budgets, creating a functional financial management app.  
 Implementation of reporting: Enabling users to view and generate a PDF report of their documented budgets and expenses, with the aid of charts and graphs for easier interpretation.
 
-## Milestone 3
+## Milestone 3: Refinement
 ### Features
 - Develop a goal-setting feature allowing users to set specific financial goals (e.g., saving for a vacation, paying off debt) and track their progress over time.
 - Introduce a system of achievements and rewards to motivate users to reach their financial goals and maintain good financial habits.
