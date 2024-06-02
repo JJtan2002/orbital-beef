@@ -1,7 +1,7 @@
 # Cashflow
 Web Application: https://orbital-beef-6446.vercel.app/  
 Project Log: https://docs.google.com/spreadsheets/d/1fRKyT99eiQhj5aBOOT7uKjaHC7vXyJ32StYWshTvJaA/edit?usp=sharing  
-Poster:  https://drive.google.com/file/d/1CtRK_bXdjMyEBdbvmKDAGORhGtzTNKEF/view
+Poster:  https://drive.google.com/file/d/1CtRK_bXdjMyEBdbvmKDAGORhGtzTNKEF/view  
 Video:  https://drive.google.com/file/d/1_i6dacfBTZXtfXXxD6YCgkZ37p6sygDM/view
 
 ## Level of Achievement
