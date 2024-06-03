@@ -25,7 +25,7 @@ const Login = (props) => {
             setIsLoggedIn(true);
             setEmail(email);
             navigate("/profile");
-        } else toast.error(data.message);
+        } else toast.error("Wrong email or password! Please try again.");
     };
 
     return (
