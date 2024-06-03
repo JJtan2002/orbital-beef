@@ -40,7 +40,7 @@ const AppNavBar = (props) => {
                         <Dropdown.Divider />
                         <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
                     </Dropdown>
-                    <Navbar.Toggle />
+                    {/* <Navbar.Toggle /> */}
                 </div>
             )}
             <Navbar.Collapse style={{ display: 'block', visibility: 'visible', opacity: 1}}>
