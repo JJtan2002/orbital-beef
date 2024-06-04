@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-r+#gcwjw(0zxpfc*t4-)x%x@4yvizr^$u5m(yz0uos8xefh4q1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app']
 
 
 # Application definition
@@ -139,6 +139,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:3000",
+    "https://orbital-beef.vercel.app/",
+    "https://orbital-beef-6446.vercel.app/"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
