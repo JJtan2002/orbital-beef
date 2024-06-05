@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta # for simplej
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,11 @@ SECRET_KEY = 'django-insecure-r+#gcwjw(0zxpfc*t4-)x%x@4yvizr^$u5m(yz0uos8xefh4q1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = [
+    '.vercel.app',
+    '127.0.0.1',
+    'localhost'
+]
 
 
 # Application definition
@@ -37,10 +42,34 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     "app",
+
     "corsheaders",
     "rest_framework",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    # 'SLIDING_TOKEN_LIFETIME': timedelta(days=2),
+    # 'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
+    # 'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,17 +112,29 @@ WSGI_APPLICATION = 'cashflow.wsgi.application'
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }"""
+# Official
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER' : 'postgres.irhdctmkmzjkcbhtumap',
+#         'PASSWORD' : 'pIp0NHGstwoz0jRz',
+#         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
+#         'PORT': '5432',
+#     }
+# }
+
+# for testing
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
-        'USER' : 'postgres.irhdctmkmzjkcbhtumap',
-        'PASSWORD' : 'pIp0NHGstwoz0jRz',
+        'USER' : 'postgres.orpzogptkpvfusobmcpc',
+        'PASSWORD' : 'CGKcG54DAgTGNMj1',
         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '5432',
+        'PORT': '6543',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -137,10 +178,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",
+    "http://localhost:8000",
     "http://localhost:3000",
-    "https://orbital-beef.vercel.app/",
-    "https://orbital-beef-6446.vercel.app/"
+    # "https://orbital-beef.vercel.app/",
+    # "https://orbital-beef-6446.vercel.app/"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
