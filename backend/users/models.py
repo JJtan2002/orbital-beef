@@ -1,7 +1,24 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, UserManager
+
 
 # Create your models here.
+class CustomUser(AbstractUser):
+    id = models.AutoField(primary_key=True)
+    phone = models.CharField(max_length=10, null=True)
+    country = models.CharField(max_length=63, null=True)
 
+    class Mata:
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
+    def __str__(self):
+        return self.username
+    
+    REQUIRED_FIELDS = ['email']
+
+
+class CustomUserManager(UserManager):
+    pass
 
 class Token(models.Model):
     id = models.AutoField(primary_key=True)
