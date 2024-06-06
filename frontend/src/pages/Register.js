@@ -1,203 +1,193 @@
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
-import CountryInput from "../components/CountryInput";
-import { useEffect } from "react";
+import React, { useState } from "react";
+import Base from "../core/Base";
+import { Link } from "react-router-dom";
+import { signup } from "../auth/index";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/app/register";
-const Register = (props) => {
-    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
-    let navigate = useNavigate();
+import { makeStyles } from "@material-ui/core/styles";
+import {
+    Typography,
+    Button,
+    FormControl,
+    TextField,
+    Box,
+} from "@material-ui/core";
 
-    useEffect(() => {
-        if (isLoggedIn) navigate("profile");
+const useStyles = makeStyles((theme) => ({
+    mainDiv: theme.flexDiv,
+    formGroup: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+    },
+    textFields: {
+        width: "20%",
+        margin: "1rem",
+        [theme.breakpoints.down("sm")]: {
+            width: "50%",
+        },
+    },
+    submitButton: {
+        backgroundColor: "#00c853",
+        color: "white",
+        width: "20%",
+        "&:hover": {
+            background: "#00e676",
+        },
+        [theme.breakpoints.down("sm")]: {
+            width: "50%",
+        },
+    },
+}));
+
+const Register = () => {
+    const classes = useStyles();
+    const [values, setValues] = useState({
+        name: "",
+        email: "",
+        password: "",
+        error: "",
+        success: false,
+        loading: false,
     });
 
-    const handleRegister = async (ev) => {
-        ev.preventDefault();
-        const name = ev.target.name.value;
-        const email = ev.target.email.value;
-        const password = ev.target.password.value;
-        const confirmpassword = ev.target.confirmpassword.value;
-        const country = ev.target.country.value;
-        const phone = ev.target.phone.value;
-        if (country === "Select Country") toast.error("Select your country !");
-        if (password !== confirmpassword) toast.error("Passwords do not match !");
-        else {
-            const formData = {
-                name: name,
-                email: email,
-                password: password,
-                country: country,
-                phone: phone,
-            };
-            try {
-                const res = await axios.post(URL, formData);
-                const data = res.data;
-                if (data.success === true) {
-                    toast.success(data.message);
-                    setIsLoggedIn(true);
-                    setName(name);
-                    setEmail(email);
-                    navigate("/profile");
+    const { name, email, password, error, success, loading } = values;
+
+    const handleChange = (name) => (event) => {
+        setValues({ ...values, error: false, [name]: event.target.value });
+    };
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+        setValues({ ...values, error: false, loading: true });
+        signup({ name, email, password })
+            .then((data) => {
+                console.log(data);
+                if (data.email === email) {
+                    setValues({
+                        ...values,
+                        name: "",
+                        email: "",
+                        password: "",
+                        error: "",
+                        success: true,
+                        loading: false,
+                    });
                 } else {
-                    toast.error(data.message);
+                    setValues({ ...values, error: true, success: false });
                 }
-            } catch (err) {
-                console.log("Some error occured", err);
-            }
-        }
+            })
+            .catch((e) => console.log(e));
+    };
+
+    const successMessage = () => {
+        return (
+            <div style={{ display: success ? "" : "none" }}>
+                <div
+                    style={{
+                        color: "#43a047",
+                    }}
+                >
+                    New Account Created. Please{" "}
+                    <Link
+                        to="/signin"
+                        style={{
+                            color: "#00e676",
+                        }}
+                    >
+                        {" "}
+                        Login{" "}
+                    </Link>{" "}
+                </div>
+            </div>
+        );
+    };
+
+    const errorMessage = () => {
+        return (
+            <div style={{ display: error ? "" : "none" }}>
+                <div
+                    style={{
+                        color: "#e53935",
+                    }}
+                >
+                    Check all fields again.
+                </div>
+            </div>
+        );
+    };
+    const loadingMessage = () => {
+        return (
+            loading && (
+                <div>
+                    <h2>Loading....</h2>
+                </div>
+            )
+        );
+    };
+
+    const signupForm = () => {
+        return (
+            <Box component="div" className={classes.mainDiv}>
+                <Typography variant="h2" componen="h2">
+                    Sign Up
+                </Typography>
+                {loadingMessage()}
+                {errorMessage()}
+                {successMessage()}
+                <FormControl className={classes.formGroup}>
+                    <TextField
+                        required
+                        type="text"
+                        label="Name"
+                        value={name}
+                        className={classes.textFields}
+                        onChange={handleChange("name")}
+                    />
+                    <TextField
+                        required
+                        type="email"
+                        label="Email"
+                        value={email}
+                        className={classes.textFields}
+                        onChange={handleChange("email")}
+                    />
+                    <TextField
+                        required
+                        type="password"
+                        label="Password"
+                        value={password}
+                        className={classes.textFields}
+                        onChange={handleChange("password")}
+                    />
+                    <Button className={classes.submitButton} onClick={onSubmit}>
+                        Submit
+                    </Button>
+                </FormControl>
+            </Box>
+            // <form>
+            //   <label>Name</label>
+            //   <input type="text" value={name} onChange={handleChange("name")} />
+            //   <label>Email</label>
+            //   <input type="email" value={email} onChange={handleChange("email")} />
+            //   <label>Password</label>
+            //   <input
+            //     type="password"
+            //     value={password}
+            //     onChange={handleChange("password")}
+            //   />
+            //   <input type="submit" value="Submit" onClick={onSubmit} />
+            // </form>
+        );
     };
 
     return (
-        <div className="w-full flex flex-col items-center justify-center px-6 py-8 mx-auto my-5 lg:py-0">
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-xl xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
-                        Create an account
-                    </h1>
-                    <form
-                        className="space-y-4 md:space-y-"
-                        action="POST"
-                        onSubmit={handleRegister}
-                    >
-                        <div>
-                            <div className="mb-2 block">
-                                <label htmlFor="name" className="text-sm font-medium required">
-                                    Name
-                                </label>
-                            </div>
-                            <input
-                                id="name"
-                                name="name"
-                                type="text"
-                                placeholder="Your Name"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <label htmlFor="email" className="text-sm font-medium required">
-                                    Email
-                                </label>
-                            </div>
-                            <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                                placeholder="Your Email"
-                                required
-                            />
-                        </div>
-
-                        <div class="grid gap-6 mb-6 md:grid-cols-2">
-                            <div>
-                                <div className="mb-2 block">
-                                    <label
-                                        htmlFor="password"
-                                        className="text-sm font-medium required"
-                                    >
-                                        Password
-                                    </label>
-                                </div>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    placeholder="Your Password"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <div className="mb-2 block">
-                                    <label
-                                        htmlFor="confirmpassword"
-                                        className="text-sm font-medium required"
-                                    >
-                                        Confirm Password
-                                    </label>
-                                </div>
-                                <input
-                                    type="password"
-                                    name="confirmpassword"
-                                    id="confirmpassword"
-                                    placeholder="Re-enter Password"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <CountryInput />
-                        <div className="max-w-xl">
-                            <div className="mb-2 block">
-                                <label htmlFor="phone" className="text-sm font-medium">
-                                    Phone Number
-                                </label>
-                            </div>
-                            <input
-                                type="text"
-                                id="phone"
-                                name="phone"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                                maxLength={10}
-                                pattern="^[0-9]{8}"
-                                placeholder="1234567890"
-                                aria-errormessage="Phone number must start with 7 or 9"
-                            />
-                        </div>
-
-                        <div className="flex items-start">
-                            <div className="flex items-center h-5">
-                                <input
-                                    id="terms"
-                                    type="checkbox"
-                                    class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                    required
-                                    aria-describedby="terms"
-                                />
-                            </div>
-                            <div className="ml-3 text-sm">
-                                <label
-                                    htmlFor="terms"
-                                    className="font-light text-gray-500 dark:text-gray-300"
-                                >
-                                    I accept the{" "}
-                                    <a
-                                        className="font-medium text-purple-600 hover:underline dark:text-purple-500"
-                                        href="#"
-                                    >
-                                        Terms and Conditions
-                                    </a>
-                                </label>
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            class="w-full font-bold focus:outline-none hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 rounded-lg text-sm px-5 py-2.5 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
-                            style={{backgroundColor: "#66cccc", color: "black"}}
-                        >
-                            Create an account
-                        </button>
-                        <p className="text-center text-sm text-gray-500">
-                            Already have an account?{" "}
-                            <a
-                                href="login"
-                                className="font-semibold leading-6 text-purple-600 hover:text-purple-500"
-                            >
-                                Login Here
-                            </a>
-                        </p>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <Base title="Sign Up Page">
+            {/* {successMessage()} */}
+            {/* {errorMessage()} */}
+            {signupForm()}
+            {/* <p>{JSON.stringify(values)}</p> */}
+        </Base>
     );
 };
-
 export default Register;
