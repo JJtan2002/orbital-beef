@@ -23,11 +23,11 @@ def signin(request):
     if not request.method == 'POST':
         return JsonResponse({'error': 'Send a Post request'})
 
-    username = request.POST['email']
-    password = request.POST['password']
+    username = request.POST.get('email')
+    password = request.POST.get('password')
 
 # Validation
-    if not re.match("^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", username):
+    if not re.match("^[^\s@]+@[^\s@]+\.[^\s@]+$", username):
         return JsonResponse({'error': 'Enter a valid email'})
 
     if len(password) < 3:
@@ -46,14 +46,14 @@ def signin(request):
             if user.session_token != "0":
                 user.session_token = "0"
                 user.save()
-                return JsonResponse({"error": "Session already exists"})
+                #return JsonResponse({"error": "Session already exists"})
 
             # token = generate_session_token()
             token = Token.objects.get(user=user).key
             user.session_token = token
             user.save()
             login(request, user)
-            return JsonResponse({"token": token, "user": usr_dict})
+            return JsonResponse({"token": token, "user": usr_dict, "message": "good job"})
         else:
             return JsonResponse({'error': 'Invalid password'})
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/app/forgotPassword";
+const URL = process.env.REACT_APP_BACKEND_URL + "/users/forgotPassword";
 
 const ForgotPassword = () => {
     const handleSubmit = async (ev) => {
@@ -29,7 +29,7 @@ const ForgotPassword = () => {
                     </div>
                     <div className="mt-2 block">
                         <button type="submit" class="w-full focus:outline-none hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 font-bold rounded-lg text-sm px-5 py-2.5 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
-                            style={{backgroundColor: "#66cccc"}}
+                            style={{ backgroundColor: "#66cccc" }}
                         >
                             Submit
                         </button>

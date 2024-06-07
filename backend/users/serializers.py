@@ -16,16 +16,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        # for attr, value in validated_data:
-        #     if attr == 'password':
-        #         instance.set_password(value)
-        #     else:
-        #         setattr(instance, attr, value)
-        # for attr, value in validated_data:
-        #     if attr == 'name':
-        #         instance.set_name(value)
-        #     else:
-        #         setattr(instance, attr, value)
         instance.save()
         return instance
 

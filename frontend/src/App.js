@@ -9,12 +9,24 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  /*const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+*/
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") || false);
+  const [name, setName] = useState(localStorage.getItem("name") || "");
+  const [email, setEmail] = useState(localStorage.getItem("email") || "");
+
+  useEffect(() => {
+    if (localStorage.getItem("isLoggedIn") === "true") {
+      setIsLoggedIn(true);
+      setName(localStorage.getItem("name"));
+      setEmail(localStorage.getItem("email"));
+    }
+  }, []);
 
   return (
     <div className="md:h-screen #d1fae5">
