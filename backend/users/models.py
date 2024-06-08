@@ -1,4 +1,5 @@
 from django.db import models
+<<<<<<< HEAD
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 from django.conf import settings
@@ -34,7 +35,28 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
+=======
+from django.contrib.auth.models import AbstractUser, UserManager
 
+
+# Create your models here.
+class CustomUser(AbstractUser):
+    id = models.AutoField(primary_key=True)
+    phone = models.CharField(max_length=10, null=True)
+    country = models.CharField(max_length=63, null=True)
+>>>>>>> 1dc75ee18fa08cb48f6b971e52a4bbafce67063d
+
+    class Mata:
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
+    def __str__(self):
+        return self.username
+    
+    REQUIRED_FIELDS = ['email']
+
+
+class CustomUserManager(UserManager):
+    pass
 
 class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=50, default='Anonymous')
