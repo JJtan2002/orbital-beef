@@ -2,12 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 
-const Home = () => {
+const Home = (props) => {
     let navigate = useNavigate();
 
-    const [isLoggedIn, setIsLoggedIn] = useState(
-        () => localStorage.getItem("isLoggedIn")
-    );
+    const {isLoggedIn, setIsLoggedIn} = props;
+
+    // const [isLoggedIn, setIsLoggedIn] = useState(
+    //     () => localStorage.getItem("isLoggedIn")
+    // );
 
     useEffect(() => {
         if (isLoggedIn) navigate("profile");

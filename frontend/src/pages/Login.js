@@ -7,10 +7,10 @@ const URL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
 
 const Login = (props) => {
     let navigate = useNavigate();
-    const { setName, setEmail } = props;
-    const [isLoggedIn, setIsLoggedIn] = useState(
-        () => localStorage.getItem("isLoggedIn")
-    );
+    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
+    // const [isLoggedIn, setIsLoggedIn] = useState(
+    //     () => localStorage.getItem("isLoggedIn")
+    // );
 
     useEffect(() => {
         if (isLoggedIn) {

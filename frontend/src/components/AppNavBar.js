@@ -7,11 +7,11 @@ import { useEffect, useState } from "react";
 
 const AppNavBar = (props) => {
     let navigate = useNavigate();
-    const { name, setName, email, setEmail } = props;
+    const { isLoggedIn, setIsLoggedIn, name, setName, email, setEmail } = props;
 
-    const [isLoggedIn, setIsLoggedIn] = useState(
-        () => localStorage.getItem("isLoggedIn") === "true"
-    );
+    // const [isLoggedIn, setIsLoggedIn] = useState(
+    //     () => localStorage.getItem("isLoggedIn") === "true"
+    // );
 
     const handleLogout = () => {
         setIsLoggedIn(false);

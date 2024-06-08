@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 
 const URL = process.env.REACT_APP_BACKEND_URL + "/users/";
 const Register = (props) => {
-    const { setName, setEmail } = props;
+    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
     let navigate = useNavigate();
 
-    const [isLoggedIn, setIsLoggedIn] = useState(
-        () => localStorage.getItem("isLoggedIn") === "true"
-    );
+    // const [isLoggedIn, setIsLoggedIn] = useState(
+    //     () => localStorage.getItem("isLoggedIn") === "true"
+    // );
 
     useEffect(() => {
         if (isLoggedIn) {
