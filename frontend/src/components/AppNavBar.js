@@ -4,22 +4,16 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CashFlowIcon from "../images/cashflow.png"
 import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-const AppNavBar = (props) => {
+const AppNavBar = () => {
     let navigate = useNavigate();
-    const { isLoggedIn, setIsLoggedIn, name, setName, email, setEmail } = props;
-
-    // const [isLoggedIn, setIsLoggedIn] = useState(
-    //     () => localStorage.getItem("isLoggedIn") === "true"
-    // );
+   
+    const { isLoggedIn, name, email, Logout } = useAuth();
 
     const handleLogout = () => {
-        setIsLoggedIn(false);
-        localStorage.removeItem("isLoggedIn");
-        setName(null);
-        setEmail(null);
+        Logout();
         navigate("/");
-        toast.success("You are successfully logged out!");
     };
 
     return (

@@ -2,104 +2,24 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 const URL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
 
-const Login = (props) => {
+const Login = () => {
     let navigate = useNavigate();
-    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
-    // const [isLoggedIn, setIsLoggedIn] = useState(
-    //     () => localStorage.getItem("isLoggedIn")
-    // );
 
+    const { isLoggedIn, Login } = useAuth();    
+   
     useEffect(() => {
         if (isLoggedIn) {
-            navigate("");
+            navigate("/");
         }
     }, [isLoggedIn, navigate]);
 
-    const [values, setValues] = useState({
-        name: "",
-        email: "",
-        password: "",
-        error: "",
-        success: false,
-        loading: false,
-    });
-    const {
-        name,
-        email,
-        password,
-        error,
-        success,
-        loading,
-        didRedirect,
-    } = values;
-
-
-
-    /*const handleLogin = async (ev) => {
-        ev.preventDefault();
-        const email = ev.target.email.value;
-        const password = ev.target.password.value;
-        const formData = { "email": email, "password": password };
-        const res = await axios.post(URL, formData);
-        const data = res.data;
-        console.log(data);
-        if (data.token) {
-            toast.success(data.message);
-            setIsLoggedIn(true);
-            setEmail(email);
-            navigate("/profile");
-        } else {
-         toast.error("Wrong email or password! Please try again.");
-        }
-    };*/
-    const signin = (user) => {
-        const formData = new FormData();
-
-        for (const name in user) {
-            formData.append(name, user[name]);
-        }
-
-        for (var key of formData.keys()) {
-            console.log("MYKEY", key);
-        }
-
-        return fetch(URL, {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => {
-                console.log("SUCCESS", response);
-                return response.json();
-            })
-            .catch((err) => console.log(err));
-
-    };
-
 
     const handleLogin = async (event) => {
-        event.preventDefault();
-        setValues({ ...values, error: false, loading: true });
-        const email = event.target.email.value;
-        const password = event.target.password.value;
-        await signin({ email, password })
-            .then((data) => {
-                console.log("DATA", data);
-                if (data.token) {
-                    toast.success(data.message);
-                    setIsLoggedIn(true);
-                    localStorage.setItem("isLoggedIn", "true");
-                    localStorage.setItem("name", name);
-                    localStorage.setItem("email", email);
-                    setEmail(email);
-                    navigate("/profile");
-                } else {
-                    toast.error("Wrong email or password! Please try again.");
-                }
-            })
-            .catch((err) => console.log(err));
+        Login(event);
     };
 
     return (

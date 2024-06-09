@@ -1,18 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 
-const Home = (props) => {
+const Home = () => {
     let navigate = useNavigate();
 
-    const {isLoggedIn, setIsLoggedIn} = props;
-
-    // const [isLoggedIn, setIsLoggedIn] = useState(
-    //     () => localStorage.getItem("isLoggedIn")
-    // );
+    const { isLoggedIn } = useAuth();
 
     useEffect(() => {
-        if (isLoggedIn) navigate("profile");
+        if (isLoggedIn) {
+            navigate("/profile");
+            console.log("Jump to home");
+        }
     });
     return (
         <div>

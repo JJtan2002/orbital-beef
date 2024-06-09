@@ -2,15 +2,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/users/";
-const Register = (props) => {
-    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
+
+const Register = () => {
+    const { Register, isLoggedIn } = useAuth();
+
     let navigate = useNavigate();
-
-    // const [isLoggedIn, setIsLoggedIn] = useState(
-    //     () => localStorage.getItem("isLoggedIn") === "true"
-    // );
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -18,49 +16,9 @@ const Register = (props) => {
         }
     }, [isLoggedIn, navigate]);
 
-    const [values, setValues] = useState({
-        name: "",
-        email: "",
-        password: "",
-        error: "",
-        success: false,
-        loading: false,
-    });
-
-    const { name, email, password, error, success, loading } = values;
 
     const handleRegister = async (ev) => {
-        ev.preventDefault();
-        const name = ev.target.name.value;
-        const email = ev.target.email.value;
-        const password = ev.target.password.value;
-        const confirmpassword = ev.target.confirmpassword.value;
-        if (password !== confirmpassword) {
-            toast.error("Passwords do not match!");
-            return;
-        }
-
-        const formData = { name, email, password };
-
-        try {
-            const res = await axios.post(URL, formData);
-            const data = res.data;
-            if (data.id) {
-                toast.success(data.message);
-                setIsLoggedIn(true);
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("name", name);
-                localStorage.setItem("email", email);
-                setName(name);
-                setEmail(email);
-                navigate("/profile");
-            } else {
-                toast.error(data.message);
-            }
-        } catch (err) {
-            toast.error("Some error occurred");
-            console.log("Error:", err);
-        }
+        Register(ev);
     };
 
     return (
