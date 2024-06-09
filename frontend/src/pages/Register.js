@@ -1,52 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import CountryInput from "../components/CountryInput";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/app/register";
-const Register = (props) => {
-    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
+
+const Register = () => {
+    const { Register, isLoggedIn } = useAuth();
+
     let navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoggedIn) navigate("profile");
-    });
+        if (isLoggedIn) {
+            navigate("profile");
+        }
+    }, [isLoggedIn, navigate]);
+
 
     const handleRegister = async (ev) => {
-        ev.preventDefault();
-        const name = ev.target.name.value;
-        const email = ev.target.email.value;
-        const password = ev.target.password.value;
-        const confirmpassword = ev.target.confirmpassword.value;
-        const country = ev.target.country.value;
-        const phone = ev.target.phone.value;
-        if (country === "Select Country") toast.error("Select your country !");
-        if (password !== confirmpassword) toast.error("Passwords do not match !");
-        else {
-            const formData = {
-                name: name,
-                email: email,
-                password: password,
-                country: country,
-                phone: phone,
-            };
-            try {
-                const res = await axios.post(URL, formData);
-                const data = res.data;
-                if (data.success === true) {
-                    toast.success(data.message);
-                    setIsLoggedIn(true);
-                    setName(name);
-                    setEmail(email);
-                    navigate("/profile");
-                } else {
-                    toast.error(data.message);
-                }
-            } catch (err) {
-                console.log("Some error occured", err);
-            }
-        }
+        Register(ev);
     };
 
     return (
@@ -132,24 +104,6 @@ const Register = (props) => {
                             </div>
                         </div>
 
-                        <CountryInput />
-                        <div className="max-w-xl">
-                            <div className="mb-2 block">
-                                <label htmlFor="phone" className="text-sm font-medium">
-                                    Phone Number
-                                </label>
-                            </div>
-                            <input
-                                type="text"
-                                id="phone"
-                                name="phone"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                                maxLength={10}
-                                pattern="^[0-9]{8}"
-                                placeholder="1234567890"
-                                aria-errormessage="Phone number must start with 7 or 9"
-                            />
-                        </div>
 
                         <div className="flex items-start">
                             <div className="flex items-center h-5">
@@ -180,7 +134,7 @@ const Register = (props) => {
                         <button
                             type="submit"
                             class="w-full font-bold focus:outline-none hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 rounded-lg text-sm px-5 py-2.5 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
-                            style={{backgroundColor: "#66cccc", color: "black"}}
+                            style={{ backgroundColor: "#66cccc", color: "black" }}
                         >
                             Create an account
                         </button>

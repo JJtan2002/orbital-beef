@@ -1,10 +1,16 @@
-from django.urls import path
+from rest_framework import routers
+from django.urls import path, include
+
+# from rest_framework.authtoken.views import obtain_auth_token
+
 from . import views
-from .views import RegistrationView, LoginView, ForgotPasswordView, ResetPasswordView
+
+router = routers.DefaultRouter()
+router.register(r'', views.UserViewSet)
 
 urlpatterns = [
-    path("register", RegistrationView.as_view(), name="register"),
-    path("login", LoginView.as_view(), name="login"),
-    path("forgotPassword", ForgotPasswordView.as_view(), name="forgotPassword"),
-    path("resetPassword", ResetPasswordView.as_view(), name="resetPassword"),
+    path('login/', views.signin, name='signin'),
+    # path('login/', obtain_auth_token, name='signin'),
+    path('logout/<int:id>/', views.signout, name='signout'),
+    path('', include(router.urls)),
 ]

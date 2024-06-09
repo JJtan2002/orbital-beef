@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import UserIcon from "../images/user.png";
 import { redirect } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
-const Profile = (props) => {
-    const { isLoggedIn, name, email } = props;
+const Profile = () => {
+    const { isLoggedIn, name, email } = useAuth();
+
     useEffect(() => {
         if (isLoggedIn === false) redirect("/");
     }, []);

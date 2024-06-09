@@ -3,22 +3,21 @@ import UserIcon from "../images/user.png";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CashFlowIcon from "../images/cashflow.png"
+import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-const AppNavBar = (props) => {
+const AppNavBar = () => {
     let navigate = useNavigate();
-
-    const { isLoggedIn, setIsLoggedIn, name, setName, email, setEmail } = props;
+   
+    const { isLoggedIn, name, email, Logout } = useAuth();
 
     const handleLogout = () => {
-        setIsLoggedIn(false);
-        setName(null);
-        setEmail(null);
+        Logout();
         navigate("/");
-        toast.success("You are successfully logged out!");
     };
 
     return (
-        <Navbar fluid  style={{ backgroundColor: "#99cccc"}}>
+        <Navbar fluid style={{ backgroundColor: "#99cccc" }}>
             <Navbar.Brand>
                 <img
                     src={CashFlowIcon}
@@ -43,7 +42,7 @@ const AppNavBar = (props) => {
                     {/* <Navbar.Toggle /> */}
                 </div>
             )}
-            <Navbar.Collapse style={{ display: 'block', visibility: 'visible', opacity: 1}}>
+            <Navbar.Collapse style={{ display: 'block', visibility: 'visible', opacity: 1 }}>
                 <div className="flex space-x-4 ml-auto">
                     <Navbar.Link href="/" className="text-lg">Home</Navbar.Link>
                     <Navbar.Link href="#" className="text-lg">About</Navbar.Link>

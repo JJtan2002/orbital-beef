@@ -1,31 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/app/login";
+const URL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
 
-const Login = (props) => {
+const Login = () => {
     let navigate = useNavigate();
-    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
 
+    const { isLoggedIn, Login } = useAuth();    
+   
     useEffect(() => {
-        if (isLoggedIn) navigate("profile");
-    });
+        if (isLoggedIn) {
+            navigate("/");
+        }
+    }, [isLoggedIn, navigate]);
 
-    const handleLogin = async (ev) => {
-        ev.preventDefault();
-        const email = ev.target.email.value;
-        const password = ev.target.password.value;
-        const formData = { email: email, password: password };
-        const res = await axios.post(URL, formData);
-        const data = res.data;
-        if (data.success === true) {
-            toast.success(data.message);
-            setIsLoggedIn(true);
-            setEmail(email);
-            navigate("/profile");
-        } else toast.error("Wrong email or password! Please try again.");
+
+    const handleLogin = async (event) => {
+        Login(event);
     };
 
     return (
@@ -47,6 +41,7 @@ const Login = (props) => {
                         <input
                             id="email"
                             type="email"
+                            name="email"
                             placeholder="Your Email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
                             required
@@ -72,6 +67,7 @@ const Login = (props) => {
                         <input
                             id="password"
                             type="password"
+                            name="password"
                             placeholder="Your Password"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
                             required
@@ -91,7 +87,7 @@ const Login = (props) => {
                     <button
                         type="submit"
                         class="focus:outline-none hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 font-bold rounded-lg text-sm px-5 py-2.5 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
-                        style={{backgroundColor: "#66cccc"}}
+                        style={{ backgroundColor: "#66cccc" }}
                     >
                         Submit
                     </button>

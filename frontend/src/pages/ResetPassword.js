@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/app/resetPassword";
+const URL = process.env.REACT_APP_BACKEND_URL + "/users/resetPassword";
 
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();
