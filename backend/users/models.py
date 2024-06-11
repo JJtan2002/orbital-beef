@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-
+from django.db.models import QuerySet, Sum, F
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -58,6 +58,26 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
+
+    
+    def get_wallet(self) -> 'Wallet':
+        """
+        Returns the wallet related to that user.
+        """
+        return Wallet.objects.get(user_id=self.pk)
+
+    def get_labels(self) -> QuerySet['CustomLabel']:
+        """
+        Return all CustomLabels related to that user
+        """
+        return self.get_wallet().get_labels()
+
+    def get_name(self):
+        """
+        Returns the name of the user.
+        """
+        return self.name
+
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
