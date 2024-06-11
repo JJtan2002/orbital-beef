@@ -47,37 +47,37 @@ class TransactionTestCase(TestCase):
     def test_get_monthly_earnings(self):
         one_month_ago = datetime.datetime.today() - relativedelta(months=1)
         out_of_range = one_month_ago - relativedelta(days=1)
-        in_range = one_month_ago + relativedelta(days=1)
+        in_range = datetime.datetime.today() - relativedelta(days=1)
 
         earnings_in_range = self.factory.create_transaction_filled(self.wallet, type="EARNING", value=150)
         earning_in_range2 = self.factory.create_transaction_filled(self.wallet, type="EARNING", value=50, date=in_range)
-        earning_in_range3 = self.factory.create_transaction_filled(self.wallet, type="EARNING", value=300,
+        earning_out_of_range1 = self.factory.create_transaction_filled(self.wallet, type="EARNING", value=300,
                                                                   date=one_month_ago)
 
-        earning_out_of_range = self.factory.create_transaction_filled(self.wallet, type="EARNING", date=out_of_range)
+        earning_out_of_range2 = self.factory.create_transaction_filled(self.wallet, type="EARNING", date=out_of_range)
 
         # these transactions shouldn't be considered in the queryset since it's not an earning
         expense_in_range = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", date=in_range)
 
         # Sum of all set transactions values
-        expected_value = 500
+        expected_value = 200
         monthly_earning = self.wallet.get_monthly_earnings()
         self.assertEqual(expected_value, monthly_earning)
 
     def test_get_monthly_expenses(self):
         one_month_ago = datetime.datetime.today() - relativedelta(months=1)
         out_of_range = one_month_ago - relativedelta(days=1)
-        in_range = one_month_ago + relativedelta(days=1)
+        in_range = datetime.datetime.today() + relativedelta(days=1)
 
         expense_in_range = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", value=150)
         expense_in_range2 = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", value=50, date=in_range)
-        expense_in_range3 = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", value=300,
+        expense_out_of_range1 = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", value=300,
                                                                    date=one_month_ago)
-        expense_out_of_range = self.factory.create_transaction_filled(self.wallet, type="EXPENSE",date=out_of_range)
+        expense_out_of_range2 = self.factory.create_transaction_filled(self.wallet, type="EXPENSE",date=out_of_range)
 
         # this transaction shouldn't be considered in the queryset since it's an earning
         earning_in_range = self.factory.create_transaction_filled(self.wallet, type="EARNING", date=in_range)
 
-        expected_value = 500
+        expected_value = 200
         monthly_earning = self.wallet.get_monthly_expenses()
         self.assertEqual(expected_value, monthly_earning)

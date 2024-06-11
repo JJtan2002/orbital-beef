@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User
+import users.models
 from decimal import Decimal
 from django.db import models
 from django.db.models import QuerySet, Sum, F
@@ -12,12 +12,15 @@ from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 class Wallet(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(users.models.User, on_delete=models.CASCADE)
     current_amount = models.DecimalField(decimal_places=2, max_digits=15)
 
     constraints = [
         models.UniqueConstraint(fields=['user'], name='unique wallet per user')
     ]
+
+    def get_users_wallet(self, user):
+        return Wallet.objects.get(user_id=user.pk)
 
     def update_balance(self, value):
         self.current_amount = self.current_amount + Decimal(value)
@@ -98,8 +101,8 @@ class CustomLabel(WalletBasedModel):
     @staticmethod
     def create_from_json(data: dict, user_pk: int) -> 'CustomLabel':
         try:
-            user: User = User.objects.get(pk=user_pk)
-        except User.DoesNotExist:
+            user: users.models.User = users.models.User.objects.get(pk=user_pk)
+        except users.models.User.DoesNotExist:
             raise PermissionError()
 
         user_wallet = user.get_wallet()
@@ -201,8 +204,8 @@ class Transaction(WalletBasedModel):
         """
         # TODO: Field validations
         try:
-            user: User = User.objects.get(pk=user_pk)
-        except User.DoesNotExist:
+            user: users.models.User = users.models.User.objects.get(pk=user_pk)
+        except users.models.User.DoesNotExist:
             raise PermissionError()
 
         user_wallet = user.get_wallet()
@@ -225,9 +228,6 @@ class Transaction(WalletBasedModel):
                 raise PermissionError()
             transaction.label = custom_label
 
-        if data.get("description"):
-            transaction.description = data.get("description")
-
         # Value section
         if data.get("value") is not None:
             transaction.value = data.get("value")
@@ -237,9 +237,9 @@ class Transaction(WalletBasedModel):
         if data.get("type"):
             transaction.type = data.get("type")
         if data.get("date"):
-            date_string = data.get("date")
-            date_object = datetime.strptime(
-                date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+            date_object = data.get("date")
+            #date_object = datetime.strptime(
+                #date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
             transaction.date = date_object.date()
         if data.get("updateWallet") is not None:
             transaction.update_wallet = data.get("updateWallet")

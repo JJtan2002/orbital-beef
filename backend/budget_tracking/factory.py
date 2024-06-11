@@ -1,6 +1,7 @@
 import datetime
 
-from .models import HubUser, Transaction, TransactionRecurrency, Wallet
+from users.models import User
+from .models import Transaction, TransactionRecurrency, Wallet
 from faker import Faker
 from faker.providers import DynamicProvider
 
@@ -31,20 +32,18 @@ class TransactionFactory:
     def create_user(self, **kwargs):
         name = self.faker.unique.first_name()
         default_values = {
-            'name': name,
             'email': f'{name}@gmail.com',
             **kwargs
         }
-        return HubUser.objects.create_user(**default_values)
+        return User.objects.create_user(**default_values)
 
     def create_superuser(self, **kwargs):
         name = self.faker.unique.first_name()
         default_values = {
-            'name': name,
             'email': f'{name}@gmail.com',
             **kwargs
         }
-        return HubUser.objects.create_superuser(**default_values)
+        return User.objects.create_superuser(**default_values)
     
     # Transactions section
     @staticmethod
@@ -59,7 +58,6 @@ class TransactionFactory:
             'title': get_and_pop(kwargs, 'title') or self.faker.text(max_nb_chars=10),
             'value': get_and_pop(kwargs, 'value') or self.faker.random_number(digits=2),
             'type': get_and_pop(kwargs, 'type') or self.faker.transaction_type(),
-            'description': get_and_pop(kwargs, 'description') or self.faker.sentence(),
             'date': get_and_pop(kwargs, 'date') or datetime.datetime.now(),
             **kwargs
         }
@@ -71,7 +69,6 @@ class TransactionFactory:
             'title': self.faker.text(max_nb_chars=10),
             'value': self.faker.random_number(digits=2),
             'type': self.faker.transaction_type(),
-            'description': self.faker.sentence(),
             'date': datetime.datetime.now(),
             'recurrent': True,
             # Recurrency section

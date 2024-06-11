@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+import budget_tracking.models
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -20,6 +21,13 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.save(using=self._db)
+
+        # Creation of a related wallet for the created user
+        wallet = budget_tracking.models.Wallet.objects.create(
+            user_id=user.pk,
+            current_amount=0
+        )
+        wallet.save()
         return user
 
     def create_superuser(self, email, password):
@@ -64,7 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         Returns the wallet related to that user.
         """
-        return Wallet.objects.get(user_id=self.pk)
+        return budget_tracking.models.Wallet.objects.get(user_id=self.pk)
 
     def get_labels(self) -> QuerySet['CustomLabel']:
         """
