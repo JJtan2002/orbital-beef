@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-// import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookies';
 
 // create context
 const AuthContext = createContext();
@@ -62,7 +62,7 @@ const AuthContextProvider = ({children}) => {
         await signin({ email, password })
             .then((data) => {
                 console.log("DATA", data);
-                if (data.token) {
+                if (data.success) {
                     toast.success(data.message);
                     setIsLoggedIn(true);
                     localStorage.setItem("isLoggedIn", "true");
@@ -71,7 +71,7 @@ const AuthContextProvider = ({children}) => {
                     setEmail(email);
                     // navigate("/profile");
                 } else {
-                    toast.error("Wrong email or password! Please try again.");
+                    toast.error(data.error);
                 }
             })
             .catch((err) => console.log(err));
@@ -121,6 +121,8 @@ const AuthContextProvider = ({children}) => {
         localStorage.removeItem("isLoggedIn");
         setName(null);
         setEmail(null);
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");
         console.log("name: " + name + " isLoggedIn: " + isLoggedIn);
         console.log("localStorage: " + localStorage.getItem("isLoggedIn"));
         // navigate("/");

@@ -11,6 +11,7 @@ import re
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
+from django.middleware.csrf import get_token
 
 
 def generate_session_token(length=10):
@@ -53,12 +54,12 @@ def signin(request):
             user.session_token = token
             user.save()
             login(request, user)
-            return JsonResponse({"token": token, "user": usr_dict, "message": "good job"})
+            return JsonResponse(data={"success": True, "token": token, "user": usr_dict, "message": "good job"})
         else:
-            return JsonResponse({'error': 'Invalid password'})
+            return JsonResponse(data={"success": False, "error": "Invalid password"})
 
-    except UserModel.DoesNotExist():
-        return JsonResponse({'error': 'Invalid Email'})
+    except UserModel.DoesNotExist:
+        return JsonResponse(data={"success": False, "error": "Invalid Email"})
 
 
 # @csrf_exempt
