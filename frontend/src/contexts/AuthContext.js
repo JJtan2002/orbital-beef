@@ -117,7 +117,6 @@ const AuthContextProvider = ({children}) => {
     };
 
     // // handle log out
-<<<<<<< HEAD
     const Logout = async (user_id) => {
         try {
             const res = await axios.post(LogOutURL + `${user_id}/`);
@@ -142,20 +141,6 @@ const AuthContextProvider = ({children}) => {
             toast.error("An error occurred: " + error);
         }
         
-=======
-    const Logout = () => {
-        setIsLoggedIn(false);
-        console.log(isLoggedIn);
-        localStorage.removeItem("isLoggedIn");
-        setName(null);
-        setEmail(null);
-        localStorage.removeItem("name");
-        localStorage.removeItem("email");
-        console.log("name: " + name + " isLoggedIn: " + isLoggedIn);
-        console.log("localStorage: " + localStorage.getItem("isLoggedIn"));
-        // navigate("/");
-        toast.success("You are successfully logged out!");
->>>>>>> e9427425530fb7fe13e40153882012bfc0d22d9e
     };
 
     return (

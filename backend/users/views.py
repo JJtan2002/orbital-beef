@@ -54,20 +54,12 @@ def signin(request):
             user.session_token = token
             user.save()
             login(request, user)
-<<<<<<< HEAD
             return JsonResponse({"id": user.pk, "token": token, "user": usr_dict, "message": "good job"})
-=======
-            return JsonResponse(data={"success": True, "token": token, "user": usr_dict, "message": "good job"})
->>>>>>> e9427425530fb7fe13e40153882012bfc0d22d9e
         else:
             return JsonResponse(data={"success": False, "error": "Invalid password"})
 
     except UserModel.DoesNotExist:
-<<<<<<< HEAD
         return JsonResponse({'error': 'Invalid Email'})
-=======
-        return JsonResponse(data={"success": False, "error": "Invalid Email"})
->>>>>>> e9427425530fb7fe13e40153882012bfc0d22d9e
 
 
 @csrf_exempt
