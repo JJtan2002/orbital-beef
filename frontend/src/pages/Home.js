@@ -13,7 +13,8 @@ const Home = () => {
             navigate("/profile");
             console.log("Jump to home");
         }
-    });
+    }, [isLoggedIn, navigate]);
+    
     return (
         <div>
             <h2 className="font-bold my-5 text-xl text-center">Welcome to CashFlow!</h2>

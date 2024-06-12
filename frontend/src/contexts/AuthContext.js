@@ -10,7 +10,8 @@ const AuthContext = createContext();
 // create context provider
 const AuthContextProvider = ({children}) => {
     const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/";
-    const LogURL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
+    const LogInURL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
+    const LogOutURL = process.env.REACT_APP_BACKEND_URL + "/users/logout/";
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") || false);
     const [name, setName] = useState(localStorage.getItem("name") || "");
@@ -44,7 +45,7 @@ const AuthContextProvider = ({children}) => {
             console.log("MYKEY", key);
         }
 
-        return fetch(LogURL, {
+        return fetch(LogInURL, {
             method: "POST",
             body: formData,
         })
@@ -66,12 +67,13 @@ const AuthContextProvider = ({children}) => {
                     toast.success(data.message);
                     setIsLoggedIn(true);
                     localStorage.setItem("isLoggedIn", "true");
+                    localStorage.setItem("id", data.id)
                     localStorage.setItem("name", data.user.name);
                     localStorage.setItem("email", email);
                     setEmail(email);
                     // navigate("/profile");
                 } else {
-                    toast.error("Wrong email or password! Please try again.");
+                    toast.error(data.error);
                 }
             })
             .catch((err) => console.log(err));
@@ -115,16 +117,30 @@ const AuthContextProvider = ({children}) => {
     };
 
     // // handle log out
-    const Logout = () => {
-        setIsLoggedIn(false);
-        console.log(isLoggedIn);
-        localStorage.removeItem("isLoggedIn");
-        setName(null);
-        setEmail(null);
-        console.log("name: " + name + " isLoggedIn: " + isLoggedIn);
-        console.log("localStorage: " + localStorage.getItem("isLoggedIn"));
-        // navigate("/");
-        toast.success("You are successfully logged out!");
+    const Logout = async (user_id) => {
+        try {
+            const res = await axios.post(LogOutURL + `${user_id}/`);
+            if (res.data.success) {
+                console.log("Logout successful");
+
+                setIsLoggedIn(false);
+                console.log(isLoggedIn);
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("id");
+                setName(null);
+                setEmail(null);
+                localStorage.removeItem("name");
+                localStorage.removeItem("email");
+                toast.success("You are successfully logged out!");
+            } else {
+                console.error("Logout failed: ", res.data.error);
+                toast.error("Logout failed: " + res.data.error);
+            }
+        } catch (error) {
+            console.error("An error occurred: ", error);
+            toast.error("An error occurred: " + error);
+        }
+        
     };
 
     return (

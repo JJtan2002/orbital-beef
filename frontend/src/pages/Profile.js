@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import UserIcon from "../images/user.png";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const Profile = () => {
     const { isLoggedIn, name, email } = useAuth();
+    let navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoggedIn === false) redirect("/");
-    }, []);
+        if (!isLoggedIn) 
+            navigate("/");
+    }, [isLoggedIn]);
 
     return (
         <div className="flex items-center justify-center mt-5">

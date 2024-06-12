@@ -1,9 +1,7 @@
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import UserIcon from "../images/user.png";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CashFlowIcon from "../images/cashflow.png"
-import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 const AppNavBar = () => {
@@ -12,7 +10,7 @@ const AppNavBar = () => {
     const { isLoggedIn, name, email, Logout } = useAuth();
 
     const handleLogout = () => {
-        Logout();
+        Logout(localStorage.getItem("id"));
         navigate("/");
     };
 

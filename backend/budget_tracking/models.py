@@ -4,12 +4,13 @@ from decimal import Decimal
 from django.db import models
 from django.db.models import QuerySet, Sum, F
 from django.core.mail import send_mail
-from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth.base_user import AbstractBaseUser
-from .managers import HubUserManager, TransactionsManager, TransactionsQueryset
+# from django.contrib.auth.models import PermissionsMixin
+# from django.contrib.auth.base_user import AbstractBaseUser
+# from .managers import HubUserManager
+from .managers import TransactionsManager, TransactionsQueryset
 
 from datetime import date, datetime, timedelta
-from dateutil.relativedelta import relativedelta
+# from dateutil.relativedelta import relativedelta
 
 class Wallet(models.Model):
     user = models.ForeignKey(users.models.User, on_delete=models.CASCADE)
