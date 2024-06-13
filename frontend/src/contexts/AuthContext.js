@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import Cookies from 'js-cookies';
+import { jwtDecode, InvalidTokenError} from 'jwt-decode';
 
 // create context
 const AuthContext = createContext();
@@ -9,13 +9,22 @@ const AuthContext = createContext();
 
 // create context provider
 const AuthContextProvider = ({children}) => {
-    const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/";
-    const LogInURL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
-    const LogOutURL = process.env.REACT_APP_BACKEND_URL + "/users/logout/";
+    const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/signup/";
+
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") || false);
     const [name, setName] = useState(localStorage.getItem("name") || "");
     const [email, setEmail] = useState(localStorage.getItem("email") || "");
+    const [authTokens, setAuthTokens] = useState(() => {
+        const access = localStorage.getItem('access_token');
+        const refresh = localStorage.getItem('refresh_token');
+        return { access, refresh };
+    });
+    const [user, setUser] = useState(() => {
+        const token = localStorage.getItem('access_token');
+        return token ? jwtDecode(token) : null;
+    });
+    
 
     useEffect(() => {
         if (localStorage.getItem("isLoggedIn") === "true") {
@@ -24,59 +33,37 @@ const AuthContextProvider = ({children}) => {
           setEmail(localStorage.getItem("email"));
         }
       }, [isLoggedIn]);
-
-    // handle login
-    const [values, setValues] = useState({
-        username: "",
-        useremail: "",
-        password: "",
-        error: "",
-        success: false,
-        loading: false,
-    });
     
-    const signin = (user) => {
-        const formData = new FormData();
-        // append all info in user object to formData
-        for (const name in user) {
-            formData.append(name, user[name]);
+    useEffect(() => {
+        if (authTokens.access) {
+            const decodedToken = jwtDecode(authTokens.access);
+            if (decodedToken.exp * 1000 < Date.now()) {
+                setAuthTokens(null);
+                setUser(null);
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
+            }
         }
-        for (var key of formData.keys()) {
-            console.log("MYKEY", key);
-        }
+    }, [authTokens]);
 
-        return fetch(LogInURL, {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => {
-                console.log("SUCCESS", response);
-                return response.json();
-            })
-            .catch((err) => console.log(err));
-    };
-    const Login = async (event) => {
-        event.preventDefault();
-        setValues({ ...values, error: false, loading: true });
-        const email = event.target.email.value;
-        const password = event.target.password.value;
-        await signin({ email, password })
-            .then((data) => {
-                console.log("DATA", data);
-                if (data.success) {
-                    toast.success(data.message);
-                    setIsLoggedIn(true);
-                    localStorage.setItem("isLoggedIn", "true");
-                    localStorage.setItem("id", data.id)
-                    localStorage.setItem("name", data.user.name);
-                    localStorage.setItem("email", email);
-                    setEmail(email);
-                    // navigate("/profile");
-                } else {
-                    toast.error(data.error);
-                }
-            })
-            .catch((err) => console.log(err));
+    
+
+    const Login = (tokens) => {
+        setAuthTokens({
+            access: tokens.access,
+            refresh: tokens.refresh,
+        });
+        const decodedToken = jwtDecode(authTokens.access);
+        setUser(decodedToken);
+        setIsLoggedIn(true);
+        setName(decodedToken.name);
+        setEmail(decodedToken.email);
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("name", name);
+        localStorage.setItem("email", email);
+        localStorage.setItem('access_token', tokens.access);
+        localStorage.setItem('refresh_token', tokens.refresh);
+        console.log(authTokens.access);
     };
 
 
@@ -97,18 +84,26 @@ const AuthContextProvider = ({children}) => {
         try {
             const res = await axios.post(RegURL, formData);
             const data = res.data;
-            if (data.id) {
+            if (data.access) {
                 toast.success(data.message);
                 setIsLoggedIn(true);
+                setName(name);
+                setEmail(email);
+                setAuthTokens({
+                    'access': data.access,
+                    'refresh': data.refresh,
+                })
+                setUser(jwtDecode(data.access));
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("name", name);
                 localStorage.setItem("email", email);
-                setName(name);
-                setEmail(email);
+                localStorage.setItem("access_token", data.access);
+                localStorage.setItem("refresh_token", data.refresh);
+                
                 // navigate("/profile");
                 console.log("Successful Registration.");
             } else {
-                toast.error(data.message);
+                toast.error(data.error);
             }
         } catch (err) {
             toast.error("Some error occurred");
@@ -116,35 +111,25 @@ const AuthContextProvider = ({children}) => {
         }
     };
 
-    // // handle log out
-    const Logout = async (user_id) => {
-        try {
-            const res = await axios.post(LogOutURL + `${user_id}/`);
-            if (res.data.success) {
-                console.log("Logout successful");
 
-                setIsLoggedIn(false);
-                console.log(isLoggedIn);
-                localStorage.removeItem("isLoggedIn");
-                localStorage.removeItem("id");
-                setName(null);
-                setEmail(null);
-                localStorage.removeItem("name");
-                localStorage.removeItem("email");
-                toast.success("You are successfully logged out!");
-            } else {
-                console.error("Logout failed: ", res.data.error);
-                toast.error("Logout failed: " + res.data.error);
-            }
-        } catch (error) {
-            console.error("An error occurred: ", error);
-            toast.error("An error occurred: " + error);
-        }
-        
-    };
+    const Logout = () => {
+        setAuthTokens({
+            access: null,
+            refresh: null,
+        });
+        setUser(null);
+        setName(null);
+        setEmail(null);
+        setIsLoggedIn(false);
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+    }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, name, email, 
+        <AuthContext.Provider value={{ isLoggedIn, name, email, authTokens, user,
                                       setIsLoggedIn, setName, setEmail,
                                       Logout, Register, Login,
                                     }}>

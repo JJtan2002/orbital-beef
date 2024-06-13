@@ -1,7 +1,4 @@
 from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenRefreshView,
-)
 
 from .views import (TransactionAPIView, get_saving_plans, get_transactions,
                     get_routes, create_user, WalletAPIView, LabelAPIView)

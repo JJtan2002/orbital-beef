@@ -1,14 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.db.models import QuerySet, Sum, F
-from django.conf import settings
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from rest_framework.authtoken.models import Token
+from django.db.models import QuerySet
 import budget_tracking.models
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, name, email, password=None):
         """
         Creates and saves a User with the given email and password.
         """
@@ -17,6 +13,7 @@ class UserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
+            name=name,
         )
 
         user.set_password(password)
@@ -54,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     # session_token = models.CharField(max_length=10, default=0)
-    session_token = models.CharField(blank=True, null=True, max_length=400)
+    # session_token = models.CharField(blank=True, null=True, max_length=400)
 
     active = models.BooleanField(default=True)
     # a admin user; non super-user
@@ -88,7 +85,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def create_auth_token(sender, instance=None, created=False, **kwargs):
+#     if created:
+#         Token.objects.create(user=instance)

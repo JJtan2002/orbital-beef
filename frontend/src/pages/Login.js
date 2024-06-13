@@ -1,15 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const URL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
 
 const Login = () => {
     let navigate = useNavigate();
 
-    const { isLoggedIn, Login } = useAuth();    
+    const { isLoggedIn, Login } = useAuth();  
+    const TokenObtainURL = process.env.REACT_APP_BACKEND_URL + "/api/token/";  
    
     useEffect(() => {
         if (isLoggedIn) {
@@ -19,7 +20,18 @@ const Login = () => {
 
 
     const handleLogin = async (event) => {
-        Login(event);
+        event.preventDefault();
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        try {
+            const response = await axios.post(TokenObtainURL, { email, password });
+            const { access, refresh } = response.data;
+            Login ({ access, refresh });
+        } catch (error) {
+            console.error('Login failed: ', error);
+            toast.error("Login failed: " + error)
+        }
+      
     };
 
     return (

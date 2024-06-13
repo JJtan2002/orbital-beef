@@ -1,17 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 
 const Home = () => {
     let navigate = useNavigate();
 
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, authTokens } = useAuth();
 
     useEffect(() => {
         if (isLoggedIn) {
             navigate("/profile");
             console.log("Jump to home");
+            console.log(authTokens.access);
         }
     }, [isLoggedIn, navigate]);
     

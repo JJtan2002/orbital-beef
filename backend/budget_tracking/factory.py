@@ -1,7 +1,7 @@
 import datetime
 
 from users.models import User
-from .models import Transaction, TransactionRecurrency, Wallet
+from .models import Transaction
 from faker import Faker
 from faker.providers import DynamicProvider
 

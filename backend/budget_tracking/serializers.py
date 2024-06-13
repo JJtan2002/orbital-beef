@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from .models import Transaction, SavingPlan, Wallet, CustomLabel
 
-# from django.utils import timezone
-
 
 
 class LabelSerializer(serializers.ModelSerializer):
