@@ -1,18 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
 
 const Home = () => {
     let navigate = useNavigate();
 
-    const { isLoggedIn, authTokens } = useAuth();
+    const { isLoggedIn, authTokens, name } = useAuth();
 
     useEffect(() => {
         if (isLoggedIn) {
             navigate("/profile");
             console.log("Jump to home");
             console.log(authTokens.access);
+            console.log(jwtDecode(authTokens.access));
         }
     }, [isLoggedIn, navigate]);
     

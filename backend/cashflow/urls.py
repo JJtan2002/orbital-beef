@@ -27,4 +27,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('budget_tracking/', include('budget_tracking.urls')),
+    path('protected/', views.ProtectedView.as_view(), name='protected'),
 ]

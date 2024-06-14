@@ -32,7 +32,8 @@ class UserManager(BaseUserManager):
         Creates and saves a superuser with the given email and password.
         """
         user = self.create_user(
-            email,
+            name='Admin',
+            email=email,
             password=password,
         )
         user.is_staff = True
@@ -49,9 +50,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-
-    # session_token = models.CharField(max_length=10, default=0)
-    # session_token = models.CharField(blank=True, null=True, max_length=400)
 
     active = models.BooleanField(default=True)
     # a admin user; non super-user
@@ -83,9 +81,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return self.name
 
-
-
-# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-# def create_auth_token(sender, instance=None, created=False, **kwargs):
-#     if created:
-#         Token.objects.create(user=instance)

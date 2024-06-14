@@ -10,7 +10,7 @@ const AuthContext = createContext();
 // create context provider
 const AuthContextProvider = ({children}) => {
     const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/signup/";
-
+    const RefreshURL = process.env.REACT_APP_BACKEND_URL + "/api/token/refresh/";
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") || false);
     const [name, setName] = useState(localStorage.getItem("name") || "");
@@ -26,13 +26,13 @@ const AuthContextProvider = ({children}) => {
     });
     
 
-    useEffect(() => {
-        if (localStorage.getItem("isLoggedIn") === "true") {
-          setIsLoggedIn(true);
-          setName(localStorage.getItem("name"));
-          setEmail(localStorage.getItem("email"));
-        }
-      }, [isLoggedIn]);
+    // useEffect(() => {
+    //     if (localStorage.getItem("isLoggedIn") === "true") {
+    //       setIsLoggedIn(true);
+    //       setName(localStorage.getItem("name"));
+    //       setEmail(localStorage.getItem("email"));
+    //     }
+    //   }, [isLoggedIn]);
     
     useEffect(() => {
         if (authTokens.access) {
@@ -46,28 +46,35 @@ const AuthContextProvider = ({children}) => {
         }
     }, [authTokens]);
 
-    
-
+    /**
+     * Handle Login
+     */
     const Login = (tokens) => {
         setAuthTokens({
             access: tokens.access,
             refresh: tokens.refresh,
         });
-        const decodedToken = jwtDecode(authTokens.access);
+        const decodedToken = jwtDecode(tokens.access);
+        console.log(decodedToken);
         setUser(decodedToken);
-        setIsLoggedIn(true);
         setName(decodedToken.name);
+        console.log(name);
         setEmail(decodedToken.email);
-        localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("name", name);
         localStorage.setItem("email", email);
         localStorage.setItem('access_token', tokens.access);
         localStorage.setItem('refresh_token', tokens.refresh);
+        setIsLoggedIn(true);
+        localStorage.setItem("isLoggedIn", "true");
         console.log(authTokens.access);
     };
 
 
-    // handle register
+    /**
+     * Handle Register
+     * @param {*} ev 
+     * @returns 
+     */
     const Register = async (ev) => {
         ev.preventDefault();
         const name = ev.target.name.value;
@@ -111,7 +118,9 @@ const AuthContextProvider = ({children}) => {
         }
     };
 
-
+    /**
+     * Handle Logout
+     */
     const Logout = () => {
         setAuthTokens({
             access: null,
@@ -128,10 +137,26 @@ const AuthContextProvider = ({children}) => {
         localStorage.removeItem('refresh_token');
     }
 
+    /**
+     * Handle refresh
+     */
+    const refresh = async () => {
+        const response = await axios.post(RefreshURL, {
+            refresh: authTokens.refresh,
+        });
+        const newTokens = response.data;
+        setAuthTokens(newTokens);
+        console.log("Token refresh! Success!");
+        setUser(jwtDecode(newTokens.access));
+        localStorage.setItem("access_tokem", newTokens.access);
+        localStorage.setItem("refresh_token", newTokens.refresh);
+        return newTokens.access;
+    }
+
     return (
         <AuthContext.Provider value={{ isLoggedIn, name, email, authTokens, user,
                                       setIsLoggedIn, setName, setEmail,
-                                      Logout, Register, Login,
+                                      Logout, Register, Login, refresh,
                                     }}>
           {children}
         </AuthContext.Provider>

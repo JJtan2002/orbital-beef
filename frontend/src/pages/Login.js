@@ -4,7 +4,6 @@ import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
 
 const Login = () => {
     let navigate = useNavigate();
@@ -25,11 +24,12 @@ const Login = () => {
         const password = event.target.password.value;
         try {
             const response = await axios.post(TokenObtainURL, { email, password });
+            console.log("Login response get!");
             const { access, refresh } = response.data;
             Login ({ access, refresh });
         } catch (error) {
             console.error('Login failed: ', error);
-            toast.error("Login failed: " + error)
+            toast.error("Login failed: Invalid email or password!")
         }
       
     };
