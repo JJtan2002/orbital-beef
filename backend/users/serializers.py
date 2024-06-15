@@ -1,6 +1,16 @@
 from rest_framework import serializers
 from .models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # Add custom fields
+        data['name'] = self.user.name
+
+        return data
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 

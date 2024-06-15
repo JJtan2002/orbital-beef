@@ -8,12 +8,12 @@ import { toast } from "react-toastify";
 const Login = () => {
     let navigate = useNavigate();
 
-    const { isLoggedIn, Login } = useAuth();  
-    const TokenObtainURL = process.env.REACT_APP_BACKEND_URL + "/api/token/";  
-   
+    const { Login, isLoggedIn } = useAuth();
+    const TokenObtainURL = process.env.REACT_APP_BACKEND_URL + "/api/token/";
+
     useEffect(() => {
         if (isLoggedIn) {
-            navigate("/");
+            navigate("/profile");
         }
     }, [isLoggedIn, navigate]);
 
@@ -25,13 +25,13 @@ const Login = () => {
         try {
             const response = await axios.post(TokenObtainURL, { email, password });
             console.log("Login response get!");
-            const { access, refresh } = response.data;
-            Login ({ access, refresh });
+            const { access, refresh, name } = response.data;
+            Login({ access, refresh, name, email });
         } catch (error) {
             console.error('Login failed: ', error);
             toast.error("Login failed: Invalid email or password!")
         }
-      
+
     };
 
     return (
