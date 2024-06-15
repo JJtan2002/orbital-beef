@@ -2,92 +2,41 @@ from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from .serializers import UserSerializer
 from .models import User
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth import get_user_model
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import login, logout
 import random
-import re
-from rest_framework.authtoken.models import Token
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
-def generate_session_token(length=10):
-    return ''.join(random.SystemRandom().choice([chr(i) for i in range(97, 123)] + [str(i) for i in range(10)]) for _ in range(length))
-
-
-@csrf_exempt
+@api_view(['POST'])
 @permission_classes([AllowAny])
-def signin(request):
-    if not request.method == 'POST':
-        return JsonResponse({'error': 'Send a Post request'})
+def signup(request):
+    if request.method == 'POST':
+        data = request.data
+        name = data.get('name')
+        email = data.get('email')
+        password = data.get('password')
 
-    username = request.POST.get('email')
-    password = request.POST.get('password')
-
-# Validation
-    if not re.match("^[^\s@]+@[^\s@]+\.[^\s@]+$", username):
-        return JsonResponse({'error': 'Enter a valid email'})
-
-    if len(password) < 3:
-        return JsonResponse({'error': "Password should be at least 3 character long"})
-
-    UserModel = get_user_model()
-
-    try:
-        user = UserModel.objects.get(email=username)
-
-        if user.check_password(password):
-            usr_dict = UserModel.objects.filter(
-                email=username).values().first()
-            usr_dict.pop('password')
-
-            if user.session_token != "0":
-                user.session_token = "0"
-                user.save()
-                #return JsonResponse({"error": "Session already exists"})
-
-            # token = generate_session_token()
-            token = Token.objects.get(user=user).key
-            user.session_token = token
-            user.save()
-            login(request, user)
-            return JsonResponse({"token": token, "user": usr_dict, "message": "good job"})
-        else:
-            return JsonResponse({'error': 'Invalid password'})
-
-    except UserModel.DoesNotExist():
-        return JsonResponse({'error': 'Invalid Email'})
-
-
-# @csrf_exempt
-def signout(request, id):
-    logout(request)
-
-    UserModel = get_user_model()
-
-    try:
-        user = UserModel.objects.get(pk=id)
-        # user.session_token = "0"
-        user.session_token = "0"
-        user.save()
-    except UserModel.DoesNotExist:
-        return JsonResponse({"error": 'Invalid User Id'})
-
-    return JsonResponse({"success": 'Logout success'})
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    permission_classes_by_action = {'create': [AllowAny]}
-
-    queryset = User.objects.all().order_by('id')
-    serializer_class = UserSerializer
-
-    def get_permissions(self):
+        if not email or not password or not name:
+            return JsonResponse({'error': 'Please provide all the required fields'}, status=400)
+        
+        UserModel = get_user_model()
         try:
-            return [permission() for permission in self.permission_classes_by_action[self.action]]
-
-        except KeyError:
-            return [permission() for permission in self.permission_classes]
+            user = UserModel.objects.create_user(name = name, email = email, password = password)
+            refresh = RefreshToken.for_user(user)
+            return JsonResponse({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'message': 'Successful Registration!',
+            })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=405)
+        
 # Create your views here.

@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
-import { useState, useEffect } from "react";
+import Protected from "./pages/Protected";
 
 const App = () => {
 
@@ -50,6 +50,12 @@ const App = () => {
             <Route path="profile" exact
               element={
                 <Profile 
+                />
+              }
+            />
+            <Route path="protected" exact
+              element={
+                <Protected
                 />
               }
             />

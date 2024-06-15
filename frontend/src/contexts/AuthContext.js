@@ -1,84 +1,82 @@
-import React, { createContext, useState, useEffect, useContext} from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-// import { useNavigate } from 'react-router-dom';
+import { jwtDecode, InvalidTokenError } from 'jwt-decode';
 
 // create context
 const AuthContext = createContext();
 
 
 // create context provider
-const AuthContextProvider = ({children}) => {
-    const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/";
-    const LogURL = process.env.REACT_APP_BACKEND_URL + "/users/login/";
+const AuthContextProvider = ({ children }) => {
+    const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/signup/";
+    const RefreshURL = process.env.REACT_APP_BACKEND_URL + "/api/token/refresh/";
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") || false);
     const [name, setName] = useState(localStorage.getItem("name") || "");
     const [email, setEmail] = useState(localStorage.getItem("email") || "");
+    const [authTokens, setAuthTokens] = useState(() => {
+        const access = localStorage.getItem('access_token');
+        const refresh = localStorage.getItem('refresh_token');
+        return { access, refresh };
+    });
+    const [user, setUser] = useState(() => {
+        const token = localStorage.getItem('access_token');
+        return token ? jwtDecode(token) : null;
+    });
+
+
+    // useEffect(() => {
+    //     if (localStorage.getItem("isLoggedIn") === "true") {
+    //       setIsLoggedIn(true);
+    //       setName(localStorage.getItem("name"));
+    //       setEmail(localStorage.getItem("email"));
+    //     }
+    //   }, [isLoggedIn]);
 
     useEffect(() => {
-        if (localStorage.getItem("isLoggedIn") === "true") {
-          setIsLoggedIn(true);
-          setName(localStorage.getItem("name"));
-          setEmail(localStorage.getItem("email"));
+        if (authTokens.access) {
+            const decodedToken = jwtDecode(authTokens.access);
+            if (decodedToken.exp * 1000 < Date.now()) {
+                setAuthTokens({ access: null, refresh: null, name: null });
+                setUser(null);
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
+            }
         }
-      }, [isLoggedIn]);
+    }, [authTokens]);
 
-    // handle login
-    const [values, setValues] = useState({
-        username: "",
-        useremail: "",
-        password: "",
-        error: "",
-        success: false,
-        loading: false,
-    });
-    
-    const signin = (user) => {
-        const formData = new FormData();
-        // append all info in user object to formData
-        for (const name in user) {
-            formData.append(name, user[name]);
-        }
-        for (var key of formData.keys()) {
-            console.log("MYKEY", key);
-        }
+    /**
+     * Handle Login
+     */
+    const Login = (tokens) => {
+        setAuthTokens({
+            access: tokens.access,
+            refresh: tokens.refresh,
+        });
+        const decodedToken = jwtDecode(tokens.access);
+        console.log(decodedToken);
+        localStorage.setItem("name", tokens.name);
+        localStorage.setItem("email", tokens.email);
+        localStorage.setItem('access_token', tokens.access);
+        localStorage.setItem('refresh_token', tokens.refresh);
+        localStorage.setItem("isLoggedIn", "true");
+        setUser(decodedToken);
+        setName(tokens.name);
+        console.log(name);
+        setEmail(tokens.email);
 
-        return fetch(LogURL, {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => {
-                console.log("SUCCESS", response);
-                return response.json();
-            })
-            .catch((err) => console.log(err));
-    };
-    const Login = async (event) => {
-        event.preventDefault();
-        setValues({ ...values, error: false, loading: true });
-        const email = event.target.email.value;
-        const password = event.target.password.value;
-        await signin({ email, password })
-            .then((data) => {
-                console.log("DATA", data);
-                if (data.token) {
-                    toast.success(data.message);
-                    setIsLoggedIn(true);
-                    localStorage.setItem("isLoggedIn", "true");
-                    localStorage.setItem("name", data.user.name);
-                    localStorage.setItem("email", email);
-                    setEmail(email);
-                    // navigate("/profile");
-                } else {
-                    toast.error("Wrong email or password! Please try again.");
-                }
-            })
-            .catch((err) => console.log(err));
+        setIsLoggedIn(true);
+
+        console.log(authTokens.access);
     };
 
 
-    // handle register
+    /**
+     * Handle Register
+     * @param {*} ev 
+     * @returns 
+     */
     const Register = async (ev) => {
         ev.preventDefault();
         const name = ev.target.name.value;
@@ -95,18 +93,26 @@ const AuthContextProvider = ({children}) => {
         try {
             const res = await axios.post(RegURL, formData);
             const data = res.data;
-            if (data.id) {
+            if (data.access) {
                 toast.success(data.message);
                 setIsLoggedIn(true);
+                setName(name);
+                setEmail(email);
+                setAuthTokens({
+                    'access': data.access,
+                    'refresh': data.refresh,
+                })
+                setUser(jwtDecode(data.access));
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("name", name);
                 localStorage.setItem("email", email);
-                setName(name);
-                setEmail(email);
+                localStorage.setItem("access_token", data.access);
+                localStorage.setItem("refresh_token", data.refresh);
+
                 // navigate("/profile");
                 console.log("Successful Registration.");
             } else {
-                toast.error(data.message);
+                toast.error(data.error);
             }
         } catch (err) {
             toast.error("Some error occurred");
@@ -114,27 +120,50 @@ const AuthContextProvider = ({children}) => {
         }
     };
 
-    // // handle log out
+    /**
+     * Handle Logout
+     */
     const Logout = () => {
-        setIsLoggedIn(false);
-        console.log(isLoggedIn);
-        localStorage.removeItem("isLoggedIn");
+        setAuthTokens({
+            access: null,
+            refresh: null,
+        });
+        setUser(null);
         setName(null);
         setEmail(null);
-        console.log("name: " + name + " isLoggedIn: " + isLoggedIn);
-        console.log("localStorage: " + localStorage.getItem("isLoggedIn"));
-        // navigate("/");
-        toast.success("You are successfully logged out!");
-    };
+        setIsLoggedIn(false);
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+    }
+
+    /**
+     * Handle refresh
+     */
+    const refresh = async () => {
+        const response = await axios.post(RefreshURL, {
+            refresh: authTokens.refresh,
+        });
+        const newTokens = response.data;
+        setAuthTokens(newTokens);
+        console.log("Token refresh! Success!");
+        setUser(jwtDecode(newTokens.access));
+        localStorage.setItem("access_tokem", newTokens.access);
+        localStorage.setItem("refresh_token", newTokens.refresh);
+        return newTokens.access;
+    }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, name, email, 
-                                      setIsLoggedIn, setName, setEmail,
-                                      Logout, Register, Login,
-                                    }}>
-          {children}
+        <AuthContext.Provider value={{
+            isLoggedIn, name, email, authTokens, user,
+            setIsLoggedIn, setName, setEmail,
+            Logout, Register, Login, refresh,
+        }}>
+            {children}
         </AuthContext.Provider>
-      );
+    );
 
 }
 

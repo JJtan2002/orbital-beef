@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 
@@ -12,7 +10,7 @@ const Register = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            navigate("profile");
+            navigate("/profile");
         }
     }, [isLoggedIn, navigate]);
 

@@ -1,13 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-
-from django.conf import settings
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from rest_framework.authtoken.models import Token
+from django.db.models import QuerySet
+import budget_tracking.models
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, name, email, password=None):
         """
         Creates and saves a User with the given email and password.
         """
@@ -16,10 +13,18 @@ class UserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
+            name=name,
         )
 
         user.set_password(password)
         user.save(using=self._db)
+
+        # Creation of a related wallet for the created user
+        wallet = budget_tracking.models.Wallet.objects.create(
+            user_id=user.pk,
+            current_amount=0
+        )
+        wallet.save()
         return user
 
     def create_superuser(self, email, password):
@@ -27,7 +32,8 @@ class UserManager(BaseUserManager):
         Creates and saves a superuser with the given email and password.
         """
         user = self.create_user(
-            email,
+            name='Admin',
+            email=email,
             password=password,
         )
         user.is_staff = True
@@ -45,9 +51,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    # session_token = models.CharField(max_length=10, default=0)
-    session_token = models.CharField(blank=True, null=True, max_length=400)
-
     active = models.BooleanField(default=True)
     # a admin user; non super-user
     is_staff = models.BooleanField(default=False)
@@ -59,8 +62,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    
+    def get_wallet(self) -> 'Wallet':
+        """
+        Returns the wallet related to that user.
+        """
+        return budget_tracking.models.Wallet.objects.get(user_id=self.pk)
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+    def get_labels(self) -> QuerySet['CustomLabel']:
+        """
+        Return all CustomLabels related to that user
+        """
+        return self.get_wallet().get_labels()
+
+    def get_name(self):
+        """
+        Returns the name of the user.
+        """
+        return self.name
+
