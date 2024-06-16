@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { jwtDecode, InvalidTokenError } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 // create context
 const AuthContext = createContext();
@@ -13,8 +13,6 @@ const AuthContextProvider = ({ children }) => {
     const RefreshURL = process.env.REACT_APP_BACKEND_URL + "/api/token/refresh/";
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") || false);
-    const [name, setName] = useState(localStorage.getItem("name") || "");
-    const [email, setEmail] = useState(localStorage.getItem("email") || "");
     const [authTokens, setAuthTokens] = useState(() => {
         const access = localStorage.getItem('access_token');
         const refresh = localStorage.getItem('refresh_token');
@@ -26,19 +24,22 @@ const AuthContextProvider = ({ children }) => {
     });
 
 
-    // useEffect(() => {
-    //     if (localStorage.getItem("isLoggedIn") === "true") {
-    //       setIsLoggedIn(true);
-    //       setName(localStorage.getItem("name"));
-    //       setEmail(localStorage.getItem("email"));
-    //     }
-    //   }, [isLoggedIn]);
+    useEffect(() => {
+        if (localStorage.getItem("isLoggedIn") === "true") {
+          setIsLoggedIn(true);
+          setAuthTokens({
+            access: localStorage.getItem('access_token'),
+            refresh: localStorage.getItem('refresh_token'),
+          });
+          setUser(jwtDecode(authTokens.access));
+        }
+      }, [isLoggedIn]);
 
     useEffect(() => {
         if (authTokens.access) {
             const decodedToken = jwtDecode(authTokens.access);
             if (decodedToken.exp * 1000 < Date.now()) {
-                setAuthTokens({ access: null, refresh: null, name: null });
+                setAuthTokens({ access: null, refresh: null });
                 setUser(null);
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
@@ -56,16 +57,10 @@ const AuthContextProvider = ({ children }) => {
         });
         const decodedToken = jwtDecode(tokens.access);
         console.log(decodedToken);
-        localStorage.setItem("name", decodedToken.name);
-        localStorage.setItem("email", decodedToken.email);
         localStorage.setItem('access_token', tokens.access);
         localStorage.setItem('refresh_token', tokens.refresh);
         localStorage.setItem("isLoggedIn", "true");
         setUser(decodedToken);
-        setName(decodedToken.name);
-        console.log(name);
-        setEmail(decodedToken.email);
-
         setIsLoggedIn(true);
 
         console.log(authTokens.access);
@@ -96,16 +91,12 @@ const AuthContextProvider = ({ children }) => {
             if (data.access) {
                 toast.success(data.message);
                 setIsLoggedIn(true);
-                setName(name);
-                setEmail(email);
                 setAuthTokens({
                     'access': data.access,
                     'refresh': data.refresh,
                 })
                 setUser(jwtDecode(data.access));
                 localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("name", name);
-                localStorage.setItem("email", email);
                 localStorage.setItem("access_token", data.access);
                 localStorage.setItem("refresh_token", data.refresh);
 
@@ -129,12 +120,8 @@ const AuthContextProvider = ({ children }) => {
             refresh: null,
         });
         setUser(null);
-        setName(null);
-        setEmail(null);
         setIsLoggedIn(false);
         localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem("name");
-        localStorage.removeItem("email");
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
     }
@@ -157,8 +144,8 @@ const AuthContextProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{
-            isLoggedIn, name, email, authTokens, user,
-            setIsLoggedIn, setName, setEmail,
+            isLoggedIn,  authTokens, user,
+            setIsLoggedIn, setAuthTokens, setUser,
             Logout, Register, Login, refresh,
         }}>
             {children}

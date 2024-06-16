@@ -7,7 +7,7 @@ import { useAuth } from "../contexts/AuthContext";
 const AppNavBar = () => {
     let navigate = useNavigate();
    
-    const { isLoggedIn, name, email, Logout } = useAuth();
+    const { isLoggedIn, user, Logout } = useAuth();
 
     const handleLogout = () => {
         Logout(localStorage.getItem("id"));
@@ -29,8 +29,8 @@ const AppNavBar = () => {
                     <Dropdown arrowIcon={false} inline
                         label={<Avatar alt="User settings" img={UserIcon} rounded />}>
                         <Dropdown.Header>
-                            <span className="block text-sm">{name}</span>
-                            <span className="block truncate text-sm font-medium">{email}</span>
+                            <span className="block text-sm">{user.name}</span>
+                            <span className="block truncate text-sm font-medium">{user.email}</span>
                         </Dropdown.Header>
                         <Dropdown.Item>Settings</Dropdown.Item>
                         <Dropdown.Item>Your Orders</Dropdown.Item>

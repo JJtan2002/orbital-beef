@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 const Home = () => {
     let navigate = useNavigate();
 
-    const { isLoggedIn, authTokens, name } = useAuth();
+    const { isLoggedIn, authTokens } = useAuth();
     /*
         useEffect(() => {
             if (isLoggedIn) {
