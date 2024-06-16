@@ -1,0 +1,6 @@
+# Ignore Python cache files
+**/__pycache__/
+**/*.pyc
+
+# Ignore SQLite database file
+backend/db.sqlite3
