@@ -37,12 +37,14 @@ const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (authTokens.access) {
-            const decodedToken = jwtDecode(authTokens.access);
+            const decodedToken = jwtDecode(authTokens.refresh);
             if (decodedToken.exp * 1000 < Date.now()) {
                 setAuthTokens({ access: null, refresh: null });
                 setUser(null);
+                setIsLoggedIn(false);
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
+                localStorage.removeItem('isLoggodIn')
             }
         }
     }, [authTokens]);
@@ -96,6 +98,7 @@ const AuthContextProvider = ({ children }) => {
                     'refresh': data.refresh,
                 })
                 setUser(jwtDecode(data.access));
+                console.log(user);
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("access_token", data.access);
                 localStorage.setItem("refresh_token", data.refresh);

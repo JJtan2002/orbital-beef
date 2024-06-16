@@ -12,7 +12,7 @@ const Profile = () => {
             navigate("/");
     }, [isLoggedIn]);
 
-    return isLoggedIn && (
+    return isLoggedIn && user && (
         <div className="flex flex-col items-center justify-center mt-5">
 
             {/* User Profile Card and Transaction Form*/}

@@ -26,6 +26,8 @@ def signup(request):
         try:
             user = UserModel.objects.create_user(name = name, email = email, password = password)
             refresh = RefreshToken.for_user(user)
+            refresh['name']=user.name
+            refresh['email']=user.email 
             return JsonResponse({
                 'access': str(refresh.access_token),
                 'refresh': str(refresh),
