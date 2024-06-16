@@ -8,7 +8,7 @@ const Protected = () => {
     const getProtectedData = async () => {
         try {
           const response = await apiProtected.get('/protected/');
-          // const response = await axios.get('/protected/');
+          // const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/protected/');
           console.log('Protected data:', response.data);
           // Handle response data as needed
         } catch (error) {

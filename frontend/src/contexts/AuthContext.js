@@ -56,15 +56,15 @@ const AuthContextProvider = ({ children }) => {
         });
         const decodedToken = jwtDecode(tokens.access);
         console.log(decodedToken);
-        localStorage.setItem("name", tokens.name);
-        localStorage.setItem("email", tokens.email);
+        localStorage.setItem("name", decodedToken.name);
+        localStorage.setItem("email", decodedToken.email);
         localStorage.setItem('access_token', tokens.access);
         localStorage.setItem('refresh_token', tokens.refresh);
         localStorage.setItem("isLoggedIn", "true");
         setUser(decodedToken);
-        setName(tokens.name);
+        setName(decodedToken.name);
         console.log(name);
-        setEmail(tokens.email);
+        setEmail(decodedToken.email);
 
         setIsLoggedIn(true);
 
@@ -150,7 +150,7 @@ const AuthContextProvider = ({ children }) => {
         setAuthTokens(newTokens);
         console.log("Token refresh! Success!");
         setUser(jwtDecode(newTokens.access));
-        localStorage.setItem("access_tokem", newTokens.access);
+        localStorage.setItem("access_token", newTokens.access);
         localStorage.setItem("refresh_token", newTokens.refresh);
         return newTokens.access;
     }
