@@ -1,16 +1,17 @@
 from rest_framework import serializers
 from .models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, Token
 
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user) -> Token:
+        token = super().get_token(user)
+        # Add custom claims
+        token['name'] = user.name
+        token['email'] = user.email
 
-        # Add custom fields
-        data['name'] = self.user.name
-
-        return data
+        return token
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 

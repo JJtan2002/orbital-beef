@@ -25,8 +25,8 @@ const Login = () => {
         try {
             const response = await axios.post(TokenObtainURL, { email, password });
             console.log("Login response get!");
-            const { access, refresh, name } = response.data;
-            Login({ access, refresh, name, email });
+            const { access, refresh } = response.data;
+            Login({ access, refresh });
         } catch (error) {
             console.error('Login failed: ', error);
             toast.error("Login failed: Invalid email or password!")

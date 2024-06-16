@@ -8,11 +8,6 @@ import random
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
 
 
 @api_view(['POST'])
@@ -31,6 +26,8 @@ def signup(request):
         try:
             user = UserModel.objects.create_user(name = name, email = email, password = password)
             refresh = RefreshToken.for_user(user)
+            refresh['name']=user.name
+            refresh['email']=user.email 
             return JsonResponse({
                 'access': str(refresh.access_token),
                 'refresh': str(refresh),
