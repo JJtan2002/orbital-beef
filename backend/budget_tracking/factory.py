@@ -33,6 +33,7 @@ class TransactionFactory:
         name = self.faker.unique.first_name()
         default_values = {
             'email': f'{name}@gmail.com',
+            'name' : name,
             **kwargs
         }
         return User.objects.create_user(**default_values)
