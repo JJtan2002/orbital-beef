@@ -51,4 +51,4 @@ const useAxiosPrivate = () => {
   return apiPrivate;
 };
 
-export { apiPrivate, useAxiosPrivate };
+export default useAxiosPrivate;

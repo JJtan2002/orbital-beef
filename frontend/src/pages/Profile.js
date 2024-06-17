@@ -1,10 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserIcon from "../images/user.png";
 import { redirect, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useTransactions } from "../hooks/useTransactions";
+import { useWallet } from "../hooks/useWallet";
+import { useQuery } from "@tanstack/react-query";
+
+const QUERY_LIMIT = 10;
 
 const Profile = () => {
     const { isLoggedIn, user } = useAuth();
+    const { getTransactions } = useTransactions();
+    const { getWallet } = useWallet();
+
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -12,7 +20,27 @@ const Profile = () => {
             navigate("/");
     }, [isLoggedIn]);
 
-    return isLoggedIn && user && (
+    /*
+        const { data: transactions } = useQuery({
+            queryKey: ["transactions"],
+            queryFn: () => getTransactions(QUERY_LIMIT),
+        });
+    */
+    const {
+        data: wallet,
+        isPending,
+        isError,
+    } = useQuery({
+        queryKey: ["api/wallet"],
+        queryFn: () => getWallet(),
+    });
+
+    const [transactionType, setTransactionType] = useState("expense"); // State to track transaction type
+    const expenseCategories = ["Food", "Transportation", "Housing", "Utilities", "Entertainment"];
+    const incomeCategories = ["Salary", "Freelance Income", "Investment", "Gifts", "Other"];
+
+
+    return isLoggedIn && user && !isPending && (
         <div className="flex flex-col items-center justify-center mt-5">
 
             {/* User Profile Card and Transaction Form*/}
@@ -37,25 +65,40 @@ const Profile = () => {
                 </div>
 
                 {/* Transaction Form*/}
-                <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" >
+                <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Transaction</h2>
                     <form id="transaction-form" className="w-full">
                         <div className="mb-4">
-                            <input type="text" id="description" placeholder="Description" required
-                                className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+                            <input type="text" id="description" placeholder="Description" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
                         </div>
                         <div className="mb-4">
-                            <input type="number" id="amount" placeholder="Amount" required
-                                className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+                            <input type="number" id="amount" placeholder="Amount" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
                         </div>
                         <div className="mb-4">
-                            <select id="type" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+                            <select id="type" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                                onChange={(e) => setTransactionType(e.target.value)}>
+                                <option value="" disabled selected>Select Type</option>
                                 <option value="expense">Expense</option>
                                 <option value="income">Income</option>
                             </select>
                         </div>
-                        <button type="submit"
-                            className="w-full rounded-lg bg-purple-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">
+                        <div className="mb-4">
+                            <select id="category" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+                                <option value="" disabled selected>Select Category</option>
+                                {/* Conditionally render options based on transactionType */}
+                                {transactionType === "expense" && (
+                                    expenseCategories.map(category => (
+                                        <option key={category} value={category}>{category}</option>
+                                    ))
+                                )}
+                                {transactionType === "income" && (
+                                    incomeCategories.map(category => (
+                                        <option key={category} value={category}>{category}</option>
+                                    ))
+                                )}
+                            </select>
+                        </div>
+                        <button type="submit" className="w-full rounded-lg bg-purple-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">
                             Add Transaction
                         </button>
                     </form>
@@ -64,16 +107,16 @@ const Profile = () => {
                 <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Monthly Summary</h2>
                     <div className="mb-4">
-                        <label htmlFor="monthly-balance" className="block text-sm font-medium text-gray-700 dark:text-white">Monthly Balance</label>
-                        <input type="text" id="monthly-balance" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" readOnly />
+                        <label htmlFor="monthly-balance" className="block text-sm font-medium text-gray-700 dark:text-white">Current Amount</label>
+                        <input type="text" id="monthly-balance" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" value={wallet.current_amount} readOnly />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="monthly-income" className="block text-sm font-medium text-gray-700 dark:text-white">Monthly Income</label>
-                        <input type="text" id="monthly-income" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" readOnly />
+                        <label htmlFor="monthly-income" className="block text-sm font-medium text-gray-700 dark:text-white">Monthly Earnings</label>
+                        <input type="text" id="monthly-income" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" value={wallet.monthly_earnings} readOnly />
                     </div>
                     <div className="mb-4">
                         <label htmlFor="monthly-expenses" className="block text-sm font-medium text-gray-700 dark:text-white">Monthly Expenses</label>
-                        <input type="text" id="monthly-expenses" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" readOnly />
+                        <input type="text" id="monthly-expenses" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" value={wallet.monthly_expenses} readOnly />
                     </div>
                 </div>
             </div>

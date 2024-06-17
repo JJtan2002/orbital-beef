@@ -1,4 +1,4 @@
-import useAxiosPrivate from ".useAxiosPrivate";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 export function useTransactions() {
     const axiosPrivate = useAxiosPrivate();
@@ -10,7 +10,7 @@ export function useTransactions() {
         endDate
     ) {
         try {
-            let endpoint = `/transactions?limit=${limit}&chart_type=${chartType}`;
+            let endpoint = `budget_tracking/transactions?limit=${limit}&chart_type=${chartType}`;
             if (startDate)
                 endpoint += `&start_date=${startDate.toISOString().split("T")[0]}`;
             if (endDate)
@@ -35,7 +35,7 @@ export function useTransactions() {
                 ...transaction,
                 date: transaction.date,
             };
-            const response = await axiosPrivate.post("/transaction/", newTransaction);
+            const response = await axiosPrivate.post("/budget_tracking/transaction/", newTransaction);
             if (response.status !== 200) return null;
             return await response.data;
         } catch (error) {

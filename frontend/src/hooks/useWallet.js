@@ -1,11 +1,11 @@
-import useAxiosPrivate from ".useAxiosPrivate";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 export function useWallet() {
     const axiosPrivate = useAxiosPrivate();
 
     async function getWallet() {
         try {
-            const response = await axiosPrivate.get("/wallet/");
+            const response = await axiosPrivate.get("/budget_tracking/wallet/");
             const data = (await response.data);
             return data;
         } catch (error) {
@@ -20,7 +20,7 @@ export function useWallet() {
 
     async function updateWallet({ value }) {
         try {
-            const response = await axiosPrivate.put("/wallet/", value);
+            const response = await axiosPrivate.put("/budget_tracking/wallet/", value);
             const data = await response.data;
             return data;
         } catch (error) {

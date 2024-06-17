@@ -1,4 +1,4 @@
-import useAxiosPrivate from ".useAxiosPrivate";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 export function useLabels() {
     const axiosPrivate = useAxiosPrivate();
