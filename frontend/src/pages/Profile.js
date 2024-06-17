@@ -5,12 +5,13 @@ import { useAuth } from "../contexts/AuthContext";
 import { useTransactions } from "../hooks/useTransactions";
 import { useWallet } from "../hooks/useWallet";
 import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 
 const QUERY_LIMIT = 10;
 
 const Profile = () => {
     const { isLoggedIn, user } = useAuth();
-    const { getTransactions } = useTransactions();
+    const { getTransactions, createTransaction } = useTransactions();
     const { getWallet } = useWallet();
 
     let navigate = useNavigate();
@@ -35,9 +36,30 @@ const Profile = () => {
         queryFn: () => getWallet(),
     });
 
-    const [transactionType, setTransactionType] = useState("expense"); // State to track transaction type
+    const [transactionType, setTransactionType] = useState("Expense"); // State to track transaction type
     const expenseCategories = ["Food", "Transportation", "Housing", "Utilities", "Entertainment"];
     const incomeCategories = ["Salary", "Freelance Income", "Investment", "Gifts", "Other"];
+
+    const handleTransaction = (ev) => {
+        ev.preventDefault();
+        const date = new Date();
+        const isoDateString = date.toISOString(); // "YYYY-MM-DD" format for DateField
+        console.log(isoDateString);
+
+        const formData = {
+            title: ev.target.title.value,
+            label: {
+                id: 1,
+            },
+            value: parseInt(ev.target.amount.value),
+            type: ev.target.type.value,
+            date: dayjs(new Date().toLocaleDateString(), "DD-MM-YYYY"),
+            // user: user,
+        };
+        console.log(formData);
+
+        createTransaction({transaction: formData});
+    }
 
 
     return isLoggedIn && user && !isPending && (
@@ -67,31 +89,31 @@ const Profile = () => {
                 {/* Transaction Form*/}
                 <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Transaction</h2>
-                    <form id="transaction-form" className="w-full">
+                    <form id="transaction-form" className="w-full" onSubmit={ handleTransaction }>
                         <div className="mb-4">
-                            <input type="text" id="description" placeholder="Description" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+                            <input name="title" type="text" id="description" placeholder="Description" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
                         </div>
                         <div className="mb-4">
-                            <input type="number" id="amount" placeholder="Amount" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+                            <input name="amount" type="number" id="amount" placeholder="Amount" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
                         </div>
                         <div className="mb-4">
-                            <select id="type" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                            <select name="type" id="type" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                                 onChange={(e) => setTransactionType(e.target.value)}>
                                 <option value="" disabled selected>Select Type</option>
-                                <option value="expense">Expense</option>
-                                <option value="income">Income</option>
+                                <option value="Expense">Expense</option>
+                                <option value="Earning">Income</option>
                             </select>
                         </div>
                         <div className="mb-4">
-                            <select id="category" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+                            <select name="label" id="category" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white">
                                 <option value="" disabled selected>Select Category</option>
                                 {/* Conditionally render options based on transactionType */}
-                                {transactionType === "expense" && (
+                                {transactionType === "Expense" && (
                                     expenseCategories.map(category => (
                                         <option key={category} value={category}>{category}</option>
                                     ))
                                 )}
-                                {transactionType === "income" && (
+                                {transactionType === "Earning" && (
                                     incomeCategories.map(category => (
                                         <option key={category} value={category}>{category}</option>
                                     ))
