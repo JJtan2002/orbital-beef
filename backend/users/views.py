@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 import random
 from rest_framework.decorators import permission_classes, api_view
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -37,3 +37,13 @@ def signup(request):
             return JsonResponse({'error': str(e)}, status=405)
         
 # Create your views here.
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def verification(request):
+    if request.method == 'GET':
+        return JsonResponse({
+            'success': "valid account, persist loggedin",
+        })
+        

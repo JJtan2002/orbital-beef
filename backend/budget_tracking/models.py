@@ -231,6 +231,7 @@ class Transaction(WalletBasedModel):
 
         if data.get("type"):
             transaction.type = data.get("type")
+            
         if data.get("date"):
             date_string = data.get("date")
             if isinstance(date_string, datetime):

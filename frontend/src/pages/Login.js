@@ -27,9 +27,10 @@ const Login = () => {
             console.log("Login response get!");
             const { access, refresh } = response.data;
             Login({ access, refresh });
+            toast.success("Login Successfully!");
         } catch (error) {
             console.error('Login failed: ', error);
-            toast.error("Login failed: Invalid email or password!")
+            toast.error("Login failed: Invalid email or password!");
         }
 
     };

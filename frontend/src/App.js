@@ -10,8 +10,26 @@ import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import Protected from "./pages/Protected";
+import { useEffect } from "react";
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import { useAuth } from "./contexts/AuthContext";
 
 const App = () => {
+  const apiPrivate = useAxiosPrivate();
+  const { Logout } = useAuth();
+
+  useEffect(() => {
+    const verify = async () => {
+      try {
+        const response = await apiPrivate.get('/users/verify/');
+      } catch (error) {
+        console.log("Invalid credential: " + error);
+        Logout();
+      }
+    };
+
+    verify();
+  },[]);
 
   return (
     <div className="md:h-screen #d1fae5">
