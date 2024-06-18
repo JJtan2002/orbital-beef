@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 
 const QUERY_LIMIT = 10;
 
+
 const Profile = () => {
     const { isLoggedIn, user } = useAuth();
     const { getTransactions, createTransaction } = useTransactions();
@@ -27,6 +28,10 @@ const Profile = () => {
             queryFn: () => getTransactions(QUERY_LIMIT),
         });
     */
+    const { refetch: refetchWallet } = useQuery({
+        queryKey: ["api/wallet"],
+        queryFn: () => getWallet(),
+    });
     const {
         data: wallet,
         isPending,
@@ -59,6 +64,7 @@ const Profile = () => {
         console.log(formData);
 
         createTransaction({ transaction: formData });
+        refetchWallet();
     }
 
 
