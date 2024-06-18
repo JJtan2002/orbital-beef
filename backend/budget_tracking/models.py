@@ -233,9 +233,11 @@ class Transaction(WalletBasedModel):
             transaction.type = data.get("type")
         if data.get("date"):
             date_string = data.get("date")
+            if isinstance(date_string, datetime):
+                transaction.date = date_string.date()
+            else: transaction.date = datetime.strptime(date_string, "%Y-%m-%d")
             #date_object = datetime.strptime(
-                #date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
-            transaction.date = datetime.strptime(date_string, "%Y-%m-%d")
+            #date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
         if data.get("updateWallet") is not None:
             transaction.update_wallet = data.get("updateWallet")
 

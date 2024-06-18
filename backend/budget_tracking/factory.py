@@ -70,7 +70,7 @@ class TransactionFactory:
             'title': self.faker.text(max_nb_chars=10),
             'value': self.faker.random_number(digits=2),
             'type': self.faker.transaction_type(),
-            'date': datetime.datetime.now(),
+            'date': get_and_pop(kwargs, 'date') or datetime.datetime.now(),
             'recurrent': True,
             # Recurrency section
             'amount': kwargs.get('amount') or self.faker.random_int(min=1, max=31),

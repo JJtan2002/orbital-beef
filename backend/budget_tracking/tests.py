@@ -21,7 +21,7 @@ class TransactionTestCase(TestCase):
         Check if a given transaction of type `EXPENSE`, when `update_wallet` is True, updates the wallet's current
         amount
         """
-        transaction = self.factory.create_transaction_filled(self.wallet, type='EXPENSE', update_wallet=True)
+        transaction = self.factory.create_transaction_filled(self.wallet, type='Expense', update_wallet=True)
         current_wallet_amount = self.STARTER_WALLET_AMOUNT - transaction.value
         self.assertEqual(Decimal(current_wallet_amount), self.wallet.get_current_amount())
 
@@ -47,15 +47,15 @@ class TransactionTestCase(TestCase):
         out_of_range = one_month_ago - relativedelta(days=1)
         in_range = datetime.datetime.today() - relativedelta(days=1)
 
-        earnings_in_range = self.factory.create_transaction_filled(self.wallet, type="EARNING", value=150)
-        earning_in_range2 = self.factory.create_transaction_filled(self.wallet, type="EARNING", value=50, date=in_range)
-        earning_out_of_range1 = self.factory.create_transaction_filled(self.wallet, type="EARNING", value=300,
+        earnings_in_range = self.factory.create_transaction_filled(self.wallet, type="Earning", value=150)
+        earning_in_range2 = self.factory.create_transaction_filled(self.wallet, type="Earning", value=50, date=in_range)
+        earning_out_of_range1 = self.factory.create_transaction_filled(self.wallet, type="Earning", value=300,
                                                                   date=one_month_ago)
 
-        earning_out_of_range2 = self.factory.create_transaction_filled(self.wallet, type="EARNING", date=out_of_range)
+        earning_out_of_range2 = self.factory.create_transaction_filled(self.wallet, type="Earning", date=out_of_range)
 
         # these transactions shouldn't be considered in the queryset since it's not an earning
-        expense_in_range = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", date=in_range)
+        expense_in_range = self.factory.create_transaction_filled(self.wallet, type="Expense", date=in_range)
 
         # Sum of all set transactions values
         expected_value = 200
@@ -67,14 +67,14 @@ class TransactionTestCase(TestCase):
         out_of_range = one_month_ago - relativedelta(days=1)
         in_range = datetime.datetime.today() + relativedelta(days=1)
 
-        expense_in_range = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", value=150)
-        expense_in_range2 = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", value=50, date=in_range)
-        expense_out_of_range1 = self.factory.create_transaction_filled(self.wallet, type="EXPENSE", value=300,
+        expense_in_range = self.factory.create_transaction_filled(self.wallet, type="Expense", value=150)
+        expense_in_range2 = self.factory.create_transaction_filled(self.wallet, type="Expense", value=50, date=in_range)
+        expense_out_of_range1 = self.factory.create_transaction_filled(self.wallet, type="Expense", value=300,
                                                                    date=one_month_ago)
-        expense_out_of_range2 = self.factory.create_transaction_filled(self.wallet, type="EXPENSE",date=out_of_range)
+        expense_out_of_range2 = self.factory.create_transaction_filled(self.wallet, type="Expense",date=out_of_range)
 
         # this transaction shouldn't be considered in the queryset since it's an earning
-        earning_in_range = self.factory.create_transaction_filled(self.wallet, type="EARNING", date=in_range)
+        earning_in_range = self.factory.create_transaction_filled(self.wallet, type="Earning", date=in_range)
 
         expected_value = 200
         monthly_earning = self.wallet.get_monthly_expenses()
