@@ -3,6 +3,7 @@ import UserIcon from "../images/user.png";
 import { useNavigate } from "react-router-dom";
 import CashFlowIcon from "../images/cashflow.png"
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const AppNavBar = () => {
     let navigate = useNavigate();
@@ -10,7 +11,8 @@ const AppNavBar = () => {
     const { isLoggedIn, user, Logout } = useAuth();
 
     const handleLogout = () => {
-        Logout(localStorage.getItem("id"));
+        Logout();
+        toast.success("Logout Successfully!");
         navigate("/");
     };
 

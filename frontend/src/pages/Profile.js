@@ -45,7 +45,7 @@ const Profile = () => {
     const expenseCategories = ["Food", "Transportation", "Housing", "Utilities", "Entertainment"];
     const incomeCategories = ["Salary", "Freelance Income", "Investment", "Gifts", "Other"];
 
-    const handleTransaction = (ev) => {
+    const handleTransaction = async (ev) => {
         ev.preventDefault();
         const date = new Date();
         const isoDateString = date.toISOString(ev.target.date.value); // "YYYY-MM-DD" format for DateField
@@ -63,8 +63,8 @@ const Profile = () => {
         };
         console.log(formData);
 
-        createTransaction({ transaction: formData });
-        refetchWallet();
+        await createTransaction({ transaction: formData });
+        await refetchWallet();
     }
 
 

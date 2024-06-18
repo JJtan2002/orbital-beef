@@ -64,7 +64,6 @@ const AuthContextProvider = ({ children }) => {
         localStorage.setItem("isLoggedIn", "true");
         setUser(decodedToken);
         setIsLoggedIn(true);
-
         console.log(authTokens.access);
     };
 
