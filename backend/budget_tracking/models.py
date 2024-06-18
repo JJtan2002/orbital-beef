@@ -45,7 +45,7 @@ class Wallet(models.Model):
         Returns the monthly earnings value of a user's Wallet
         """
         this_month = datetime.now().month
-        return self.transactions.filter(date__month=this_month, type="EARNING") \
+        return self.transactions.filter(date__month=this_month, type="Earning") \
             .aggregate(Sum('value')).get('value__sum') or 0
 
     def get_monthly_expenses(self):
@@ -53,7 +53,7 @@ class Wallet(models.Model):
         Returns the monthly debt value of a user's Wallet
         """
         this_month = datetime.now().month
-        return self.transactions.filter(date__month=this_month, type="EXPENSE")\
+        return self.transactions.filter(date__month=this_month, type="Expense")\
             .aggregate(Sum('value')).get('value__sum') or 0
 
     def get_saving_plans(self):
@@ -162,7 +162,7 @@ class Transaction(WalletBasedModel):
     label = models.ForeignKey(CustomLabel, on_delete=models.SET_NULL, null=True, blank=True)
     imported = models.BooleanField(default=False, null=True, blank=True)
     # Django convention is to avoid setting null=True to CharFields
-    update_wallet = models.BooleanField(default=False)
+    update_wallet = models.BooleanField(default=True)
     # Recurrency section
     recurrent = models.BooleanField(default=False)
     recurrency = models.OneToOneField(
@@ -175,7 +175,7 @@ class Transaction(WalletBasedModel):
     def save(self, is_first_save=False, **kwargs):
         # Cloned transactions will never update wallet, since will they will only be a base transaction for future ones
         if self.update_wallet and is_first_save and not self.recurrent:
-            amount = self.value if self.type == 'EARNING' else (-self.value)
+            amount = self.value if self.type == 'Earning' else (-self.value)
             self.wallet.update_balance(amount)
 
         return super().save(**kwargs)
@@ -185,7 +185,7 @@ class Transaction(WalletBasedModel):
         if self.update_wallet:
             # If transaction doesn't have fk to a base
             if not self.recurrent:
-                amount = (-self.value) if self.type == 'EARNING' else self.value
+                amount = (-self.value) if self.type == 'Earning' else self.value
                 self.wallet.update_balance(amount)
 
         return super().delete(**kwargs)
@@ -232,10 +232,10 @@ class Transaction(WalletBasedModel):
         if data.get("type"):
             transaction.type = data.get("type")
         if data.get("date"):
-            date_object = data.get("date")
+            date_string = data.get("date")
             #date_object = datetime.strptime(
                 #date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
-            transaction.date = date_object.date()
+            transaction.date = datetime.strptime(date_string, "%Y-%m-%d")
         if data.get("updateWallet") is not None:
             transaction.update_wallet = data.get("updateWallet")
 

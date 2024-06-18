@@ -43,8 +43,8 @@ const Profile = () => {
     const handleTransaction = (ev) => {
         ev.preventDefault();
         const date = new Date();
-        const isoDateString = date.toISOString(); // "YYYY-MM-DD" format for DateField
-        console.log(isoDateString);
+        const isoDateString = date.toISOString(ev.target.date.value); // "YYYY-MM-DD" format for DateField
+        //console.log(isoDateString);
 
         const formData = {
             title: ev.target.title.value,
@@ -53,12 +53,12 @@ const Profile = () => {
             },
             value: parseInt(ev.target.amount.value),
             type: ev.target.type.value,
-            date: dayjs(new Date().toLocaleDateString(), "DD-MM-YYYY"),
+            date: dayjs(date).format("YYYY-MM-DD"),
             // user: user,
         };
         console.log(formData);
 
-        createTransaction({transaction: formData});
+        createTransaction({ transaction: formData });
     }
 
 
@@ -89,7 +89,7 @@ const Profile = () => {
                 {/* Transaction Form*/}
                 <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Transaction</h2>
-                    <form id="transaction-form" className="w-full" onSubmit={ handleTransaction }>
+                    <form id="transaction-form" className="w-full" onSubmit={handleTransaction}>
                         <div className="mb-4">
                             <input name="title" type="text" id="description" placeholder="Description" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
                         </div>
@@ -119,6 +119,9 @@ const Profile = () => {
                                     ))
                                 )}
                             </select>
+                        </div>
+                        <div className="mb-4">
+                            <input name="date" type="date" id="date" placeholder="Date" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
                         </div>
                         <button type="submit" className="w-full rounded-lg bg-purple-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">
                             Add Transaction
