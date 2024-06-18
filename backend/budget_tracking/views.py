@@ -22,7 +22,7 @@ class WalletAPIView(APIView):
 
         wallet = user.get_wallet()
         wallet_serialized = WalletSerializer(wallet)
-
+        print(wallet_serialized.data)
         return Response(wallet_serialized.data)
 
     def put(self, request):
