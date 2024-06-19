@@ -38,15 +38,15 @@ const Profile = () => {
 
     const { refetch: refetchExpenses } = useQuery({
         queryKey: ["api/transactions"],
-        queryFn: () => getTransactions(),
+        queryFn: () => getTransactions(QUERY_LIMIT),
     });
     const {
         data: expenses,
         loading,
         error,
-    } = useQuery ({
+    } = useQuery({
         queryKey: ["api/transactions"],
-        queryFn: () => getTransactions(),
+        queryFn: () => getTransactions(QUERY_LIMIT),
     })
 
 
@@ -191,16 +191,16 @@ const Profile = () => {
                             ) : expenses && (
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {expenses.map((transaction) => (
-                                    <tr key={transaction.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.amount}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.label}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.description}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(transaction.date).toLocaleDateString()}</td>
-                                    </tr>
+                                        <tr key={transaction.id}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.value}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.label.name}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.title}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(transaction.date).toLocaleDateString()}</td>
+                                        </tr>
                                     ))}
                                 </tbody>
                             )}
-                            
+
                         </table>
                     </div>
                 </div>
