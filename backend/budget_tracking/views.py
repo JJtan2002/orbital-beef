@@ -152,7 +152,7 @@ def get_transactions(request):
     # return only values grouped by date for charts
     chart_type = request.query_params.get('chart_type')
 
-    transactions = user.get_wallet().get_transactions()
+    transactions = user.get_wallet().get_transactions().order_by('-id')
 
     if start_date_str and end_date_str:
         start_date = date.fromisoformat(start_date_str)
