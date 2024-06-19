@@ -22,12 +22,6 @@ const Profile = () => {
             navigate("/");
     }, [isLoggedIn]);
 
-    /*
-        const { data: transactions } = useQuery({
-            queryKey: ["transactions"],
-            queryFn: () => getTransactions(QUERY_LIMIT),
-        });
-    */
     const { refetch: refetchWallet } = useQuery({
         queryKey: ["api/wallet"],
         queryFn: () => getWallet(),
@@ -41,6 +35,21 @@ const Profile = () => {
         queryFn: () => getWallet(),
     });
 
+
+    const { refetch: refetchExpenses } = useQuery({
+        queryKey: ["api/transactions"],
+        queryFn: () => getTransactions(),
+    });
+    const {
+        data: expenses,
+        loading,
+        error,
+    } = useQuery ({
+        queryKey: ["api/transactions"],
+        queryFn: () => getTransactions(),
+    })
+
+
     const [transactionType, setTransactionType] = useState("Expense"); // State to track transaction type
     const expenseCategories = ["Food", "Transportation", "Housing", "Utilities", "Entertainment"];
     const incomeCategories = ["Salary", "Freelance Income", "Investment", "Gifts", "Other"];
@@ -48,8 +57,6 @@ const Profile = () => {
     const handleTransaction = async (ev) => {
         ev.preventDefault();
         const date = new Date();
-        const isoDateString = date.toISOString(ev.target.date.value); // "YYYY-MM-DD" format for DateField
-        //console.log(isoDateString);
 
         const formData = {
             title: ev.target.title.value,
@@ -59,12 +66,11 @@ const Profile = () => {
             value: parseInt(ev.target.amount.value),
             type: ev.target.type.value,
             date: dayjs(date).format("YYYY-MM-DD"),
-            // user: user,
         };
-        console.log(formData);
 
         await createTransaction({ transaction: formData });
         await refetchWallet();
+        await refetchExpenses();
     }
 
 
@@ -175,6 +181,26 @@ const Profile = () => {
                                 </tr>
                                 {/* Additional rows */}
                             </tbody>
+                            {/* <tbody className="bg-white divide-y divide-gray-200">
+                                <tr>
+                                Loading...
+                                </tr>
+                            </tbody> */}
+                            {loading ? (
+                                <p>Loading...</p>
+                            ) : expenses && (
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {expenses.map((transaction) => (
+                                    <tr key={transaction.id}>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.amount}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.label}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.description}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(transaction.date).toLocaleDateString()}</td>
+                                    </tr>
+                                    ))}
+                                </tbody>
+                            )}
+                            
                         </table>
                     </div>
                 </div>

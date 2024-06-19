@@ -7,7 +7,7 @@ export function useTransactions() {
         limit = 0,
         chartType = 0,
         startDate,
-        endDate
+        endDate,
     ) {
         try {
             let endpoint = `budget_tracking/transactions?limit=${limit}&chart_type=${chartType}`;
