@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/users/forgotPassword";
+const URL = process.env.REACT_APP_BACKEND_URL + "/users/forgotPassword/";
 
 const ForgotPassword = () => {
     const handleSubmit = async (ev) => {
@@ -10,7 +10,7 @@ const ForgotPassword = () => {
         const formData = { email: email };
         const res = await axios.post(URL, formData);
         const data = res.data;
-        if (data.success === true) toast.success(data.message);
+        if (data.success === 'true') toast.success(data.message);
         else toast.error(data.message);
     };
 

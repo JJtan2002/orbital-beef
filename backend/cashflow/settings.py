@@ -220,10 +220,13 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+FRONTEND_BASE_URL = 'http://localhost:3000'
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "orbital.beef.cashflow@gmail.com"
-EMAIL_HOST_PASSWORD = "pIp0NHGstwoz0jRz"
+EMAIL_HOST_PASSWORD = "dtzpryavconjxsjo"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 

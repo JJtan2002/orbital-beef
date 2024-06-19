@@ -7,8 +7,14 @@ from django.contrib.auth import get_user_model
 import random
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import send_mail
+from django.conf import settings
 
+
+UserModel = get_user_model()
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -22,7 +28,6 @@ def signup(request):
         if not email or not password or not name:
             return JsonResponse({'error': 'Please provide all the required fields'}, status=400)
         
-        UserModel = get_user_model()
         try:
             user = UserModel.objects.create_user(name = name, email = email, password = password)
             refresh = RefreshToken.for_user(user)
@@ -46,4 +51,57 @@ def verification(request):
         return JsonResponse({
             'success': "valid account, persist loggedin",
         })
-        
+    
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def forgetpassword(request):
+    email = request.data.get('email')
+
+    if not UserModel.objects.filter(email=email).exists():
+        return JsonResponse({'message': 'Invalid Email'}, status=200)
+    
+    user = UserModel.objects.get(email=email)
+    token = RefreshToken.for_user(user).access_token
+    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+    print(uidb64)
+    frontend_base_url = settings.FRONTEND_BASE_URL
+    reset_link = f"{frontend_base_url}/resetPassword/{uidb64}/{token}/"
+
+    send_mail(
+        'Password Reset Request',
+        f'Use the link below to reset your password: {reset_link}',
+        settings.DEFAULT_FROM_EMAIL,
+        [email],
+        fail_silently=False,
+    )
+
+    return JsonResponse({
+        'success': 'true',
+        'message': 'Password reset link sent',
+    }, status=200)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def resetPassword(request):
+    try:
+        uidb64 = request.data.get('uidb64')
+        token = request.data.get('token')
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = UserModel.objects.get(pk=uid)
+        access_token = AccessToken(token)
+        if access_token['user_id'] != user.id:
+            return JsonResponse({'error': 'Invalid token'}, status=400)
+
+        password = request.data.get('password')
+        user.set_password(password)
+        user.save()
+        return JsonResponse({
+            'success': 'true',
+            'message': 'Password reset successful',
+        }, status=200)
+    
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+    

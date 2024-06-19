@@ -1,15 +1,16 @@
 import { React } from "react";
 import axios from "axios";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const URL = process.env.REACT_APP_BACKEND_URL + "/users/resetPassword";
+const URL = process.env.REACT_APP_BACKEND_URL + "/users/resetPassword/";
 
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();
     let navigate = useNavigate();
-    const id = searchParams.get("id");
-    const token = searchParams.get("token");
+    // const uidb64 = searchParams.get("uidb64");
+    // const token = searchParams.get("token");
+    const { uidb64, token } = useParams();
 
     const handleResetPassword = async (ev) => {
         ev.preventDefault();
@@ -17,13 +18,19 @@ const ResetPassword = () => {
         const confirmpassword = ev.target.confirmpassword.value;
         if (newpassword !== confirmpassword)
             toast.error("Passwords do not match !");
-        const formData = { id: id, token: token, password: newpassword };
-        const res = await axios.post(URL, formData);
-        const data = res.data;
-        if (data.success === true) {
-            toast.success(data.message);
-            navigate("/login");
-        } else toast.error(data.message);
+        const formData = { uidb64: uidb64, token: token, password: newpassword };
+        console.log(uidb64);
+        try {
+            const res = await axios.post(URL, formData);
+            const data = res.data;
+            if (data.success === 'true') {
+                toast.success(data.message);
+                navigate("/login");
+            } else toast.error(data.error);
+        } catch (error) {
+            console.log(error);
+        }
+        
     };
 
     return (

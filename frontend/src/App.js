@@ -61,7 +61,7 @@ const App = () => {
               element={<ForgotPassword 
               />}
             />
-            <Route path="resetPassword"
+            <Route path="resetPassword/:uidb64/:token"
               element={<ResetPassword 
               />}
             />
