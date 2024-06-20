@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const AppNavBar = () => {
     let navigate = useNavigate();
-   
+
     const { isLoggedIn, user, Logout } = useAuth();
 
     const handleLogout = () => {
@@ -46,7 +46,12 @@ const AppNavBar = () => {
                 <div className="flex space-x-4 ml-auto">
                     <Navbar.Link href="/" className="text-lg">Home</Navbar.Link>
                     <Navbar.Link href="#" className="text-lg">About</Navbar.Link>
-                    <Navbar.Link href="#" className="text-lg">Services</Navbar.Link>
+                    {isLoggedIn && (
+                        <Navbar.Link href="/profile" className="text-lg">Dashboard</Navbar.Link>
+                    )}
+                    {isLoggedIn && (
+                        <Navbar.Link href="/transactions" className="text-lg">Transactions</Navbar.Link>
+                    )}
                     {!isLoggedIn && (
                         <Navbar.Link href="/login" className="text-lg">Login</Navbar.Link>
                     )}
