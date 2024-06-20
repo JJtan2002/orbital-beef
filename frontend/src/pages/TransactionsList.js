@@ -41,8 +41,12 @@ const TransactionsList = () => {
         await refetchTransactions();
         toast.warning("Transaction deleted!");
     };
+
+    // Apply sorting
+    const sortedByDate = transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
     // Apply filter
-    const filteredTransactions = transactions.filter(transaction =>
+    const filteredTransactions = sortedByDate.filter(transaction =>
         transaction.title.toLowerCase().includes(filter.toLowerCase())
         || transaction.label.name.toLowerCase().includes(filter.toLowerCase())
         || transaction.value.toString().includes(filter.toLowerCase())
