@@ -6,13 +6,23 @@ import { useTransactions } from "../hooks/useTransactions";
 import { useWallet } from "../hooks/useWallet";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 const QUERY_LIMIT = 5;
 
 
 const Profile = () => {
+    const [dateValue, setDateValue] = useState(() => {
+        // Initialize with today's date
+        return new Date().toISOString().split('T')[0];
+    });
+
+    const handleDateChange = (event) => {
+        setDateValue(event.target.value);
+    };
+
     const { isLoggedIn, user } = useAuth();
-    const { getTransactions, createTransaction } = useTransactions();
+    const { getTransactions, createTransaction, deleteTransaction } = useTransactions();
     const { getWallet } = useWallet();
 
     let navigate = useNavigate();
@@ -71,7 +81,15 @@ const Profile = () => {
         await createTransaction({ transaction: formData });
         await refetchWallet();
         await refetchExpenses();
+        toast.success("Transaction added!");
     }
+
+    const handleDeleteTransaction = async (transactionId) => {
+        await deleteTransaction(transactionId);
+        await refetchWallet();
+        await refetchExpenses();
+        toast.warning("Transaction deleted!");
+    };
 
 
     return isLoggedIn && user && !isPending && (
@@ -133,7 +151,10 @@ const Profile = () => {
                             </select>
                         </div>
                         <div className="mb-4">
-                            <input name="date" type="date" id="date" placeholder="Date" required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+                            <input name="date" type="date" id="date" placeholder="Date"
+                                value={dateValue}
+                                onChange={handleDateChange}
+                                required className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
                         </div>
                         <button type="submit" className="w-full rounded-lg bg-purple-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">
                             Add Transaction
@@ -169,6 +190,7 @@ const Profile = () => {
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Label</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             {/* <tbody className="bg-white divide-y divide-gray-200">
@@ -186,6 +208,11 @@ const Profile = () => {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.label.name}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.title}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(transaction.date).toLocaleDateString()}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <button onClick={() => {
+                                                    handleDeleteTransaction({ transactionId: transaction.id });
+                                                }} className="text-red-600 hover:text-red-900">Delete</button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

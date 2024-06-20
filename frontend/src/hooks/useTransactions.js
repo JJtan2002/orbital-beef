@@ -53,8 +53,9 @@ export function useTransactions() {
         transactionId,
     }) {
         try {
+            console.log(transactionId);
             const response = await axiosPrivate.delete(
-                `/transaction/${transactionId}`
+                `/budget_tracking/transaction/${transactionId}`
             );
             return await response.data;
         } catch (error) {

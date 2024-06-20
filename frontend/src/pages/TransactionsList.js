@@ -4,10 +4,11 @@ import { useAuth } from "../contexts/AuthContext";
 import { useTransactions } from "../hooks/useTransactions";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 const TransactionsList = () => {
     const { isLoggedIn, user } = useAuth();
-    const { getTransactions } = useTransactions();
+    const { getTransactions, deleteTransaction } = useTransactions();
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(15); // Number of items per page
     const [filter, setFilter] = useState("");
@@ -35,7 +36,11 @@ const TransactionsList = () => {
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error loading transactions</div>;
 
-    console.log(transactions);
+    const handleDeleteTransaction = async (transactionId) => {
+        await deleteTransaction(transactionId);
+        await refetchTransactions();
+        toast.warning("Transaction deleted!");
+    };
     // Apply filter
     const filteredTransactions = transactions.filter(transaction =>
         transaction.title.toLowerCase().includes(filter.toLowerCase())
@@ -84,6 +89,7 @@ const TransactionsList = () => {
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Label</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -93,6 +99,11 @@ const TransactionsList = () => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.label.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.title}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(transaction.date).toLocaleDateString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <button onClick={() => {
+                                            handleDeleteTransaction({ transactionId: transaction.id });
+                                        }} className="text-red-600 hover:text-red-900">Delete</button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
