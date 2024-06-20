@@ -1,10 +1,7 @@
-from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from .serializers import UserSerializer
 from .models import User
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
-import random
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
@@ -12,6 +9,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.conf import settings
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 
 
 UserModel = get_user_model()
@@ -62,7 +60,7 @@ def forgetpassword(request):
         return JsonResponse({'message': 'Invalid Email'}, status=200)
     
     user = UserModel.objects.get(email=email)
-    token = RefreshToken.for_user(user).access_token
+    token = RefreshToken.for_user(user)
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
     print(uidb64)
     frontend_base_url = settings.FRONTEND_BASE_URL
@@ -70,7 +68,7 @@ def forgetpassword(request):
 
     send_mail(
         'Password Reset Request',
-        f'Use the link below to reset your password: {reset_link}',
+        f'Use the link below to reset your password in CashFlow: {reset_link}',
         settings.DEFAULT_FROM_EMAIL,
         [email],
         fail_silently=False,
@@ -90,18 +88,23 @@ def resetPassword(request):
         token = request.data.get('token')
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = UserModel.objects.get(pk=uid)
-        access_token = AccessToken(token)
-        if access_token['user_id'] != user.id:
-            return JsonResponse({'error': 'Invalid token'}, status=400)
 
-        password = request.data.get('password')
-        user.set_password(password)
-        user.save()
-        return JsonResponse({
-            'success': 'true',
-            'message': 'Password reset successful',
-        }, status=200)
+        try:
+            refresh_token = RefreshToken(token)
+            if refresh_token['user_id'] != user.id:
+                return JsonResponse({'error': 'Invalid token for the user'}, status=200)
+              
+            password = request.data.get('password')
+            user.set_password(password)
+            user.save()
+            refresh_token.blacklist()
+            return JsonResponse({
+                'success': 'true',
+                'message': 'Password reset successful',
+            }, status=200)
+        except ( InvalidToken, TokenError ):
+            return JsonResponse({'error': 'Invalid Token. Used once already!'}, status=200)
     
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except ( ValueError, User.DoesNotExist):
         return JsonResponse({'error': 'Invalid request'}, status=400)
     
