@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import Protected from "./pages/Protected";
+import TransactionsList from "./pages/TransactionsList";
 import { useEffect } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useAuth } from "./contexts/AuthContext";
@@ -29,7 +30,7 @@ const App = () => {
     };
 
     verify();
-  },[]);
+  }, []);
 
   return (
     <div className="md:h-screen #d1fae5">
@@ -41,7 +42,7 @@ const App = () => {
           <Routes>
             <Route path="/" exact
               element={
-                <Home 
+                <Home
                 />
               }
             />
@@ -58,16 +59,22 @@ const App = () => {
               }
             />
             <Route path="forgotPassword" exact
-              element={<ForgotPassword 
+              element={<ForgotPassword
               />}
             />
-            <Route path="resetPassword"
-              element={<ResetPassword 
+            <Route path="resetPassword/:uidb64/:token"
+              element={<ResetPassword
               />}
             />
             <Route path="profile" exact
               element={
-                <Profile 
+                <Profile
+                />
+              }
+            />
+            <Route path="transactions" exact
+              element={
+                <TransactionsList
                 />
               }
             />

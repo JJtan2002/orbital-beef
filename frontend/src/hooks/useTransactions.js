@@ -7,24 +7,25 @@ export function useTransactions() {
         limit = 0,
         chartType = 0,
         startDate,
-        endDate
+        endDate,
     ) {
         try {
-            let endpoint = `budget_tracking/transactions?limit=${limit}&chart_type=${chartType}`;
+            let endpoint = `/budget_tracking/transactions/?limit=${limit}&chart_type=${chartType}`;
             if (startDate)
                 endpoint += `&start_date=${startDate.toISOString().split("T")[0]}`;
             if (endDate)
                 endpoint += `&end_date=${endDate.toISOString().split("T")[0]}`;
             const response = await axiosPrivate.get(endpoint);
-
+            const data = await response.data;
             if (chartType === 2) {
-                return response.data;
+                return data;
             }
-            return response.data;
+            return data;
         } catch (error) {
             console.log(error);
             throw error;
         }
+
     }
 
     async function createTransaction({

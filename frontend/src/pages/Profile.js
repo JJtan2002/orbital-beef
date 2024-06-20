@@ -7,7 +7,7 @@ import { useWallet } from "../hooks/useWallet";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 
-const QUERY_LIMIT = 10;
+const QUERY_LIMIT = 5;
 
 
 const Profile = () => {
@@ -22,12 +22,6 @@ const Profile = () => {
             navigate("/");
     }, [isLoggedIn]);
 
-    /*
-        const { data: transactions } = useQuery({
-            queryKey: ["transactions"],
-            queryFn: () => getTransactions(QUERY_LIMIT),
-        });
-    */
     const { refetch: refetchWallet } = useQuery({
         queryKey: ["api/wallet"],
         queryFn: () => getWallet(),
@@ -41,15 +35,28 @@ const Profile = () => {
         queryFn: () => getWallet(),
     });
 
+
+    const { refetch: refetchExpenses } = useQuery({
+        queryKey: ["api/transactions"],
+        queryFn: () => getTransactions(QUERY_LIMIT),
+    });
+    const {
+        data: expenses,
+        loading,
+        error,
+    } = useQuery({
+        queryKey: ["api/transactions"],
+        queryFn: () => getTransactions(QUERY_LIMIT),
+    })
+
+
     const [transactionType, setTransactionType] = useState("Expense"); // State to track transaction type
     const expenseCategories = ["Food", "Transportation", "Housing", "Utilities", "Entertainment"];
     const incomeCategories = ["Salary", "Freelance Income", "Investment", "Gifts", "Other"];
 
     const handleTransaction = async (ev) => {
         ev.preventDefault();
-        const date = new Date();
-        const isoDateString = date.toISOString(ev.target.date.value); // "YYYY-MM-DD" format for DateField
-        //console.log(isoDateString);
+        const date = new Date(ev.target.date.value);
 
         const formData = {
             title: ev.target.title.value,
@@ -59,12 +66,11 @@ const Profile = () => {
             value: parseInt(ev.target.amount.value),
             type: ev.target.type.value,
             date: dayjs(date).format("YYYY-MM-DD"),
-            // user: user,
         };
-        console.log(formData);
 
         await createTransaction({ transaction: formData });
         await refetchWallet();
+        await refetchExpenses();
     }
 
 
@@ -165,16 +171,26 @@ const Profile = () => {
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                                {/* Replace with your dynamic data */}
+                            {/* <tbody className="bg-white divide-y divide-gray-200">
                                 <tr>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">100</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Food</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Lunch at restaurant</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-06-15</td>
+                                Loading...
                                 </tr>
-                                {/* Additional rows */}
-                            </tbody>
+                            </tbody> */}
+                            {loading ? (
+                                <p>Loading...</p>
+                            ) : expenses && (
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {expenses.map((transaction) => (
+                                        <tr key={transaction.id}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.value}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.label.name}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.title}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(transaction.date).toLocaleDateString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            )}
+
                         </table>
                     </div>
                 </div>
