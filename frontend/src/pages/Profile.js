@@ -4,6 +4,7 @@ import { redirect, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useTransactions } from "../hooks/useTransactions";
 import { useWallet } from "../hooks/useWallet";
+import { useLabels } from "../hooks/useLabels";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
@@ -12,18 +13,22 @@ const QUERY_LIMIT = 5;
 
 
 const Profile = () => {
+
+    // default date in transaction form to today
     const [dateValue, setDateValue] = useState(() => {
         // Initialize with today's date
         return new Date().toISOString().split('T')[0];
     });
-
     const handleDateChange = (event) => {
         setDateValue(event.target.value);
     };
 
+    // hooks
     const { isLoggedIn, user } = useAuth();
     const { getTransactions, createTransaction, deleteTransaction } = useTransactions();
     const { getWallet } = useWallet();
+    const { getLabels } = useLabels();
+
 
     let navigate = useNavigate();
 
@@ -45,7 +50,6 @@ const Profile = () => {
         queryFn: () => getWallet(),
     });
 
-
     const { refetch: refetchExpenses } = useQuery({
         queryKey: ["api/transactions"],
         queryFn: () => getTransactions(QUERY_LIMIT),
@@ -59,6 +63,20 @@ const Profile = () => {
         queryFn: () => getTransactions(QUERY_LIMIT),
     })
 
+    const { refetch: refetchLabels } = useQuery({
+        queryKey: ["api/label"],
+        queryFn: () => getLabels(),
+    });
+    const {
+        data: labels,
+        isPendingLabels,
+        isErrorLabels,
+    } = useQuery({
+        queryKey: ["api/label"],
+        queryFn: () => getLabels(),
+    });
+
+    console.log(labels);
 
     const [transactionType, setTransactionType] = useState("Expense"); // State to track transaction type
     const expenseCategories = ["Food", "Transportation", "Housing", "Utilities", "Entertainment"];

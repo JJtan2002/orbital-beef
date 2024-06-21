@@ -115,6 +115,7 @@ def get_routes(request):
         '/api/savingplans',
         '/api/transactions',
         '/api/transaction',
+        '/api/labels',
     ]
 
     return Response(routes)

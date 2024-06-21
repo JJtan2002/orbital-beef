@@ -5,7 +5,7 @@ export function useLabels() {
 
     async function getLabels() {
         try {
-            const endpoint = "/labels/";
+            const endpoint = "/budget_tracking/labels/";
             const response = await axiosPrivate.get(endpoint);
             const data = response.data;
             return data;
