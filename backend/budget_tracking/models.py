@@ -219,8 +219,8 @@ class Transaction(WalletBasedModel):
             print(data)
             custom_label = CustomLabel.objects.get(
                 pk=data.get("label").get("id"))
-            if custom_label.get_wallet() != user_wallet:
-                raise PermissionError()
+            #if custom_label.get_wallet() != user_wallet:
+                #raise PermissionError()
             transaction.label = custom_label
 
         # Value section

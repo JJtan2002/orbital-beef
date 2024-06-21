@@ -81,8 +81,8 @@ const Profile = () => {
     useEffect(() => {
         const fetchLabels = async () => {
             if (!isPendingLabels && !isErrorLabels && labels) {
-                setExpenseCategories(labels.slice(0, 4).map((i) => i["name"]));
-                setIncomeCategories(labels.slice(5,).map((i) => i["name"]));
+                setExpenseCategories(labels.slice(0, 4).map((i) => [i["id"], i["name"]]));
+                setIncomeCategories(labels.slice(5,).map((i) => [i["id"], i["name"]]));
             }
         };
 
@@ -98,7 +98,7 @@ const Profile = () => {
         const formData = {
             title: ev.target.title.value,
             label: {
-                id: 1,
+                id: ev.target.label.value,
             },
             value: parseInt(ev.target.amount.value),
             type: ev.target.type.value,
@@ -167,13 +167,13 @@ const Profile = () => {
                                     <option value="" disabled selected>Select Category</option>
                                     {/* Conditionally render options based on transactionType */}
                                     {transactionType === "Expense" && (
-                                        expenseCategories.map(category => (
-                                            <option key={category} value={category}>{category}</option>
+                                        expenseCategories.map((category) => (
+                                            <option key={category[0]} value={category[0]}>{category[1]}</option>
                                         ))
                                     )}
                                     {transactionType === "Earning" && (
-                                        incomeCategories.map(category => (
-                                            <option key={category} value={category}>{category}</option>
+                                        incomeCategories.map((category, index) => (
+                                            <option key={category[0]} value={category[0]}>{category[1]}</option>
                                         ))
                                     )}
                                 </select>
