@@ -8,6 +8,8 @@ import { useLabels } from "../hooks/useLabels";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import { Bar, Pie } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 const QUERY_LIMIT = 5;
 
@@ -77,7 +79,42 @@ const Profile = () => {
         queryFn: () => getLabels(),
     });
 
-    console.log(labels);
+    const barData = {
+        labels: ['2024-06-14', '2024-06-15', '2024-06-16', '2024-06-17', '2024-06-18', '2024-06-19', '2024-06-20'],
+        datasets: [
+            {
+                label: 'Daily Expenses',
+                data: [50, 100, 75, 125, 150, 200, 175],
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+            },
+        ],
+    };
+    const pieData = {
+        labels: ['Rent', 'Groceries', 'Utilities', 'Entertainment', 'Transport', 'Others'],
+        datasets: [
+            {
+                data: [500, 300, 200, 100, 150, 50],
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#4BC0C0',
+                    '#9966FF',
+                    '#FF9F40',
+                ],
+                hoverBackgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#4BC0C0',
+                    '#9966FF',
+                    '#FF9F40',
+                ],
+            },
+        ],
+    };
     useEffect(() => {
         const fetchLabels = async () => {
             if (!isPendingLabels && !isErrorLabels && labels) {
@@ -203,6 +240,28 @@ const Profile = () => {
                         <div className="mb-4">
                             <label htmlFor="monthly-expenses" className="block text-sm font-medium text-gray-700 dark:text-white">Monthly Expenses</label>
                             <input type="text" id="monthly-expenses" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" value={wallet.monthly_expenses} readOnly />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex w-full max-w-4xl bg-white justify-center">
+                    {/* Bar Chart for Daily Expenses */}
+                    <div className="w-full max-w-4xl mt-6">
+                        <div className="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Daily Expenses</h2>
+                            <div className="h-80"> {/* Adjust the height of the container */}
+                                <Bar data={barData} height={300} /> {/* Adjust the height of the chart */}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pie Chart for Expense Distribution */}
+                    <div className="w-full max-w-4xl mt-6">
+                        <div className="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Expense Distribution</h2>
+                            <div className="h-80"> {/* Adjust the height of the container */}
+                                <Pie data={pieData} height={300} /> {/* Adjust the height of the chart */}
+                            </div>
                         </div>
                     </div>
                 </div>

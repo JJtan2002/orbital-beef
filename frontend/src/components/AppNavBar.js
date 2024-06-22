@@ -50,6 +50,9 @@ const AppNavBar = () => {
                         <Navbar.Link href="/profile" className="text-lg">Dashboard</Navbar.Link>
                     )}
                     {isLoggedIn && (
+                        <Navbar.Link href="/wallet" className="text-lg">Wallet</Navbar.Link>
+                    )}
+                    {isLoggedIn && (
                         <Navbar.Link href="/transactions" className="text-lg">Transactions</Navbar.Link>
                     )}
                     {!isLoggedIn && (
