@@ -11,6 +11,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import Protected from "./pages/Protected";
 import TransactionsList from "./pages/TransactionsList";
+import Wallet from "./pages/Wallet";
 import { useEffect } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useAuth } from "./contexts/AuthContext";
@@ -75,6 +76,12 @@ const App = () => {
             <Route path="transactions" exact
               element={
                 <TransactionsList
+                />
+              }
+            />
+            <Route path="wallet" exact
+              element={
+                <Wallet
                 />
               }
             />

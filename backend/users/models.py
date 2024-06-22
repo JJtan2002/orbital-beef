@@ -19,12 +19,30 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
 
+        labels_data = [
+            {"id": 0, "name": "Food", "color": "white"},
+            {"id": 1, "name": "Transportation", "color": "black"},
+            {"id": 2, "name": "Housing", "color": "white"},
+            {"id": 3, "name": "Utilities", "color": "black"},
+            {"id": 4, "name": "Entertainment", "color": "white"},
+            {"id": 5, "name": "Salary", "color": "black"},
+            {"id": 6, "name": "Freelance Income", "color": "white"},
+            {"id": 7, "name": "Investment", "color": "black"},
+            {"id": 8, "name": "Gifts", "color": "white"},
+            {"id": 9, "name": "Other", "color": "black"},
+        ]
+        
         # Creation of a related wallet for the created user
         wallet = budget_tracking.models.Wallet.objects.create(
             user_id=user.pk,
-            current_amount=0
-        )
+            current_amount=0,
+            )
         wallet.save()
+
+        for label_data in labels_data:
+            label = budget_tracking.models.CustomLabel.create_from_json(label_data, user.pk)
+            label.save()
+            
         return user
 
     def create_superuser(self, email, password):
