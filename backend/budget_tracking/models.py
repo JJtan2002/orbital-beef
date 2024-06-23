@@ -181,12 +181,19 @@ class Transaction(WalletBasedModel):
     # Manager section
     objects = TransactionsManager()
 
+    def is_within_current_month(self):
+        current_date = datetime.now().date()
+        return self.date.year == current_date.year and self.date.month == current_date.month
+    
     def save(self, is_first_save=False, **kwargs):
         # Cloned transactions will never update wallet, since will they will only be a base transaction for future ones
         if self.update_wallet and is_first_save and not self.recurrent:
             amount = self.value if self.type == 'Earning' else (-self.value)
             self.wallet.update_balance(amount)
-        self.label.update_balance(self.value)
+
+        if self.is_within_current_month():
+            self.label.update_balance(self.value)
+
         return super().save(**kwargs)
 
     def delete(self, **kwargs):
@@ -196,7 +203,10 @@ class Transaction(WalletBasedModel):
             if not self.recurrent:
                 amount = (-self.value) if self.type == 'Earning' else self.value
                 self.wallet.update_balance(amount)
-        self.label.update_balance(-self.value)
+
+        if self.is_within_current_month():
+            self.label.update_balance(-self.value)
+            
         return super().delete(**kwargs)
 
     @staticmethod
