@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useWallet } from '../hooks/useWallet';
-import { useLabels } from '../hooks/useLabels';
+import { useEffect, useState } from "react";
+import UserIcon from "../images/user.png";
+import { redirect, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { useTransactions } from "../hooks/useTransactions";
+import { useWallet } from "../hooks/useWallet";
+import { useLabels } from "../hooks/useLabels";
+import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import { toast } from "react-toastify";
+import 'chart.js/auto';
 import { LinearProgress } from '@mui/material';
 
 const Wallet = () => {
@@ -31,9 +38,66 @@ const Wallet = () => {
         { labelId: 6, goal: 100 },  // Transportation
     ];
 
+
     const [wallet, setWallet] = useState(walletData);
     const [labels, setLabels] = useState(labelsData);
     const [goals, setGoals] = useState(goalsData);
+
+    // hooks
+    const { isLoggedIn, user } = useAuth();
+    const { getTransactions, createTransaction, deleteTransaction } = useTransactions();
+    const { getWallet } = useWallet();
+    const { getLabels } = useLabels();
+    const [expenseCategories, setExpenseCategories] = useState([]);
+    const [incomeCategories, setIncomeCategories] = useState([]);
+
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isLoggedIn)
+            navigate("/");
+    }, [isLoggedIn]);
+
+    const { refetch: refetchWallet } = useQuery({
+        queryKey: ["api/wallet"],
+        queryFn: () => getWallet(),
+    });
+    const {
+        data: myWallet,
+        isPendingWallet,
+        isErrorWallet,
+    } = useQuery({
+        queryKey: ["api/wallet"],
+        queryFn: () => getWallet(),
+    });
+
+    const { refetch: refetchExpenses } = useQuery({
+        queryKey: ["api/transactions"],
+        queryFn: () => getTransactions(QUERY_LIMIT),
+    });
+    const {
+        data: expenses,
+        isLoadingExpenses,
+        isErrorExpenses,
+    } = useQuery({
+        queryKey: ["api/transactions"],
+        queryFn: () => getTransactions(QUERY_LIMIT),
+    })
+
+    const { refetch: refetchLabels } = useQuery({
+        queryKey: ["api/label"],
+        queryFn: () => getLabels(),
+    });
+    const {
+        data: myLabels,
+        isPendingLabels,
+        isErrorLabels,
+    } = useQuery({
+        queryKey: ["api/label"],
+        queryFn: () => getLabels(),
+    });
+
+    console.log(myLabels);
 
     return (
         <div className="flex flex-col items-center justify-center mt-5">
