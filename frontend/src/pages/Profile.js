@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { Bar, Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 
-const QUERY_LIMIT = 5;
+// const QUERY_LIMIT = 5;
 
 
 const Profile = () => {
@@ -24,6 +24,8 @@ const Profile = () => {
     const handleDateChange = (event) => {
         setDateValue(event.target.value);
     };
+    const [dateForDisplay, setDates] = useState({ today: '', fiveDaysAgo: '' });
+
 
     // hooks
     const { isLoggedIn, user } = useAuth();
@@ -36,15 +38,24 @@ const Profile = () => {
     let navigate = useNavigate();
 
     useEffect(() => {
+        // Get today's date
+        const today = new Date();
+        // Get the date 5 days ago
+        const fiveDaysAgo = new Date(today);
+        fiveDaysAgo.setDate(today.getDate() - 5);
+     
+        // Update state with formatted dates
+        setDates({ today: today, fiveDaysAgo: fiveDaysAgo });
+    }, []);
+
+    useEffect(() => {
         if (!isLoggedIn)
             navigate("/");
     }, [isLoggedIn]);
 
-    const { refetch: refetchWallet } = useQuery({
-        queryKey: ["api/wallet"],
-        queryFn: () => getWallet(),
-    });
+
     const {
+        refetch: refetchWallet,
         data: wallet,
         isPending,
         isError,
@@ -52,25 +63,19 @@ const Profile = () => {
         queryKey: ["api/wallet"],
         queryFn: () => getWallet(),
     });
-
-    const { refetch: refetchExpenses } = useQuery({
-        queryKey: ["api/transactions"],
-        queryFn: () => getTransactions(QUERY_LIMIT),
-    });
+ 
     const {
+        refetch: refetchExpenses,
         data: expenses,
         loading,
         error,
     } = useQuery({
         queryKey: ["api/transactions"],
-        queryFn: () => getTransactions(QUERY_LIMIT),
+        queryFn: () => getTransactions(5, 0),
     })
 
-    const { refetch: refetchLabels } = useQuery({
-        queryKey: ["api/label"],
-        queryFn: () => getLabels(),
-    });
     const {
+        refetch: refetchLabels,
         data: labels,
         isPendingLabels,
         isErrorLabels,
@@ -79,19 +84,69 @@ const Profile = () => {
         queryFn: () => getLabels(),
     });
 
-    const barData = {
-        labels: ['2024-06-14', '2024-06-15', '2024-06-16', '2024-06-17', '2024-06-18', '2024-06-19', '2024-06-20'],
+    const {
+        refetch: refetchBardata,
+        data: bardata,
+        isPendingBardata,
+        isErrorBardata,
+    } = useQuery({
+        queryKey: ["api/bardata"],
+        queryFn: () => getTransactions(
+            /*limit:*/ 0,
+            /*charType:*/ 1,
+            /*startDate:*/ dateForDisplay.fiveDaysAgo,
+            /*endDate:*/ dateForDisplay.today,
+        ),
+    })
+
+    const {
+        refetch: refetchPiedata,
+        data: piedata,
+        isPendingPiedata,
+        isErrorPiedata,
+    } = useQuery({
+        queryKey: ["api/piedata"],
+        queryFn: () => getTransactions(
+            0,
+            2,
+            dateForDisplay.fiveDaysAgo,
+            dateForDisplay.today,
+        ),
+    }) 
+
+
+    var barData = {
+        labels: ['Loading'],
         datasets: [
             {
                 label: 'Daily Expenses',
-                data: [50, 100, 75, 125, 150, 200, 175],
+                data: [0],
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
             },
         ],
     };
-    const pieData = {
+
+    if (!isErrorBardata && !isPendingBardata && bardata) {
+        const sortbardata = bardata.sort((a, b) => new Date(a.date) - new Date(b.date));
+        barData = {
+            labels: sortbardata.map((day) => day.date),
+            // labels: ['2024-06-15', '2024-06-16', '2024-06-17', '2024-06-18', '2024-06-19', '2024-06-20'],
+            datasets: [
+                {
+                    label: 'Daily Expenses',
+                    // data: [50, 100, 75, 125, 150, 200, 175],
+                    data: sortbardata.map(day => day.value),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                },
+            ],
+        };
+    }
+    
+    var pieData = {
         labels: ['Rent', 'Groceries', 'Utilities', 'Entertainment', 'Transport', 'Others'],
         datasets: [
             {
@@ -115,6 +170,20 @@ const Profile = () => {
             },
         ],
     };
+
+    if (!isErrorPiedata && !isPendingPiedata && piedata) {
+        pieData = {
+            labels: piedata.map(cate => cate.label_name),
+            datasets: [
+                {
+                    data: piedata.map(cate => cate.value),
+                    backgroundColor: piedata.map(cate => cate.label_color),
+                    hoverBackgroundColor: piedata.map(cate => cate.label_color),
+                },
+            ],
+        };
+    }
+
     useEffect(() => {
         const fetchLabels = async () => {
             if (!isPendingLabels && !isErrorLabels && labels) {
@@ -145,6 +214,8 @@ const Profile = () => {
         await createTransaction({ transaction: formData });
         await refetchWallet();
         await refetchExpenses();
+        await refetchBardata();
+        await refetchPiedata();
         toast.success("Transaction added!");
     }
 
@@ -266,6 +337,7 @@ const Profile = () => {
                     </div>
                 </div>
 
+                {/* 5 Line Short Expense List */}
                 <div className="flex w-full max-w-4xl bg-white justify-center mt-6">
                     <div className="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Expense List</h2>
@@ -280,11 +352,7 @@ const Profile = () => {
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                     </tr>
                                 </thead>
-                                {/* <tbody className="bg-white divide-y divide-gray-200">
-                                <tr>
-                                Loading...
-                                </tr>
-                            </tbody> */}
+                                
                                 {loading ? (
                                     <p>Loading...</p>
                                 ) : expenses && (

@@ -10,8 +10,6 @@ class LabelSerializer(serializers.ModelSerializer):
 
 
 class WalletSerializer(serializers.ModelSerializer):
-    #monthly_earnings = serializers.SerializerMethodField()
-    #monthly_expenses = serializers.SerializerMethodField()
     monthly_earnings = serializers.DecimalField(max_digits=15, decimal_places=2, source='get_monthly_earnings', read_only=True)
     monthly_expenses = serializers.DecimalField(max_digits=15, decimal_places=2, source='get_monthly_expenses', read_only=True)
     labels = LabelSerializer(many=True)

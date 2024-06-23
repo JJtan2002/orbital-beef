@@ -219,8 +219,8 @@ class Transaction(WalletBasedModel):
             print(data)
             custom_label = CustomLabel.objects.get(
                 pk=data.get("label").get("id"))
-            #if custom_label.get_wallet() != user_wallet:
-                #raise PermissionError()
+            if custom_label.wallet != user_wallet:
+                raise PermissionError()
             transaction.label = custom_label
 
         # Value section
@@ -236,9 +236,9 @@ class Transaction(WalletBasedModel):
             date_string = data.get("date")
             if isinstance(date_string, datetime):
                 transaction.date = date_string.date()
-            else: transaction.date = datetime.strptime(date_string, "%Y-%m-%d")
-            #date_object = datetime.strptime(
-            #date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+            else: 
+                transaction.date = datetime.strptime(date_string, "%Y-%m-%d")
+               
         if data.get("updateWallet") is not None:
             transaction.update_wallet = data.get("updateWallet")
 

@@ -20,11 +20,9 @@ const TransactionsList = () => {
             navigate("/");
     }, [isLoggedIn, navigate]);
 
-    const { refetch: refetchTransactions } = useQuery({
-        queryKey: ["api/transactions"],
-        queryFn: () => getTransactions(0),
-    });
+
     const {
+        refetch: refetchTransactions,
         data: transactions,
         isLoading,
         isError,

@@ -22,7 +22,6 @@ class WalletAPIView(APIView):
 
         wallet = user.get_wallet()
         wallet_serialized = WalletSerializer(wallet)
-        print(wallet_serialized.data)
         return Response(wallet_serialized.data)
 
     def put(self, request):
@@ -158,8 +157,10 @@ def get_transactions(request):
     if start_date_str and end_date_str:
         start_date = date.fromisoformat(start_date_str)
         end_date = date.fromisoformat(end_date_str)
+        print("sorted")
 
         transactions = transactions.get_in_range(start_date, end_date)
+        print(transactions)
 
     if limit and int(limit) > 0:
         transactions = transactions[:int(limit)]
@@ -171,9 +172,13 @@ def get_transactions(request):
     if int(chart_type) == 1:
         # CHART TYPE == 1: Bar chart grouping by dates
         grouped_transactions_list = transactions.expenses().group_by_dates().add_empty_dates(start_date, end_date)
+        print(grouped_transactions_list)
+        print("get bar info")
 
     elif int(chart_type) == 2:
         # CHART TYPE == 2: Pie chart grouping by labels
         grouped_transactions_list = transactions.expenses().group_by_labels()
+        print("get pie info")
+
 
     return Response(grouped_transactions_list)

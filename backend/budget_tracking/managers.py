@@ -8,10 +8,10 @@ from django.db.models.functions import TruncMonth
 class TransactionsQueryset(models.QuerySet):
 
     def expenses(self):
-        return self.filter(type="EXPENSE")
+        return self.filter(type="Expense")
 
     def earnings(self):
-        return self.filter(type="EARNING")
+        return self.filter(type="Earning")
 
     def get_in_range(self, start_date, end_date):
         return self.filter(date__range=[start_date, end_date]).order_by('date')
@@ -49,6 +49,7 @@ class TransactionsQueryset(models.QuerySet):
 
         for d in all_dates:
             if d not in all_transactions_dates:
+                print(d)
                 grouped_transactions_list.append({'date': d, 'value': 0})
 
         for item in grouped_transactions_list:

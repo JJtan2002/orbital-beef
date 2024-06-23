@@ -32,10 +32,8 @@ export function useTransactions() {
         transaction,
     }) {
         try {
-            // console.log("createTransaction: " + transaction.title);
             const newTransaction = {
                 ...transaction,
-                // date: transaction.date,
             };
             console.log(transaction);
             console.log(newTransaction);
