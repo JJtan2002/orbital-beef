@@ -12,9 +12,9 @@ export function useTransactions() {
         try {
             let endpoint = `/budget_tracking/transactions/?limit=${limit}&chart_type=${chartType}`;
             if (startDate)
-                endpoint += `&start_date=${startDate.toISOString().split("T")[0]}`;
+                endpoint += `&start_date=${startDate.toLocaleString('en-CA', { timeZone: 'Asia/Singapore' }).split(',')[0]}`;
             if (endDate)
-                endpoint += `&end_date=${endDate.toISOString().split("T")[0]}`;
+                endpoint += `&end_date=${endDate.toLocaleString('en-CA', { timeZone: 'Asia/Singapore' }).split(',')[0]}`;
             const response = await axiosPrivate.get(endpoint);
             const data = await response.data;
             if (chartType === 2) {

@@ -19,8 +19,9 @@ const Profile = () => {
     // default date in transaction form to today
     const [dateValue, setDateValue] = useState(() => {
         // Initialize with today's date
-        return new Date().toISOString().split('T')[0];
+        return new Date().toLocaleString('en-CA', { timeZone: 'Asia/Singapore' }).split(',')[0];
     });
+    console.log(dateValue)
     const handleDateChange = (event) => {
         setDateValue(event.target.value);
     };
