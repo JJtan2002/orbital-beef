@@ -196,10 +196,10 @@ class Transaction(WalletBasedModel):
             amount = self.value if self.type == 'Earning' else (-self.value)
             self.wallet.update_balance(amount)
 
-        if self.is_within_current_month() and self.label.is_monthly:
+        if self.label and self.is_within_current_month() and self.label.is_monthly:
             self.label.update_balance(self.value)
         
-        if not self.label.is_monthly:
+        if self.label and not self.label.is_monthly:
             self.label.update_balance(self.value)
 
         return super().save(**kwargs)
