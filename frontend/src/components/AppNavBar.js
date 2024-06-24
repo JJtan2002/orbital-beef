@@ -44,7 +44,9 @@ const AppNavBar = () => {
             )}
             <Navbar.Collapse style={{ display: 'block', visibility: 'visible', opacity: 1 }}>
                 <div className="flex space-x-4 ml-auto">
-                    <Navbar.Link href="/" className="text-lg">Home</Navbar.Link>
+                    {!isLoggedIn && (
+                        <Navbar.Link href="/" className="text-lg">Home</Navbar.Link>
+                    )}
                     <Navbar.Link href="#" className="text-lg">About</Navbar.Link>
                     {isLoggedIn && (
                         <Navbar.Link href="/profile" className="text-lg">Dashboard</Navbar.Link>
