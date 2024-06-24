@@ -19,7 +19,7 @@ export function useLabels() {
         label,
     }) {
         try {
-            const response = await axiosPrivate.post("/label/", label);
+            const response = await axiosPrivate.post("/budget_tracking/labels/", label);
             if (response.status !== 200) return null;
             return await response.data;
         } catch (error) {
@@ -33,7 +33,7 @@ export function useLabels() {
         label_pk
     ) {
         try {
-            const response = await axiosPrivate.delete(`/label/${label_pk}`);
+            const response = await axiosPrivate.delete(`/budget_tracking/labels/${label_pk}`);
             return await response.data;
         } catch (error) {
             console.log(error);
@@ -41,5 +41,20 @@ export function useLabels() {
         return null;
     }
 
-    return { getLabels, createLabel, deleteLabel };
+    async function editLabel({
+        label,
+        label_pk,
+    }) {
+        try {
+            const response = await axiosPrivate.put(`/budget_tracking/labels/${label_pk}`, label);
+            if (response.status !== 200) return null;
+            return await response.data;
+        } catch (error) {
+            console.log(error);
+        }
+
+        return null;
+    }
+
+    return { getLabels, createLabel, deleteLabel, editLabel };
 }

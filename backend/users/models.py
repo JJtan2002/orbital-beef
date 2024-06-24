@@ -20,16 +20,16 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         labels_data = [
-            {"id": 0, "name": "Food", "color": "white"},
-            {"id": 1, "name": "Transportation", "color": "black"},
-            {"id": 2, "name": "Housing", "color": "white"},
-            {"id": 3, "name": "Utilities", "color": "black"},
-            {"id": 4, "name": "Entertainment", "color": "white"},
-            {"id": 5, "name": "Salary", "color": "black"},
-            {"id": 6, "name": "Freelance Income", "color": "white"},
-            {"id": 7, "name": "Investment", "color": "black"},
-            {"id": 8, "name": "Gifts", "color": "white"},
-            {"id": 9, "name": "Other", "color": "black"},
+            {"id": 0, "name": "Food", "color": "white", "is_monthly" : True},
+            {"id": 1, "name": "Transportation", "color": "black", "is_monthly" : True},
+            {"id": 2, "name": "Housing", "color": "white", "is_monthly" : True},
+            {"id": 3, "name": "Utilities", "color": "black", "is_monthly" : True},
+            {"id": 4, "name": "Entertainment", "color": "white", "is_monthly" : True},
+            {"id": 5, "name": "Salary", "color": "black", "is_monthly" : True},
+            {"id": 6, "name": "Freelance Income", "color": "white", "is_monthly" : True},
+            {"id": 7, "name": "Investment", "color": "black", "is_monthly" : True},
+            {"id": 8, "name": "Gifts", "color": "white", "is_monthly" : True},
+            {"id": 9, "name": "Other", "color": "black", "is_monthly" : True},
         ]
         
         # Creation of a related wallet for the created user
