@@ -91,6 +91,7 @@ class CustomLabel(WalletBasedModel):
     current_amount = models.DecimalField(decimal_places=2, max_digits=15, default=0)
     color = models.CharField(max_length=7, blank=False,
                              null=False)  # HEX FIELD
+    is_monthly = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -125,6 +126,10 @@ class CustomLabel(WalletBasedModel):
         if data.get("goal"):
             label.goal = data.get("goal")
 
+        if not data.get("is_monthly"):
+            raise Exception("Monthly recurrence or not is required.")
+        label.is_monthly = data.get("is_monthly")
+        
         label.save()
 
         return label
@@ -168,7 +173,7 @@ class Transaction(WalletBasedModel):
     value = models.DecimalField(decimal_places=2, max_digits=15)
     date = models.DateField(auto_now=False)
     type = models.CharField(max_length=7, choices=TRANSACTION_TYPES, null=True)
-    label = models.ForeignKey(CustomLabel, on_delete=models.SET_NULL, null=True, blank=True)
+    label = models.ForeignKey(CustomLabel, on_delete=models.CASCADE, null=True, blank=True)
     imported = models.BooleanField(default=False, null=True, blank=True)
     # Django convention is to avoid setting null=True to CharFields
     update_wallet = models.BooleanField(default=True)
@@ -191,7 +196,10 @@ class Transaction(WalletBasedModel):
             amount = self.value if self.type == 'Earning' else (-self.value)
             self.wallet.update_balance(amount)
 
-        if self.is_within_current_month():
+        if self.is_within_current_month() and self.label.is_monthly:
+            self.label.update_balance(self.value)
+        
+        if not self.label.is_monthly:
             self.label.update_balance(self.value)
 
         return super().save(**kwargs)
@@ -204,7 +212,10 @@ class Transaction(WalletBasedModel):
                 amount = (-self.value) if self.type == 'Earning' else self.value
                 self.wallet.update_balance(amount)
 
-        if self.is_within_current_month():
+        if self.is_within_current_month() and self.label.is_monthly:
+            self.label.update_balance(-self.value)
+        
+        if not self.label.is_monthly:
             self.label.update_balance(-self.value)
             
         return super().delete(**kwargs)

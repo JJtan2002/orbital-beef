@@ -104,6 +104,30 @@ class LabelAPIView(APIView):
         label.delete()
 
         return custom_success_response("Label deleted with success!")
+    
+    def put(self, request, label_pk):
+        user: User = request.user
+
+        if not label_pk:
+            return custom_server_error_response("No label id was given. Please try again.")
+
+        try:
+            label = CustomLabel.objects.get(pk=label_pk)
+        except CustomLabel.DoesNotExist:
+            return custom_server_error_response("Label not found.")
+
+        # Check if the label belongs to the user's wallet
+        if not label.is_from_wallet(user.get_wallet()):
+            raise PermissionError()
+
+        serializer = self.serializer_class(label, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return custom_success_response("Label updated with success!")
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
