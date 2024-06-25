@@ -183,7 +183,7 @@ const Wallet = () => {
                             <select name="id" id="id" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white">
                                 <option value="" disabled selected>Select Label</option>
                                 {/* TODO: Conditionally render based on label names */}
-                                {labels.map((label) => (
+                                {labels.filter(label => label.is_expense).map((label) => (
                                     <option key={label.id} value={label.id}>{label.name}</option>
                                 ))
                                 }
@@ -217,7 +217,7 @@ const Wallet = () => {
             <div className="w-full max-w-4xl p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <h2 className="text-xl font-medium text-gray-900 dark:text-white mb-4">Labels and Goals</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {labels.map(label => {
+                    {labels.filter(label => label.is_expense).map(label => {
                         const goal = label.goal;
                         return (
                             <div key={label.id} className="relative p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md">

@@ -8,7 +8,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword";
-import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 import Protected from "./pages/Protected";
 import TransactionsList from "./pages/TransactionsList";
 import Wallet from "./pages/Wallet";
@@ -67,9 +67,9 @@ const App = () => {
               element={<ResetPassword
               />}
             />
-            <Route path="profile" exact
+            <Route path="dashboard" exact
               element={
-                <Profile
+                <Dashboard
                 />
               }
             />

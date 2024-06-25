@@ -92,6 +92,7 @@ class CustomLabel(WalletBasedModel):
     color = models.CharField(max_length=7, blank=False,
                              null=False)  # HEX FIELD
     is_monthly = models.BooleanField(default=True)
+    is_expense = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -129,6 +130,9 @@ class CustomLabel(WalletBasedModel):
         if not data.get("is_monthly"):
             raise Exception("Monthly recurrence or not is required.")
         label.is_monthly = data.get("is_monthly")
+
+        if data.get("is_expense") is not None:
+            label.is_expense = data.get("is_expense")
         
         label.save()
 

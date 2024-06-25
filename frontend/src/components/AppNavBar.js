@@ -49,7 +49,7 @@ const AppNavBar = () => {
                     )}
                     <Navbar.Link href="#" className="text-lg">About</Navbar.Link>
                     {isLoggedIn && (
-                        <Navbar.Link href="/profile" className="text-lg">Dashboard</Navbar.Link>
+                        <Navbar.Link href="/dashboard" className="text-lg">Dashboard</Navbar.Link>
                     )}
                     {isLoggedIn && (
                         <Navbar.Link href="/wallet" className="text-lg">Wallet</Navbar.Link>

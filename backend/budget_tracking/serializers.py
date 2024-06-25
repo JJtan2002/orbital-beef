@@ -6,7 +6,7 @@ from .models import Transaction, SavingPlan, Wallet, CustomLabel
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomLabel
-        fields = ('id', 'name', 'color', 'goal', 'current_amount')
+        fields = ('id', 'name', 'color', 'goal', 'current_amount', 'is_expense', 'is_monthly')
 
 
 class WalletSerializer(serializers.ModelSerializer):

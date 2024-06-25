@@ -23,6 +23,9 @@ def signup(request):
         email = data.get('email')
         password = data.get('password')
 
+        if User.objects.filter(email=email).exists():
+            return JsonResponse({'error': 'Account with this email already exists.'}, status=409)
+
         if not email or not password or not name:
             return JsonResponse({'error': 'Please provide all the required fields'}, status=400)
         
