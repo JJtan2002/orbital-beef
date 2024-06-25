@@ -13,7 +13,7 @@ const Login = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            navigate("/profile");
+            navigate("/dashboard");
         }
     }, [isLoggedIn, navigate]);
 
