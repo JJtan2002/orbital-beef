@@ -32,7 +32,7 @@ const Register = () => {
         const formData = { name, email, password };
 
         try {
-            const res = await axios.post(RegURL, formData);
+            const res = await axios.post(RegURL, formData, { timeout: 20000 });
             const data = res.data;
             if (data.success) {
                 toast.success(data.success);
