@@ -87,7 +87,7 @@ const AuthContextProvider = ({ children }) => {
         const formData = { name, email, password };
 
         try {
-            const res = await axios.post(RegURL, formData);
+            const res = await axios.post(RegURL, formData, { timeout: 5000 });
             const data = res.data;
             if (data.access) {
                 toast.success(data.message);
