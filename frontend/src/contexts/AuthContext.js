@@ -89,21 +89,20 @@ const AuthContextProvider = ({ children }) => {
         try {
             const res = await axios.post(RegURL, formData, { timeout: 5000 });
             const data = res.data;
-            // if (data.access) {
-            if (data.success) {
-                toast.success(data.success + "Please login!");
-                // setIsLoggedIn(true);
-                // setAuthTokens({
-                //     'access': data.access,
-                //     'refresh': data.refresh,
-                // })
-                // setUser(jwtDecode(data.access));
-                // console.log(user);
-                // localStorage.setItem("isLoggedIn", "true");
-                // localStorage.setItem("access_token", data.access);
-                // localStorage.setItem("refresh_token", data.refresh);
+            if (data.access) {
+                toast.success(data.message);
+                setIsLoggedIn(true);
+                setAuthTokens({
+                    'access': data.access,
+                    'refresh': data.refresh,
+                })
+                setUser(jwtDecode(data.access));
+                console.log(user);
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("access_token", data.access);
+                localStorage.setItem("refresh_token", data.refresh);
 
-                navigate("/login");
+                // navigate("/profile");
                 console.log("Successful Registration.");
             } else {
                 toast.error(data.error);
