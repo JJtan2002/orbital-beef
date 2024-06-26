@@ -7,7 +7,7 @@ import axios from "axios";
 
 const Register = () => {
     const { Register, isLoggedIn } = useAuth();
-    const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/signup/";
+    
 
     let navigate = useNavigate();
 

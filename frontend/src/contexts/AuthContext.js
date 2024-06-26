@@ -10,6 +10,7 @@ const AuthContext = createContext();
 // create context provider
 const AuthContextProvider = ({ children }) => {
     const RefreshURL = process.env.REACT_APP_BACKEND_URL + "/api/token/refresh/";
+    const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/signup/";
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") || false);
     const [authTokens, setAuthTokens] = useState(() => {
