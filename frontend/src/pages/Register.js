@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 
 const Register = () => {
     const { Register, isLoggedIn } = useAuth();
+    const RegURL = process.env.REACT_APP_BACKEND_URL + "/users/signup/";
 
     let navigate = useNavigate();
 
@@ -16,6 +19,58 @@ const Register = () => {
 
 
     const handleRegister = async (ev) => {
+        ev.preventDefault();
+        const name = ev.target.name.value;
+        const email = ev.target.email.value;
+        const password = ev.target.password.value;
+        const confirmpassword = ev.target.confirmpassword.value;
+        if (password !== confirmpassword) {
+            toast.error("Passwords do not match!");
+            return;
+        }
+
+        const formData = { name, email, password };
+
+        try {
+            const res = await axios.post(RegURL, formData);
+            const data = res.data;
+            if (data.success) {
+                toast.success(data.success);
+                // setIsLoggedIn(true);
+                // setAuthTokens({
+                //     'access': data.access,
+                //     'refresh': data.refresh,
+                // })
+                // setUser(jwtDecode(data.access));
+                // console.log(user);
+                // localStorage.setItem("isLoggedIn", "true");
+                // localStorage.setItem("access_token", data.access);
+                // localStorage.setItem("refresh_token", data.refresh);
+
+                navigate("/login");
+                console.log("Successful Registration.");
+            } else {
+                toast.error(data.error);
+            }
+        } catch (err) {
+            if (err.response) {
+                // Server responded with a status other than 200 range
+                if (err.response.status === 409) {
+                    toast.error("Account with this email already exists.");
+                } else if (err.response.status === 405) {
+                    toast.error("Method Not Allowed.");
+                } else {
+                    toast.error(err.response.data.error || "Some error occurred");
+                }
+            } else if (err.request) {
+                // Request was made but no response was received
+                toast.error("No response from server.");
+            } else {
+                // Something happened in setting up the request
+                toast.error("Error: " + err.message);
+            }
+            console.log("Error:", err);
+        }
         Register(ev);
     };
 
