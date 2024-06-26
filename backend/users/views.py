@@ -34,6 +34,7 @@ def signup(request):
             refresh = RefreshToken.for_user(user)
             refresh['name']=user.name
             refresh['email']=user.email 
+            print(refresh)
             return JsonResponse({
                 'access': str(refresh.access_token),
                 'refresh': str(refresh),
