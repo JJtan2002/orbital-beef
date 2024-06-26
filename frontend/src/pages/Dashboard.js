@@ -114,6 +114,7 @@ const Dashboard = () => {
             dateForDisplay.fiveDaysAgo,
             dateForDisplay.today,
         ),
+        enabled: !!dateForDisplay.fiveDaysAgo && !!dateForDisplay.today,
     })
 
 
