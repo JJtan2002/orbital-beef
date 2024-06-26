@@ -25,7 +25,7 @@ const AuthContextProvider = ({ children }) => {
 
 
     useEffect(() => {
-        if (localStorage.getItem("isLoggedIn") === "true") {
+        if (localStorage.getItem("isLoggedIn") === "true" && authTokens.access) {
             setIsLoggedIn(true);
             setAuthTokens({
                 access: localStorage.getItem('access_token'),

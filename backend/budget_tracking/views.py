@@ -125,7 +125,7 @@ class LabelAPIView(APIView):
             serializer.save()
             return custom_success_response("Label updated with success!")
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=400)
 
 
 

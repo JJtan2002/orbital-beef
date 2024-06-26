@@ -127,7 +127,7 @@ class CustomLabel(WalletBasedModel):
         if data.get("goal"):
             label.goal = data.get("goal")
 
-        if not data.get("is_monthly"):
+        if data.get("is_monthly") is None:
             raise Exception("Monthly recurrence or not is required.")
         label.is_monthly = data.get("is_monthly")
 
