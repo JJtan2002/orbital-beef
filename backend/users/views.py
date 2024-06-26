@@ -31,15 +31,18 @@ def signup(request):
         
         try:
             user = UserModel.objects.create_user(name = name, email = email, password = password)
-            refresh = RefreshToken.for_user(user)
-            refresh['name']=user.name
-            refresh['email']=user.email 
-            print(refresh)
+            # refresh = RefreshToken.for_user(user)
+            # refresh['name']=user.name
+            # refresh['email']=user.email 
+            # print(refresh)
+            # return JsonResponse({
+            #     'access': str(refresh.access_token),
+            #     'refresh': str(refresh),
+            #     'message': 'Successful Registration!',
+            # })
             return JsonResponse({
-                'access': str(refresh.access_token),
-                'refresh': str(refresh),
-                'message': 'Successful Registration!',
-            })
+                'success': 'Account Created! Please log in.',
+            }, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=405)
         

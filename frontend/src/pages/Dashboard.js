@@ -44,7 +44,7 @@ const Dashboard = () => {
         // Get the date 5 days ago
         const fiveDaysAgo = new Date(today);
         fiveDaysAgo.setDate(today.getDate() - 5);
-     
+
         // Update state with formatted dates
         setDates({ today: today, fiveDaysAgo: fiveDaysAgo });
     }, []);
@@ -64,7 +64,7 @@ const Dashboard = () => {
         queryKey: ["api/wallet"],
         queryFn: () => getWallet(),
     });
- 
+
     const {
         refetch: refetchExpenses,
         data: expenses,
@@ -98,6 +98,7 @@ const Dashboard = () => {
             /*startDate:*/ dateForDisplay.fiveDaysAgo,
             /*endDate:*/ dateForDisplay.today,
         ),
+        enabled: !!dateForDisplay.fiveDaysAgo && !!dateForDisplay.today,
     })
 
     const {
@@ -113,7 +114,8 @@ const Dashboard = () => {
             dateForDisplay.fiveDaysAgo,
             dateForDisplay.today,
         ),
-    }) 
+        enabled: !!dateForDisplay.fiveDaysAgo && !!dateForDisplay.today,
+    })
 
 
     var barData = {
@@ -146,7 +148,7 @@ const Dashboard = () => {
             ],
         };
     }
-    
+
     var pieData = {
         labels: ['Rent', 'Groceries', 'Utilities', 'Entertainment', 'Transport', 'Others'],
         datasets: [
@@ -224,6 +226,8 @@ const Dashboard = () => {
         await deleteTransaction(transactionId);
         await refetchWallet();
         await refetchExpenses();
+        await refetchBardata();
+        await refetchPiedata();
         toast.warning("Transaction deleted!");
     };
 
@@ -353,7 +357,7 @@ const Dashboard = () => {
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                     </tr>
                                 </thead>
-                                
+
                                 {loading ? (
                                     <p>Loading...</p>
                                 ) : expenses && (
