@@ -119,17 +119,17 @@ WSGI_APPLICATION = 'cashflow.wsgi.application'
 #     }
 # }"""
 
-# # Official
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER' : 'postgres.irhdctmkmzjkcbhtumap',
-#         'PASSWORD' : 'pIp0NHGstwoz0jRz',
-#         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
-#         'PORT': '6543',
-#     }
-# }
+# Official
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER' : 'postgres.irhdctmkmzjkcbhtumap',
+        'PASSWORD' : 'pIp0NHGstwoz0jRz',
+        'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
+        'PORT': '5432',
+    }
+}
 
 # for testing
 #DATABASES = {
@@ -142,12 +142,12 @@ WSGI_APPLICATION = 'cashflow.wsgi.application'
 #        'PORT': '6543',
 #    }
 #}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
