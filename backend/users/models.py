@@ -25,11 +25,11 @@ class UserManager(BaseUserManager):
             {"id": 2, "name": "Housing", "color": "white", "is_monthly" : True},
             {"id": 3, "name": "Utilities", "color": "black", "is_monthly" : True},
             {"id": 4, "name": "Entertainment", "color": "white", "is_monthly" : True},
-            {"id": 5, "name": "Salary", "color": "black", "is_monthly" : True},
-            {"id": 6, "name": "Freelance Income", "color": "white", "is_monthly" : True},
-            {"id": 7, "name": "Investment", "color": "black", "is_monthly" : True},
-            {"id": 8, "name": "Gifts", "color": "white", "is_monthly" : True},
-            {"id": 9, "name": "Other", "color": "black", "is_monthly" : True},
+            {"id": 5, "name": "Salary", "color": "black", "is_monthly" : True, "is_expense" : False},
+            {"id": 6, "name": "Freelance Income", "color": "white", "is_monthly" : True, "is_expense" : False},
+            {"id": 7, "name": "Investment", "color": "black", "is_monthly" : True, "is_expense" : False},
+            {"id": 8, "name": "Gifts", "color": "white", "is_monthly" : True, "is_expense" : False},
+            {"id": 9, "name": "Other", "color": "black", "is_monthly" : True, "is_expense" : False},
         ]
         
         # Creation of a related wallet for the created user

@@ -14,7 +14,7 @@ import 'chart.js/auto';
 const QUERY_LIMIT = 5;
 
 
-const Profile = () => {
+const Dashboard = () => {
 
     // default date in transaction form to today
     const [dateValue, setDateValue] = useState(() => {
@@ -118,8 +118,8 @@ const Profile = () => {
     useEffect(() => {
         const fetchLabels = async () => {
             if (!isPendingLabels && !isErrorLabels && labels) {
-                setExpenseCategories(labels.slice(0, 4).map((i) => [i["id"], i["name"]]));
-                setIncomeCategories(labels.slice(5,).map((i) => [i["id"], i["name"]]));
+                setExpenseCategories(labels.filter(label => label.is_expense).map((i) => [i["id"], i["name"]]));
+                setIncomeCategories(labels.filter(label => !label.is_expense).map((i) => [i["id"], i["name"]]));
             }
         };
 
@@ -317,4 +317,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default Dashboard;
