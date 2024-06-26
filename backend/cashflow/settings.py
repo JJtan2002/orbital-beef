@@ -125,7 +125,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER' : 'postgres.irhdctmkmzjkcbhtumap',
-        'PASSWORD' : 'pIp0NHGstwoz0jRz',
+        'PASSWORD' : 'K5dAIpG6ht4CM9Ce',
         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
         'PORT': '5432',
     }
@@ -221,8 +221,8 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-FRONTEND_BASE_URL = 'http://localhost:3000'
-# FRONTEND_BASE_URL = "https://orbital-beef-6446.vercel.app"
+# FRONTEND_BASE_URL = 'http://localhost:3000'
+FRONTEND_BASE_URL = "https://orbital-beef-6446.vercel.app"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
