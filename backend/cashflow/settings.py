@@ -112,24 +112,24 @@ WSGI_APPLICATION = 'cashflow.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# """DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }"""
-
-# Official
-DATABASES = {
+"""DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER' : 'postgres.irhdctmkmzjkcbhtumap',
-        'PASSWORD' : 'pIp0NHGstwoz0jRz',
-        'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '6543',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+}"""
+
+# # Official
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER' : 'postgres.irhdctmkmzjkcbhtumap',
+#         'PASSWORD' : 'pIp0NHGstwoz0jRz',
+#         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
+#         'PORT': '6543',
+#     }
+# }
 
 # for testing
 #DATABASES = {
