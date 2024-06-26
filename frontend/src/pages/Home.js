@@ -28,7 +28,7 @@ const Home = () => {
             <div className="text-center w-20px">
                 {isLoggedIn ? (
                     <a
-                        href="profile"
+                        href="dashboard"
                         className="font-semibold leading-6 text-purple-600 hover:text-purple-500"
                     >
                         Go to Dashboard

@@ -26,14 +26,14 @@ const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (localStorage.getItem("isLoggedIn") === "true") {
-          setIsLoggedIn(true);
-          setAuthTokens({
-            access: localStorage.getItem('access_token'),
-            refresh: localStorage.getItem('refresh_token'),
-          });
-          setUser(jwtDecode(authTokens.access));
+            setIsLoggedIn(true);
+            setAuthTokens({
+                access: localStorage.getItem('access_token'),
+                refresh: localStorage.getItem('refresh_token'),
+            });
+            setUser(jwtDecode(authTokens.access));
         }
-      }, [isLoggedIn]);
+    }, [isLoggedIn]);
 
     useEffect(() => {
         if (authTokens.access) {
@@ -108,7 +108,22 @@ const AuthContextProvider = ({ children }) => {
                 toast.error(data.error);
             }
         } catch (err) {
-            toast.error("Some error occurred");
+            if (err.response) {
+                // Server responded with a status other than 200 range
+                if (err.response.status === 409) {
+                    toast.error("Account with this email already exists.");
+                } else if (err.response.status === 405) {
+                    toast.error("Method Not Allowed.");
+                } else {
+                    toast.error(err.response.data.error || "Some error occurred");
+                }
+            } else if (err.request) {
+                // Request was made but no response was received
+                toast.error("No response from server.");
+            } else {
+                // Something happened in setting up the request
+                toast.error("Error: " + err.message);
+            }
             console.log("Error:", err);
         }
     };
@@ -146,7 +161,7 @@ const AuthContextProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{
-            isLoggedIn,  authTokens, user,
+            isLoggedIn, authTokens, user,
             setIsLoggedIn, setAuthTokens, setUser,
             Logout, Register, Login, refresh,
         }}>

@@ -10,7 +10,7 @@ const Register = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            navigate("/profile");
+            navigate("/dashboard");
         }
     }, [isLoggedIn, navigate]);
 
