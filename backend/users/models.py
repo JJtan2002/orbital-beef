@@ -20,16 +20,16 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         labels_data = [
-            {"id": 0, "name": "Food", "color": "white", "is_monthly" : True},
-            {"id": 1, "name": "Transportation", "color": "black", "is_monthly" : True},
-            {"id": 2, "name": "Housing", "color": "white", "is_monthly" : True},
-            {"id": 3, "name": "Utilities", "color": "black", "is_monthly" : True},
-            {"id": 4, "name": "Entertainment", "color": "white", "is_monthly" : True},
-            {"id": 5, "name": "Salary", "color": "black", "is_monthly" : True, "is_expense" : False},
-            {"id": 6, "name": "Freelance Income", "color": "white", "is_monthly" : True, "is_expense" : False},
-            {"id": 7, "name": "Investment", "color": "black", "is_monthly" : True, "is_expense" : False},
-            {"id": 8, "name": "Gifts", "color": "white", "is_monthly" : True, "is_expense" : False},
-            {"id": 9, "name": "Other", "color": "black", "is_monthly" : True, "is_expense" : False},
+            {"id": 0, "name": "Food", "color": "red", "is_monthly": True},
+            {"id": 1, "name": "Transportation", "color": "blue", "is_monthly": True},
+            {"id": 2, "name": "Housing", "color": "green", "is_monthly": True},
+            {"id": 3, "name": "Utilities", "color": "yellow", "is_monthly": True},
+            {"id": 4, "name": "Entertainment", "color": "purple", "is_monthly": True},
+            {"id": 5, "name": "Salary", "color": "orange", "is_monthly": True, "is_expense": False},
+            {"id": 6, "name": "Freelance Income", "color": "pink", "is_monthly": True, "is_expense": False},
+            {"id": 7, "name": "Investment", "color": "cyan", "is_monthly": True, "is_expense": False},
+            {"id": 8, "name": "Gifts", "color": "lime", "is_monthly": True, "is_expense": False},
+            {"id": 9, "name": "Other", "color": "magenta", "is_monthly": True, "is_expense": False},
         ]
         
         # Creation of a related wallet for the created user

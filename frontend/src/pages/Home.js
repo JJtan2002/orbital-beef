@@ -7,6 +7,14 @@ import { jwtDecode } from "jwt-decode";
 const Home = () => {
     let navigate = useNavigate();
 
+    const handleDashboardClick = () => {
+        navigate('/dashboard'); // Navigate to 'register' path
+    };
+
+    const handleRegisterClick = () => {
+        navigate('/register'); // Navigate to 'register' path
+    };
+
     const { isLoggedIn, authTokens } = useAuth();
     /*
         useEffect(() => {
@@ -29,6 +37,7 @@ const Home = () => {
                 {isLoggedIn ? (
                     <a
                         href="dashboard"
+                        onClick={handleDashboardClick}
                         className="font-semibold leading-6 text-purple-600 hover:text-purple-500"
                     >
                         Go to Dashboard
@@ -36,6 +45,7 @@ const Home = () => {
                 ) : (
                     <a
                         href="register"
+                        onClick={handleRegisterClick}
                         className="font-semibold leading-6 text-purple-600 hover:text-purple-500"
                     >
                         Sign up and Explore!
