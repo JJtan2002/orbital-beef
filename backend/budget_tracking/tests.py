@@ -45,7 +45,7 @@ class TransactionTestCase(TestCase):
     def test_get_monthly_earnings(self):
         one_month_ago = datetime.datetime.today() - relativedelta(months=1)
         out_of_range = one_month_ago - relativedelta(days=1)
-        in_range = datetime.datetime.today() - relativedelta(days=1)
+        in_range = datetime.datetime.today()
 
         earnings_in_range = self.factory.create_transaction_filled(self.wallet, type="Earning", value=150)
         earning_in_range2 = self.factory.create_transaction_filled(self.wallet, type="Earning", value=50, date=in_range)
@@ -65,7 +65,7 @@ class TransactionTestCase(TestCase):
     def test_get_monthly_expenses(self):
         one_month_ago = datetime.datetime.today() - relativedelta(months=1)
         out_of_range = one_month_ago - relativedelta(days=1)
-        in_range = datetime.datetime.today() + relativedelta(days=1)
+        in_range = datetime.datetime.today()
 
         expense_in_range = self.factory.create_transaction_filled(self.wallet, type="Expense", value=150)
         expense_in_range2 = self.factory.create_transaction_filled(self.wallet, type="Expense", value=50, date=in_range)
