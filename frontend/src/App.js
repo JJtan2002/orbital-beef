@@ -15,6 +15,7 @@ import Wallet from "./pages/Wallet";
 import { useEffect } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useAuth } from "./contexts/AuthContext";
+import { DashboardContextProvider } from "./contexts/DashBoardContext";
 
 const App = () => {
   const apiPrivate = useAxiosPrivate();
@@ -69,8 +70,10 @@ const App = () => {
             />
             <Route path="dashboard" exact
               element={
-                <Dashboard
-                />
+                <DashboardContextProvider>
+                  <Dashboard
+                  />
+                </DashboardContextProvider>
               }
             />
             <Route path="transactions" exact
