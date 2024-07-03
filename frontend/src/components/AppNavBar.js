@@ -34,7 +34,7 @@ const AppNavBar = () => {
                             <span className="block text-sm">{user.name}</span>
                             <span className="block truncate text-sm font-medium">{user.email}</span>
                         </Dropdown.Header>
-                        <Dropdown.Item>Settings</Dropdown.Item>
+                        <Dropdown.Item href="/setting">Settings</Dropdown.Item>
                         <Dropdown.Item>Your Orders</Dropdown.Item>
                         <Dropdown.Divider />
                         <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
