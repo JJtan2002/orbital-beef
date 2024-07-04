@@ -29,23 +29,23 @@ const AppNavBar = () => {
             <div className="flex md:order-2">
                 {isLoggedIn && (
                     <>
-                    <Dropdown arrowIcon={false} inline
-                        label={<Avatar alt="User settings" img={UserIcon} rounded size="lg"/>}>
-                        <Dropdown.Header>
-                            <span className="block text-sm">{user.name}</span>
-                            <span className="block truncate text-sm font-medium">{user.email}</span>
-                        </Dropdown.Header>
-                        <Dropdown.Item href="/setting">Settings</Dropdown.Item>
-                        <Dropdown.Item>Your Orders</Dropdown.Item>
-                        <Dropdown.Divider />
-                        <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
-                    </Dropdown>
-                    {/* <Navbar.Toggle /> */}
+                        <Dropdown arrowIcon={false} inline
+                            label={<Avatar alt="User settings" img={UserIcon} rounded size="lg" />}>
+                            <Dropdown.Header>
+                                <span className="block text-sm">{user.name}</span>
+                                <span className="block truncate text-sm font-medium">{user.email}</span>
+                            </Dropdown.Header>
+                            <Dropdown.Item href="/setting">Settings</Dropdown.Item>
+                            <Dropdown.Item>Your Orders</Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
+                        </Dropdown>
+                        {/* <Navbar.Toggle /> */}
                     </>
                 )}
                 <Navbar.Toggle />
             </div>
-            <Navbar.Collapse>
+            <Navbar.Collapse className="ml-auto">
                 {/* style={{ display: 'block', visibility: 'visible', opacity: 1 }}> */}
                 {/* <div className="flex space-x-4 ml-auto"> */}
                 <>
@@ -65,7 +65,7 @@ const AppNavBar = () => {
                     {!isLoggedIn && (
                         <Navbar.Link href="/login" className="text-lg">Login</Navbar.Link>
                     )}
-                {/* </div> */}
+                    {/* </div> */}
                 </>
             </Navbar.Collapse>
         </Navbar>
