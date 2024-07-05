@@ -17,37 +17,42 @@ const AppNavBar = () => {
     };
 
     return (
-        <Navbar fluid style={{ backgroundColor: "#99cccc" }}>
+        <Navbar fluid style={{ backgroundColor: "#99cccc" }} rounded>
             <Navbar.Brand>
                 <img
                     src={CashFlowIcon}
-                    className="mr-4 h-4 sm:h-20"
+                    className="mr-4 h-8 sm:h-20"
                     alt="CashFlow Logo"
                 />
                 <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">CashFlow</span>
             </Navbar.Brand>
-            {isLoggedIn && (
-                <div className="flex md:order-2">
-                    <Dropdown arrowIcon={false} inline
-                        label={<Avatar alt="User settings" img={UserIcon} rounded />}>
-                        <Dropdown.Header>
-                            <span className="block text-sm">{user.name}</span>
-                            <span className="block truncate text-sm font-medium">{user.email}</span>
-                        </Dropdown.Header>
-                        <Dropdown.Item>Settings</Dropdown.Item>
-                        <Dropdown.Item>Your Orders</Dropdown.Item>
-                        <Dropdown.Divider />
-                        <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
-                    </Dropdown>
-                    {/* <Navbar.Toggle /> */}
-                </div>
-            )}
-            <Navbar.Collapse style={{ display: 'block', visibility: 'visible', opacity: 1 }}>
-                <div className="flex space-x-4 ml-auto">
+            <div className="flex md:order-2">
+                {isLoggedIn && (
+                    <>
+                        <Dropdown arrowIcon={false} inline
+                            label={<Avatar alt="User settings" img={UserIcon} rounded size="lg" />}>
+                            <Dropdown.Header>
+                                <span className="block text-sm">{user.name}</span>
+                                <span className="block truncate text-sm font-medium">{user.email}</span>
+                            </Dropdown.Header>
+                            <Dropdown.Item href="/setting">Settings</Dropdown.Item>
+                            <Dropdown.Item>Your Orders</Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
+                        </Dropdown>
+                        {/* <Navbar.Toggle /> */}
+                    </>
+                )}
+                <Navbar.Toggle />
+            </div>
+            <Navbar.Collapse className="ml-auto">
+                {/* style={{ display: 'block', visibility: 'visible', opacity: 1 }}> */}
+                {/* <div className="flex space-x-4 ml-auto"> */}
+                <>
                     {!isLoggedIn && (
                         <Navbar.Link href="/" className="text-lg">Home</Navbar.Link>
                     )}
-                    <Navbar.Link href="#" className="text-lg">About</Navbar.Link>
+                    <Navbar.Link href="/about" className="text-lg">About</Navbar.Link>
                     {isLoggedIn && (
                         <Navbar.Link href="/dashboard" className="text-lg">Dashboard</Navbar.Link>
                     )}
@@ -60,7 +65,8 @@ const AppNavBar = () => {
                     {!isLoggedIn && (
                         <Navbar.Link href="/login" className="text-lg">Login</Navbar.Link>
                     )}
-                </div>
+                    {/* </div> */}
+                </>
             </Navbar.Collapse>
         </Navbar>
     );

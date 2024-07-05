@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { jwtDecode } from "jwt-decode";
 
 
 const Home = () => {

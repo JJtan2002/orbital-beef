@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useAuth } from "./contexts/AuthContext";
 import { DashboardContextProvider } from "./contexts/DashBoardContext";
+import About from "./pages/About";
+import Setting from "./pages/Setting";
 
 const App = () => {
   const apiPrivate = useAxiosPrivate();
@@ -91,6 +93,18 @@ const App = () => {
             <Route path="protected" exact
               element={
                 <Protected
+                />
+              }
+            />
+            <Route path="about" exact
+              element={
+                <About
+                />
+              }
+            />
+            <Route path="setting" exact
+              element={
+                <Setting
                 />
               }
             />
