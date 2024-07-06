@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useTransactions } from "../hooks/useTransactions";
 import { useWallet } from "../hooks/useWallet";
 import { useLabels } from "../hooks/useLabels";
 import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -13,31 +12,8 @@ import 'chart.js/auto';
 import { LinearProgress } from '@mui/material';
 
 const Wallet = () => {
-    // Placeholder data
-
-    const labelsData = [
-        { id: 1, name: 'Groceries' },
-        { id: 2, name: 'Rent' },
-        { id: 3, name: 'Utilities' },
-        { id: 4, name: 'Entertainment' },
-        { id: 5, name: 'Savings' },
-        { id: 6, name: 'Transportation' },
-    ];
-
-    const goalsData = [
-        { labelId: 1, goal: 300 },  // Groceries
-        { labelId: 2, goal: 1000 }, // Rent
-        { labelId: 3, goal: 150 },  // Utilities
-        { labelId: 4, goal: 200 },  // Entertainment
-        { labelId: 5, goal: 500 },  // Savings
-        { labelId: 6, goal: 100 },  // Transportation
-    ];
-
-    const [goals, setGoals] = useState(goalsData);
-
     // hooks
     const { isLoggedIn, user } = useAuth();
-    const { getTransactions, createTransaction, deleteTransaction } = useTransactions();
     const { getWallet, updateWallet } = useWallet();
     const { getLabels, createLabel, deleteLabel, editLabel } = useLabels();
     const [expenseCategories, setExpenseCategories] = useState([]);
