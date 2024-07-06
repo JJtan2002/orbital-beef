@@ -18,6 +18,7 @@ import { useAuth } from "./contexts/AuthContext";
 import { DashboardContextProvider } from "./contexts/DashBoardContext";
 import About from "./pages/About";
 import Setting from "./pages/Setting";
+import Watchlist from "./pages/Watc";
 
 const App = () => {
   const apiPrivate = useAxiosPrivate();
@@ -105,6 +106,12 @@ const App = () => {
             <Route path="setting" exact
               element={
                 <Setting
+                />
+              }
+            />
+            <Route path="watchlist" exact
+              element={
+                <Watchlist
                 />
               }
             />
