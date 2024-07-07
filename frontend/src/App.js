@@ -18,7 +18,7 @@ import { useAuth } from "./contexts/AuthContext";
 import { DashboardContextProvider } from "./contexts/DashBoardContext";
 import About from "./pages/About";
 import Setting from "./pages/Setting";
-import Watchlist from "./pages/Watc";
+import Watchlist from "./pages/Watchlist";
 
 const App = () => {
   const apiPrivate = useAxiosPrivate();
