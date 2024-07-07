@@ -17,7 +17,6 @@ const DashboardContextProvider = ({ children }) => {
         // Initialize with today's date
         return new Date().toLocaleString('en-CA', { timeZone: 'Asia/Singapore' }).split(',')[0];
     });
-    console.log(dateValue)
     const handleDateChange = (event) => {
         setDateValue(event.target.value);
     };
