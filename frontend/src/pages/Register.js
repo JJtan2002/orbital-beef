@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 const Register = () => {
-    const { Register, isLoggedIn } = useAuth();
+    const { Register, isLoggedIn, validateEmail, validatePassword } = useAuth();
     
 
     let navigate = useNavigate();
@@ -19,6 +19,16 @@ const Register = () => {
 
 
     const handleRegister = async (ev) => {
+        ev.preventDefault();
+        if (!validateEmail(ev.target.email.value)) {
+            toast.error("Wrong email format");
+            return;
+        } 
+        if (!validatePassword(ev.target.password.value)) {
+            toast.error("Password should be at least 4 characters long");
+            return;
+        } 
+
         Register(ev);
     };
 

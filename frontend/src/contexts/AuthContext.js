@@ -49,6 +49,26 @@ const AuthContextProvider = ({ children }) => {
         }
     }, [authTokens]);
 
+
+    /**
+     * validate email format
+     * @param {*} email 
+     * @returns 
+     */
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+    
+    /**
+     * validate password length
+     * @param {*} password 
+     * @returns 
+     */
+    const validatePassword = (password) => {
+    return password.length >= 4; // Ensure password is at least 4 characters long
+    };
+
     /**
      * Handle Login
      */
@@ -165,6 +185,7 @@ const AuthContextProvider = ({ children }) => {
             isLoggedIn, authTokens, user,
             setIsLoggedIn, setAuthTokens, setUser,
             Logout, Register, Login, refresh,
+            validateEmail, validatePassword,
         }}>
             {children}
         </AuthContext.Provider>
