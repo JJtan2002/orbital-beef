@@ -19,6 +19,7 @@ import { DashboardContextProvider } from "./contexts/DashBoardContext";
 import About from "./pages/About";
 import Setting from "./pages/Setting";
 import Watchlist from "./pages/Watchlist";
+import Resources from "./pages/Resources";
 
 const App = () => {
   const apiPrivate = useAxiosPrivate();
@@ -112,6 +113,12 @@ const App = () => {
             <Route path="watchlist" exact
               element={
                 <Watchlist
+                />
+              }
+            />
+            <Route path="resources" exact
+              element={
+                <Resources
                 />
               }
             />
