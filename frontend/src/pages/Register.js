@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import React, { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { toast } from "react-toastify";
 
 const Register = () => {
     const { Register, isLoggedIn, validateEmail, validatePassword } = useAuth();
