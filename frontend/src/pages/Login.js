@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const Login = () => {
     let navigate = useNavigate();
 
-    const { Login, isLoggedIn } = useAuth();
+    const { Login, isLoggedIn, validateEmail, validatePassword } = useAuth();
     const TokenObtainURL = process.env.REACT_APP_BACKEND_URL + "/api/token/";
 
     useEffect(() => {
@@ -22,6 +22,15 @@ const Login = () => {
         event.preventDefault();
         const email = event.target.email.value;
         const password = event.target.password.value;
+        if (!validateEmail(email)) {
+            toast.error("Wrong email format");
+            return;
+        } 
+        if (!validatePassword(password)) {
+            toast.error("Password should be at least 4 characters long");
+            return;
+        } 
+
         try {
             const response = await axios.post(TokenObtainURL, { email, password });
             console.log("Login response get!");
