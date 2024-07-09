@@ -20,7 +20,7 @@ const DashboardContextProvider = ({ children }) => {
     const handleDateChange = (event) => {
         setDateValue(event.target.value);
     };
-    const [dateForDisplay, setDates] = useState({ today: '', fiveDaysAgo: '' });
+    const [dateForDisplay, setDates] = useState({ today: '', fiveDaysAgo: '', tenDaysAgo: '' });
 
 
     // hooks
@@ -30,17 +30,20 @@ const DashboardContextProvider = ({ children }) => {
     const { getLabels } = useLabels();
     const [expenseCategories, setExpenseCategories] = useState([]);
     const [incomeCategories, setIncomeCategories] = useState([]);
-
+    const [pieDays, setPieDays] = useState(5);
+    const [barDays, setBarDays] = useState(5);
 
     useEffect(() => {
         // Get today's date
         const today = new Date();
         // Get the date 5 days ago
         const fiveDaysAgo = new Date(today);
+        const tenDaysAgo = new Date(today);
         fiveDaysAgo.setDate(today.getDate() - 5);
+        tenDaysAgo.setDate(today.getDate() - 10);
 
         // Update state with formatted dates
-        setDates({ today: today, fiveDaysAgo: fiveDaysAgo });
+        setDates({ today: today, fiveDaysAgo: fiveDaysAgo, tenDaysAgo: tenDaysAgo });
     }, []);
 
     const {
@@ -73,36 +76,61 @@ const DashboardContextProvider = ({ children }) => {
         queryFn: () => getLabels(),
     });
 
+    //    const {
+    //        refetch: refetchBardata,
+    //        data: bardata,
+    //        isPendingBardata,
+    //        isErrorBardata,
+    //    } = useQuery({
+    //        queryKey: ["api/bardata"],
+    //        queryFn: () => getTransactions(
+    //            /*limit:*/ 0,
+    //            /*charType:*/ 1,
+    //            /*startDate:*/ dateForDisplay.fiveDaysAgo,
+    //            /*endDate:*/ dateForDisplay.today,
+    //        ),
+    //        enabled: !!dateForDisplay.fiveDaysAgo && !!dateForDisplay.today,
+    //    })
+
     const {
         refetch: refetchBardata,
         data: bardata,
         isPendingBardata,
         isErrorBardata,
     } = useQuery({
-        queryKey: ["api/bardata"],
-        queryFn: () => getTransactions(
+        queryKey: ["api/bardata", barDays],
+        queryFn: () => {
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(endDate.getDate() - barDays);
+            return getTransactions(
             /*limit:*/ 0,
             /*charType:*/ 1,
-            /*startDate:*/ dateForDisplay.fiveDaysAgo,
-            /*endDate:*/ dateForDisplay.today,
-        ),
-        enabled: !!dateForDisplay.fiveDaysAgo && !!dateForDisplay.today,
-    })
-
+                startDate,
+                endDate,
+            );
+        },
+        enabled: !!barDays,
+    });
     const {
         refetch: refetchPiedata,
         data: piedata,
         isPendingPiedata,
         isErrorPiedata,
     } = useQuery({
-        queryKey: ["api/piedata"],
-        queryFn: () => getTransactions(
-            0,
-            2,
-            dateForDisplay.fiveDaysAgo,
-            dateForDisplay.today,
-        ),
-        enabled: !!dateForDisplay.fiveDaysAgo && !!dateForDisplay.today,
+        queryKey: ["api/piedata", pieDays],
+        queryFn: () => {
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(endDate.getDate() - pieDays);
+            return getTransactions(
+            /*limit:*/ 0,
+            /*charType:*/ 2,
+                startDate,
+                endDate,
+            );
+        },
+        enabled: !!pieDays,
     })
 
 
@@ -221,8 +249,8 @@ const DashboardContextProvider = ({ children }) => {
 
     return (
         <DashboardContext.Provider value={{
-            transactionType, expenseCategories, incomeCategories, dateValue, 
-            barData, pieData,
+            transactionType, expenseCategories, incomeCategories, dateValue,
+            barData, pieData, pieDays, setPieDays, barDays, setBarDays,
             loading, expenses, wallet, isPending,
             setTransactionType,
             handleTransaction, handleDeleteTransaction, handleDateChange,
