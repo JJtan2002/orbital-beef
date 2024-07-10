@@ -232,3 +232,16 @@ EMAIL_HOST_USER = "orbital.beef.cashflow@gmail.com"
 EMAIL_HOST_PASSWORD = "dtzpryavconjxsjo"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+
+# supabase configuration
+SUPABASE_URL = 'https://cucxcdakmhqmirsalodf.supabase.co'
+SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3hjZGFrbWhxbWlyc2Fsb2RmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxOTM5NzczNiwiZXhwIjoyMDM0OTczNzM2fQ.Yx6eKJHu7BlRi_DLSq-vTdbMkujRDQ60v_6jXpq94CM'
+
+# Default file storage setting
+# DEFAULT_FILE_STORAGE = 'django_storage_supabase.supabase'
+DEFAULT_FILE_STORAGE = 'django_storage_supabase.supabase.SupabaseStorage'
+
+# storage settings for supabase
+SUPABASE_STORAGE_BUCKET = 'profile-pictures'  # Your Supabase storage bucket name
+SUPABASE_STORAGE_URL = SUPABASE_URL
+SUPABASE_STORAGE_KEY = SUPABASE_KEY

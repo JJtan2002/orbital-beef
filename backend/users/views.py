@@ -1,8 +1,11 @@
 from rest_framework.permissions import AllowAny
 from .models import User
+from .serializers import ProfileSerializer
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import permission_classes, api_view
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -34,7 +37,6 @@ def signup(request):
             refresh = RefreshToken.for_user(user)
             refresh['name']=user.name
             refresh['email']=user.email 
-            print(refresh)
             return JsonResponse({
                 'access': str(refresh.access_token),
                 'refresh': str(refresh),
@@ -69,7 +71,6 @@ def forgetpassword(request):
     user = UserModel.objects.get(email=email)
     token = RefreshToken.for_user(user)
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-    print(uidb64)
     frontend_base_url = settings.FRONTEND_BASE_URL
     reset_link = f"{frontend_base_url}/resetPassword/{uidb64}/{token}/"
 
@@ -115,6 +116,19 @@ def resetPassword(request):
     except ( ValueError, User.DoesNotExist):
         return JsonResponse({'error': 'Invalid request'}, status=400)
     
+class ProfileAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileSerializer
+
+    def get(self, request):
+        user: User = request.user
+
+        profile = user.get_profile()
+        print("get profile")
+        profile_serialized = ProfileSerializer(profile)
+        return Response(profile_serialized.data)
+
+
 
 @api_view(["GET", "PUT"])
 @permission_classes([IsAuthenticated])

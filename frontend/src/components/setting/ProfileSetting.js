@@ -4,10 +4,12 @@ import userIcon from "../../images/user.png";
 import { toast } from 'react-toastify';
 import { useProfile } from '../../hooks/useProfile';
 import { useNavigate } from 'react-router-dom';
+import { usePro } from '../../contexts/ProfileContext';
 
 const ProfileSection = () => {
     const { getProfile, editProfile } = useProfile();
     const { isLoggedIn } = useAuth();
+    const { profile } = usePro();
 
     let navigate = useNavigate();
 
@@ -38,7 +40,7 @@ const ProfileSection = () => {
             <form className="w-full mb-8">
                 <div className="grid gap-6 mb-6 grid-cols-1 mb-4 flex items-center justify-center">
                 <div className='flex flex-col ml-5 mr-5'>
-                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="name">
+                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="profile_picture">
                         Profile Picture        
                         </label>
                         <input
@@ -71,7 +73,8 @@ const ProfileSection = () => {
                             type="text"
                             id="name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                            placeholder={"name-placeholder"}
+                            // placeholder={"name-placeholder"}
+                            placeholder={profile?.name}
                             //   onChange={(e) => setName(e.target.value)}
                         />
                     </div>
@@ -83,30 +86,31 @@ const ProfileSection = () => {
                             type="email"
                             id="email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                            placeholder={"email-placeholder"}
+                            // placeholder={"email-placeholder"}
+                            placeholder={profile?.email}
                             //   onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className='flex flex-col ml-5 mr-5'>
-                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="password">
+                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="confirmPassword">
                         Confirm Current Password
                         </label>
                         <input
                             type="password"
-                            id="password"
-                            name='password'
+                            id="confirmPassword"
+                            name='confirmPassword'
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
                             placeholder='password-placeholder'
                         />
                     </div>
                     <div className='flex flex-col ml-5 mr-5'>
-                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="password">
+                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="resetPassword">
                         New Password
                         </label>
                         <input
                             type="password"
-                            id="password"
-                            name='password'
+                            id="resetPassword"
+                            name='resetPassword'
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
                             placeholder='password-placeholder'
                         />

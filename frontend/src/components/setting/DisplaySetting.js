@@ -1,6 +1,18 @@
 import React from "react";
+import { usePro } from "../../contexts/ProfileContext";
 
 const DisplaySetting = () => {
+    const { profile } = usePro();
+    const THEME_CHOICES = [
+        ['light', 'Light'],
+        ['dark', 'Dark'],
+    ]
+
+    const FONT_SIZE_CHOICES = [
+        ['small', 'Small'],
+        ['medium', 'Medium'],
+        ['large', 'Large'],
+    ]
 
     return (
         <>
@@ -12,28 +24,26 @@ const DisplaySetting = () => {
             <form>
                 <div className="grid gap-6 mb-6 grid-cols-2 mb-4 flex items-center justify-center">
                     <div className='flex flex-col ml-5 mr-5'>
-                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="name">
+                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="theme">
                         Theme
                         </label>
-                        <input
-                            type="text"
-                            id="name"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                            placeholder={"name-placeholder"}
-                            //   onChange={(e) => setName(e.target.value)}
-                        />
+                        <select name="theme" id="theme" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" value={profile?.theme}>
+                            {THEME_CHOICES.map((theme) => (
+                                <option key={theme[0]} value={theme[0]}>{theme[1]}</option>
+                            ))
+                            }
+                        </select>
                     </div>
                     <div className='flex flex-col ml-5 mr-5'>
-                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="fontsize">
                         Font Size
                         </label>
-                        <input
-                            type="email"
-                            id="email"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                            placeholder={"email-placeholder"}
-                            //   onChange={(e) => setEmail(e.target.value)}
-                        />
+                        <select name="fontsize" id="fontsize" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" value={profile?.font_size}>
+                            {FONT_SIZE_CHOICES.map((size) => (
+                                <option key={size[0]} value={size[0]}>{size[1]}</option>
+                            ))
+                            }
+                        </select>
                     </div>
                 </div>
                     

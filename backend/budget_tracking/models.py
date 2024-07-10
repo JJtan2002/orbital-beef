@@ -250,7 +250,6 @@ class Transaction(WalletBasedModel):
             transaction.title = data.get("title")
 
         if data.get("label"):
-            print(data)
             custom_label = CustomLabel.objects.get(
                 pk=data.get("label").get("id"))
             if custom_label.wallet != user_wallet:

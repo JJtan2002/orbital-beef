@@ -42,6 +42,13 @@ class UserManager(BaseUserManager):
         for label_data in labels_data:
             label = budget_tracking.models.CustomLabel.create_from_json(label_data, user.pk)
             label.save()
+        
+        
+        # Creation of related profile for the created user
+        profile = Profile.objects.create(
+            user_id = user.pk,
+        )
+        profile.save()
             
         return user
 
@@ -92,6 +99,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         Return all CustomLabels related to that user
         """
         return self.get_wallet().get_labels()
+    
+    def get_profile(self) -> 'Profile':
+        """
+        Return the profile related to that user.
+        """
+        return Profile.objects.get(user_id=self.pk)
 
     def get_name(self):
         """
@@ -99,3 +112,21 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return self.name
 
+
+class Profile(models.Model):
+    THEME_CHOICES = [
+        ('light', 'Light'),
+        ('dark', 'Dark'),
+    ]
+
+    FONT_SIZE_CHOICES = [
+        ('small', 'Small'),
+        ('medium', 'Medium'),
+        ('large', 'Large'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile')
+    # email = user.email
+    profile_picture = models.ImageField(null=True, blank=True)
+    theme = models.CharField(max_length=10, choices=THEME_CHOICES, default='light')
+    font_size = models.CharField(max_length=10, choices=FONT_SIZE_CHOICES, default='medium')

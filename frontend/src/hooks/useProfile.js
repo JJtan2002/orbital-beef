@@ -10,9 +10,10 @@ export function useProfile() {
      */
     async function getProfile () {
         try {
-            const response = await axiosPrivate.get('/users/setProfile/');
+            const response = await axiosPrivate.get('/users/profile/');
             const data = response.data;
-            toast.success(data.message);
+            console.log(data);
+            return data;
         } catch (err) {
             toast.error(err);
         }
@@ -27,6 +28,7 @@ export function useProfile() {
             const response = await axiosPrivate.put('/users/setProfile/');
             const data = response.data;
             toast.success(data.message);
+            return data;
         } catch (err) {
             toast.error(err);
         }

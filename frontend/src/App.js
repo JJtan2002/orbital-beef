@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useAuth } from "./contexts/AuthContext";
 import { DashboardContextProvider } from "./contexts/DashBoardContext";
+import { ProfileContextProvider } from "./contexts/ProfileContext";
 import About from "./pages/About";
 import Setting from "./pages/Setting";
 
@@ -104,8 +105,10 @@ const App = () => {
             />
             <Route path="setting" exact
               element={
-                <Setting
-                />
+                <ProfileContextProvider>
+                  <Setting
+                  />
+                </ProfileContextProvider>
               }
             />
           </Routes>
