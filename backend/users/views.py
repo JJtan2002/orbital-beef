@@ -130,24 +130,10 @@ class ProfileAPIView(APIView):
 
 
 
-@api_view(["GET", "PUT"])
+@api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def setProfile(request):
     user = request.user
-
-    # TODO: implement getProfile view
-    if request.method == "GET":
-        print(user)
-        name = user.name
-        email = user.email
-        print(name)
-        print(email)
-        return JsonResponse({
-            "message": "That is profile information",
-            "name": name,
-            "email": email,
-        })
-    
     # TODO: implement editProfile view
     if request.method == "PUT":
         return JsonResponse({"message": "This is setProfile view"})

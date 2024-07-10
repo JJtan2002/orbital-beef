@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePro } from '../../contexts/ProfileContext';
 
 const ProfileSection = () => {
-    const { getProfile, editProfile } = useProfile();
+    const { editProfile } = useProfile();
     const { isLoggedIn } = useAuth();
     const { profile } = usePro();
 
@@ -63,7 +63,7 @@ const ProfileSection = () => {
             
 
 
-            <form>
+            <form className="w-full mb-8">
                 <div className="grid gap-6 mb-6 grid-cols-2 mb-4 flex items-center justify-center">
                     <div className='flex flex-col ml-5 mr-5'>
                         <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="name">
@@ -91,6 +91,21 @@ const ProfileSection = () => {
                             //   onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
+                </div>
+                    
+                
+                <div className="flex items-center justify-center">
+                    <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                    Update Profile
+                    </button>
+                </div>
+            </form>
+
+            <form>
+                <div className="grid gap-6 mb-6 grid-cols-2 mb-4 flex items-center justify-center">
                     <div className='flex flex-col ml-5 mr-5'>
                         <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="confirmPassword">
                         Confirm Current Password
@@ -115,16 +130,6 @@ const ProfileSection = () => {
                             placeholder='password-placeholder'
                         />
                     </div>
-                </div>
-                    
-                
-                <div className="flex items-center justify-center">
-                    <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                    Update Profile
-                    </button>
                 </div>
             </form>
         </div>
