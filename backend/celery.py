@@ -5,7 +5,7 @@ app = Celery('tasks', broker='redis://localhost:6379/0', backend='redis://localh
 
 app.conf.beat_schedule = {
     'fetch_stock_data': {
-        'task': 'tasks.fetch_stock_data',
+        'task': 'watchlist.tasks.fetch_stock_data',
         'schedule': crontab(hour=0, minute=0),  # Adjust this based on your requirements
     },
 }

@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .serializers import WatchlistSerializer
 from datetime import date
+from watchlist.models import Watchlist
+from .utils import custom_success_response, custom_server_error_response
 
 class WatchlistAPIView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -13,7 +15,8 @@ class WatchlistAPIView(APIView):
 
     def get(self, request):
         user: User = request.user
-        watchlists = user.get_watchlist()
+        watchlists = Watchlist.objects.filter(user=self.request.user)
+
 
         serializer = self.serializer_class(watchlists, many=True)
         return Response(serializer.data)

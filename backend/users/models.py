@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db.models import QuerySet
 import budget_tracking.models
-import watchlist.models
 
 class UserManager(BaseUserManager):
     def create_user(self, name, email, password=None):
@@ -99,10 +98,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         Returns the name of the user.
         """
         return self.name
-
-    def get_watchlist(self) -> QuerySet['Watchlist']:
-        """
-        Return all Watchlists related to that user
-        """
-        return watchlist.models.Watchlist.objects.filter(user=self.request.user)
 

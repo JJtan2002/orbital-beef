@@ -10,7 +10,7 @@ class Watchlist(models.Model):
         return f'{self.user.username} - {self.symbol}'
     
     @staticmethod
-    def create_from_json(data: dict, user_pk: int) -> 'CustomLabel':
+    def create_from_json(data: dict, user_pk: int):
         try:
             user: users.models.User = users.models.User.objects.get(pk=user_pk)
         except users.models.User.DoesNotExist:
@@ -29,3 +29,12 @@ class Watchlist(models.Model):
         watchlist.save()
 
         return watchlist
+    
+class StockData(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    ticker = models.CharField(max_length=10)
+    close_price = models.FloatField()
+    date = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.ticker} - {self.date}"
