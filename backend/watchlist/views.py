@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .serializers import WatchlistSerializer
+from .serializers import WatchlistSerializer, StockDataSerializer
 from datetime import date
-from watchlist.models import Watchlist
+from watchlist.models import Watchlist, StockData
 from .utils import custom_success_response, custom_server_error_response
 
 class WatchlistAPIView(APIView):
@@ -39,3 +39,12 @@ class WatchlistAPIView(APIView):
 
         watchlist.delete()
         return custom_success_response("Ticker deleted with success!")
+    
+class StockDataAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = StockDataSerializer
+
+    def get(self, request):
+        stock_data = StockData.objects.all()
+        serializer = self.serializer_class(stock_data, many=True)
+        return Response(serializer.data)

@@ -1,7 +1,12 @@
 from rest_framework import serializers
-from .models import Watchlist
+from .models import Watchlist, StockData
 
 class WatchlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Watchlist
         fields = ['id', 'symbol', 'entry_price']
+
+class StockDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockData
+        fields = ['id', 'ticker', 'close_price', 'date']
