@@ -5,7 +5,7 @@ export function useWatchlist() {
 
     async function getWatchlist() {
         try {
-            const endpoint = "/watchlist/";
+            const endpoint = "/watchlist/watchlist/";
             const response = await axiosPrivate.get(endpoint);
             const data = response.data;
             return data;
@@ -15,5 +15,17 @@ export function useWatchlist() {
         }
     }
 
-    return { getWatchlist };
+    async function getStockData() {
+        try {
+            const endpoint = "/watchlist/stockdata/";
+            const response = await axiosPrivate.get(endpoint);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    return { getWatchlist, getStockData };
 }

@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 const Watchlist = () => {
     const [counter, setCounter] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-    const { getWatchlist } = useWatchlist();
+    const { getWatchlist, getStockData } = useWatchlist();
 
     const { refetch: refetchWatchlist } = useQuery({
         queryKey: ["api/watchlist"],
@@ -18,6 +18,19 @@ const Watchlist = () => {
     } = useQuery({
         queryKey: ["api/watchlist"],
         queryFn: () => getWatchlist(),
+    });
+
+    const { refetch: refetchStockData } = useQuery({
+        queryKey: ["api/stockdata"],
+        queryFn: () => getStockData(),
+    });
+    const {
+        data: stockdata,
+        isLoading: isPendingStockData,
+        isError: isErrorStockData,
+    } = useQuery({
+        queryKey: ["api/stockdata"],
+        queryFn: () => getStockData(),
     });
 
     const handleInputChange = (e) => {
@@ -47,37 +60,26 @@ const Watchlist = () => {
     };
 
     const [search, setSearch] = useState('');
-    const [stocks, setStocks] = useState([]);
     const [selectedStock, setSelectedStock] = useState(null);
 
-    // Fetch data for stocks and watchlist (dummy data for now)
-    useEffect(() => {
-        // Fetch stocks and watchlist data
-        setStocks([
-            { name: 'AAPL', price: 145, change: 1.2 },
-            { name: 'GOOG', price: 2725, change: -0.3 },
-            { name: 'AMZN', price: 3342, change: 0.5 },
-        ]);
-        setWatchlist(['AAPL', 'AMZN']);
-    }, []);
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
     };
 
-    const handleAddToWatchlist = (stock) => {
+    /*const handleAddToWatchlist = (stock) => {
         setWatchlist([...watchlist, stock.name]);
     };
 
     const handleRemoveFromWatchlist = (stock) => {
         setWatchlist(watchlist.filter(item => item !== stock.name));
     };
+    console.log(stockdata);
+    const filteredStocks = stockdata.filter(stock =>
+        stock.ticker.toLowerCase().includes(search.toLowerCase())
+    );*/
 
-    const filteredStocks = stocks.filter(stock =>
-        stock.name.toLowerCase().includes(search.toLowerCase())
-    );
-
-    return (
+    return !isPendingWatchlist && !isPendingStockData && ((
         <div className="flex flex-col items-center justify-center mt-5">
             <main className="w-full max-w-4xl p-6 space-y-6">
                 <div className="flex flex-wrap -mx-3">
@@ -147,10 +149,11 @@ const Watchlist = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {filteredStocks.map(stock => (
+                        {stockdata.filter(stock =>
+        stock.ticker.toLowerCase().includes(search.toLowerCase())).map(stock => (
                             <tr key={stock.name} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.name}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${stock.price}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.ticker}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${stock.close_price}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.change}%</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                     <button
@@ -174,7 +177,7 @@ const Watchlist = () => {
                 </table>
             </section>
         </div>
-    );
+    ));
 };
 
 export default Watchlist;
