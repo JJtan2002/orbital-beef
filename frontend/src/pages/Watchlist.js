@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useWatchlist } from "../hooks/useWatchlist";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const Watchlist = () => {
-    const [counter, setCounter] = useState('');
+    const [ticker, setTicker] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-    const { getWatchlist, getStockData } = useWatchlist();
+    const { getWatchlist, createWatchlist, deleteWatchlist, getStockData } = useWatchlist();
 
     const { refetch: refetchWatchlist } = useQuery({
         queryKey: ["api/watchlist"],
@@ -33,31 +34,25 @@ const Watchlist = () => {
         queryFn: () => getStockData(),
     });
 
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        setCounter(value);
-
-        // Fetch or filter suggestions based on the input value
-        // Replace this with your actual suggestions logic
-        const allSuggestions = ['AAPL', 'GOOGL', 'MSFT', 'AMZN']; // Example suggestions
-        const filteredSuggestions = allSuggestions.filter(suggestion =>
-            suggestion.toLowerCase().includes(value.toLowerCase())
-        );
-        setSuggestions(filteredSuggestions);
+    const handleDelete = async (stock) => {
+        const watchlistItem = watchlist.find(item => item.symbol === stock.ticker);
+        console.log(watchlistItem);
+        await deleteWatchlist(watchlistItem.id);
+        await refetchWatchlist();
+        return;
     };
 
-    const handleAddCounter = () => {
-        // Add counter to the watchlist
-        console.log('Counter added:', counter);
-        // Clear the input field and suggestions after adding
-        setCounter('');
-        setSuggestions([]);
-    };
+    const handleAddTicker = async (ev) => {
+        ev.preventDefault();
 
-    const handleSuggestionClick = (suggestion) => {
-        setCounter(suggestion);
-        setSuggestions([]);
-    };
+        const formData = {
+            ticker: ev.target.ticker.value,
+            entry: ev.target.entry.value,
+        };
+        await createWatchlist({ counter: formData });
+        await refetchWatchlist();
+        toast.success("Ticker added!");
+    }
 
     const [search, setSearch] = useState('');
     const [selectedStock, setSelectedStock] = useState(null);
@@ -78,40 +73,39 @@ const Watchlist = () => {
     const filteredStocks = stockdata.filter(stock =>
         stock.ticker.toLowerCase().includes(search.toLowerCase())
     );*/
-
+    console.log(watchlist);
     return !isPendingWatchlist && !isPendingStockData && ((
         <div className="flex flex-col items-center justify-center mt-5">
             <main className="w-full max-w-4xl p-6 space-y-6">
                 <div className="flex flex-wrap -mx-3">
-                    <form className="watchlist bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-full md:w-1/2 px-3 mb-6 md:mb-0" onSubmit={handleAddCounter}>
+                    <form className="watchlist bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-full md:w-1/2 px-3 mb-6 md:mb-0"
+                        onSubmit={handleAddTicker}>
                         <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add to Watchlist</h2>
-                        <div className="relative">
-                            <input
-                                type="text"
-                                value={counter}
-                                onChange={handleInputChange}
+
+                        <div className="relative mb-4">
+                            <label htmlFor="ticker" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ticker</label>
+                            <select
+                                id="ticker"
+                                name="ticker"
                                 className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white"
-                                placeholder="Counter"
-                            />
-                            {suggestions.length > 0 && (
-                                <ul className="absolute left-0 right-0 bg-white border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white mt-1">
-                                    {suggestions.map((suggestion, index) => (
-                                        <li
-                                            key={index}
-                                            className="p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
-                                            onClick={() => handleSuggestionClick(suggestion)}
-                                        >
-                                            {suggestion}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
+                            >
+                                <option value="" disabled>Select a ticker</option>
+                                {stockdata.map((stock) => (
+                                    <option id="ticker" name="ticker" key={stock.ticker} value={stock.ticker}>{stock.ticker}</option>
+                                ))
+                                }
+                            </select>
                         </div>
+
+                        <div className="mb-4">
+                            <input name="entry" type="number" step="0.01" id="entry" placeholder="Entry Price" required className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white" />
+                        </div>
+
                         <button
                             type="submit"
                             className="mt-4 w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                         >
-                            Add Counter
+                            Add Ticker
                         </button>
                     </form>
                     <div className="stock-details bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-full md:w-1/2 px-3">
@@ -119,8 +113,8 @@ const Watchlist = () => {
                         <div id="stock-info">
                             {selectedStock ? (
                                 <div>
-                                    <p className="text-sm text-gray-900 dark:text-white">Name: {selectedStock.name}</p>
-                                    <p className="text-sm text-gray-900 dark:text-white">Price: ${selectedStock.price}</p>
+                                    <p className="text-sm text-gray-900 dark:text-white">Name: {selectedStock.ticker}</p>
+                                    <p className="text-sm text-gray-900 dark:text-white">Price: ${selectedStock.close_price}</p>
                                     <p className="text-sm text-gray-900 dark:text-white">Change: {selectedStock.change}%</p>
                                 </div>
                             ) : (
@@ -130,6 +124,8 @@ const Watchlist = () => {
                     </div>
                 </div>
             </main>
+
+
             <section className="search-section w-full max-w-4xl p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <input
                     type="text"
@@ -150,29 +146,32 @@ const Watchlist = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {stockdata.filter(stock =>
-        stock.ticker.toLowerCase().includes(search.toLowerCase())).map(stock => (
-                            <tr key={stock.name} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.ticker}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${stock.close_price}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.change}%</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                    <button
-                                        onClick={() => setSelectedStock(stock)}
-                                        className="text-green-600 hover:text-green-900"
-                                    >
-                                        View Details
-                                    </button>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                    <button
-                                        onClick={() => setSelectedStock(stock)}
-                                        className="text-red-600 hover:text-red-900"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
+                            watchlist.some(item => item.symbol.toLowerCase() === stock.ticker.toLowerCase()))
+                            .filter(stock =>
+                                stock.ticker.toLowerCase().includes(search.toLowerCase()))
+                            .map(stock => (
+                                <tr key={stock.name} className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.ticker}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${stock.close_price}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.change}%</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                        <button
+                                            onClick={() => setSelectedStock(stock)}
+                                            className="text-green-600 hover:text-green-900"
+                                        >
+                                            View Details
+                                        </button>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                        <button
+                                            onClick={() => handleDelete(stock)}
+                                            className="text-red-600 hover:text-red-900"
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </section>

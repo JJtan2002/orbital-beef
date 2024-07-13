@@ -15,6 +15,30 @@ export function useWatchlist() {
         }
     }
 
+    async function createWatchlist({ counter, }) {
+        try {
+            console.log({ counter });
+            const endpoint = "/watchlist/watchlist/";
+            const response = await axiosPrivate.post(endpoint, counter);
+            return await response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    async function deleteWatchlist(
+        watchlist_pk
+    ) {
+        try {
+            const response = await axiosPrivate.delete(`/watchlist/watchlist/${watchlist_pk}/`);
+            return await response.data;
+        } catch (error) {
+            console.log(error);
+        }
+        return null;
+    }
+
     async function getStockData() {
         try {
             const endpoint = "/watchlist/stockdata/";
@@ -27,5 +51,5 @@ export function useWatchlist() {
         }
     }
 
-    return { getWatchlist, getStockData };
+    return { getWatchlist, getStockData, deleteWatchlist, createWatchlist };
 }

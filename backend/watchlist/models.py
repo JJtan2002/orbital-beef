@@ -19,12 +19,12 @@ class Watchlist(models.Model):
         watchlist = Watchlist()
         watchlist.user = user
 
-        if not data.get("symbol"):
+        if not data.get("ticker"):
             raise Exception("Ticker is required.")
-        watchlist.symbol = data.get("symbol")
+        watchlist.symbol = data.get("ticker")
 
-        if data.get("entry_price") is not None:
-            watchlist.is_expense = data.get("entry_price")
+        if data.get("entry") is not None:
+            watchlist.entry_price = data.get("entry")
         
         watchlist.save()
 
