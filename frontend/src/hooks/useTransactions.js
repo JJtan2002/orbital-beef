@@ -35,8 +35,6 @@ export function useTransactions() {
             const newTransaction = {
                 ...transaction,
             };
-            console.log(transaction);
-            console.log(newTransaction);
             const response = await axiosPrivate.post("/budget_tracking/transaction/", newTransaction);
             if (response.status !== 200) return null;
             return await response.data;

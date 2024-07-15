@@ -124,17 +124,53 @@ class ProfileAPIView(APIView):
         user: User = request.user
 
         profile = user.get_profile()
-        print("get profile")
         profile_serialized = ProfileSerializer(profile)
         return Response(profile_serialized.data)
+    
+
+    # /**
+    #  * Edit Profile Information
+    #  * updateField=1 --> change name
+    #  * updateField=2 --> comfirm old password and change to new password
+    #  * updateField=3 --> update display settings
+    #  */
+    def put(self, request):
+        user: User = request.user
+        profile = user.get_profile()
+
+        # get info from endpoint, if there then para exist, if not undefined
+        updateField = request.query_params.get('updateField')
+        name_str = request.query_params.get('name')
+        old_password = request.query_params.get('confirmPassword')
+        new_password = request.query_params.get('resetPassword')
+        theme_str = request.query_params.get('theme')
+        fontsize_str = request.query_params.get('fontsize')
+       
+        if int(updateField) == 1:
+            user.name = name_str
+            user.save()
+            # return the success message and refresh the token?
+            # so that the new user info will be displayed correctly on navigation bar?
+            # I guess just use the refresh function in the frontend after calling this function
+            return JsonResponse({"message": "name changed"})
+        
+        if int(updateField) == 2:
+            # confirm password first, if not correct return message that it's wrong
+            
+            # previous password confirmed, set new password
+            # and return success message, not sure if need to refresh token
+            # maybe in the frontend log out and login again?
+            user.set_password(new_password)
+            user.save()
+            return JsonResponse({"message": "d"})
+
+        if int(updateField) == 3:
+            # need to call the get request again after doing this and refresh the profile context so that can update the page changes
+            profile.theme = theme_str
+            profile.font_size = fontsize_str
+            profile.save()
+            return JsonResponse({"message": "success"})
 
 
-
-@api_view(["PUT"])
-@permission_classes([IsAuthenticated])
-def setProfile(request):
-    user = request.user
-    # TODO: implement editProfile view
-    if request.method == "PUT":
         return JsonResponse({"message": "This is setProfile view"})
     

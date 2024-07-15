@@ -5,28 +5,35 @@ import { toast } from 'react-toastify';
 import { useProfile } from '../../hooks/useProfile';
 import { useNavigate } from 'react-router-dom';
 import { usePro } from '../../contexts/ProfileContext';
+import { useRef } from 'react';
 
 const ProfileSection = () => {
-    const { editProfile } = useProfile();
     const { isLoggedIn } = useAuth();
-    const { profile } = usePro();
+    const { profile, updateName } = usePro();
 
     let navigate = useNavigate();
+    
+    const nameRef = useRef();
+    const passwordRef = useRef();
 
     useEffect(() => {
         if (!isLoggedIn)
             navigate("/");
     }, [isLoggedIn, navigate]);
 
-
-    // useEffect(() => {
-    //     try {
-    //         getProfile();
-    //         editProfile();
-    //     } catch (err) {
-    //         toast.error(err);
-    //     }
-    // }, []);
+    const updateUserName = async (ev) => {
+        ev.preventDefault();
+        const updateData = {
+            name: ev.target.name.value,
+        }
+        try {
+            await updateName(updateData);
+            nameRef.current.reset();
+        } catch (err) {
+            console.log(err);
+        }
+        
+    };
 
     return (
         <div className="w-4/5 mx-auto mt-8 flex flex-col">
@@ -55,7 +62,7 @@ const ProfileSection = () => {
                             type="submit"
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         >
-                            Upload
+                            Upload Profile Picture
                         </button>
                     </div>
                 </div>
@@ -63,7 +70,7 @@ const ProfileSection = () => {
             
 
 
-            <form className="w-full mb-8">
+            <form className="w-full mb-8" onSubmit={updateUserName} ref={nameRef}>
                 <div className="grid gap-6 mb-6 grid-cols-2 mb-4 flex items-center justify-center">
                     <div className='flex flex-col ml-5 mr-5'>
                         <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="name">
@@ -73,8 +80,8 @@ const ProfileSection = () => {
                             type="text"
                             id="name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                            // placeholder={"name-placeholder"}
                             placeholder={profile?.name}
+                            required
                             //   onChange={(e) => setName(e.target.value)}
                         />
                     </div>
@@ -82,14 +89,12 @@ const ProfileSection = () => {
                         <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="email">
                         Email
                         </label>
-                        <input
-                            type="email"
+                        <div
                             id="email"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                            // placeholder={"email-placeholder"}
-                            placeholder={profile?.email}
-                            //   onChange={(e) => setEmail(e.target.value)}
-                        />
+                            className="bg-gray-50 rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        >
+                            {profile?.email}
+                        </div>
                     </div>
                 </div>
                     
@@ -99,12 +104,12 @@ const ProfileSection = () => {
                         type="submit"
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
-                    Update Profile
+                    Update UserName
                     </button>
                 </div>
             </form>
 
-            <form>
+            <form ref={passwordRef}>
                 <div className="grid gap-6 mb-6 grid-cols-2 mb-4 flex items-center justify-center">
                     <div className='flex flex-col ml-5 mr-5'>
                         <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="confirmPassword">
@@ -130,6 +135,15 @@ const ProfileSection = () => {
                             placeholder='password-placeholder'
                         />
                     </div>
+                </div>
+
+                <div className="flex items-center justify-center">
+                    <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                    Reset Password
+                    </button>
                 </div>
             </form>
         </div>
