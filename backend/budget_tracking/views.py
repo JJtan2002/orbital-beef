@@ -194,7 +194,6 @@ def get_transactions(request):
     if int(chart_type) == 1:
         # CHART TYPE == 1: Bar chart grouping by dates
         grouped_transactions_list = transactions.expenses().group_by_dates().add_empty_dates(start_date, end_date)
-        print(grouped_transactions_list)
 
     elif int(chart_type) == 2:
         # CHART TYPE == 2: Pie chart grouping by labels

@@ -162,7 +162,7 @@ class ProfileAPIView(APIView):
             # maybe in the frontend log out and login again?
             user.set_password(new_password)
             user.save()
-            return JsonResponse({"message": "d"})
+            return JsonResponse({"message": "password changed"})
 
         if int(updateField) == 3:
             # need to call the get request again after doing this and refresh the profile context so that can update the page changes

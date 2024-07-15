@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './contexts/AuthContext';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ProfileContextProvider } from "./contexts/ProfileContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,7 +20,9 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
-        <App />
+        <ProfileContextProvider>
+          <App />
+        </ProfileContextProvider>
       </AuthContextProvider>
     </QueryClientProvider>
   </React.StrictMode>

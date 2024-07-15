@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import CashFlowIcon from "../images/cashflow.png"
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
+import { usePro } from "../contexts/ProfileContext";
 
 const AppNavBar = () => {
     let navigate = useNavigate();
 
     const { isLoggedIn, user, Logout } = useAuth();
+    const { profile } = usePro();
 
     const handleLogout = () => {
         Logout();

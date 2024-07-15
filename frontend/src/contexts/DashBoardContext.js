@@ -76,22 +76,7 @@ const DashboardContextProvider = ({ children }) => {
         queryFn: () => getLabels(),
     });
 
-    //    const {
-    //        refetch: refetchBardata,
-    //        data: bardata,
-    //        isPendingBardata,
-    //        isErrorBardata,
-    //    } = useQuery({
-    //        queryKey: ["api/bardata"],
-    //        queryFn: () => getTransactions(
-    //            /*limit:*/ 0,
-    //            /*charType:*/ 1,
-    //            /*startDate:*/ dateForDisplay.fiveDaysAgo,
-    //            /*endDate:*/ dateForDisplay.today,
-    //        ),
-    //        enabled: !!dateForDisplay.fiveDaysAgo && !!dateForDisplay.today,
-    //    })
-
+    
     const {
         refetch: refetchBardata,
         data: bardata,
@@ -112,6 +97,8 @@ const DashboardContextProvider = ({ children }) => {
         },
         enabled: !!barDays,
     });
+
+
     const {
         refetch: refetchPiedata,
         data: piedata,

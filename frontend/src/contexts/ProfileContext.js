@@ -36,6 +36,16 @@ const ProfileContextProvider = ({children}) => {
     };
 
     // TODO: resetPassword
+    const updatePassword = async (updateData) => {
+        try {
+            const response = await editProfile(
+                2,
+                updateData,
+            );
+        } catch (err) {
+            toast.error(err);
+        }
+     }
 
 
     // TODO: update the displaysetting
@@ -43,7 +53,7 @@ const ProfileContextProvider = ({children}) => {
     return (
         <ProfileContext.Provider value = {{
             profile,
-            refetchProfile, updateName,
+            refetchProfile, updateName, updatePassword,
             isPendingProfile,
         }}>
             {children}

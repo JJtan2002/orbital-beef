@@ -105,10 +105,8 @@ const App = () => {
             />
             <Route path="setting" exact
               element={
-                <ProfileContextProvider>
-                  <Setting
-                  />
-                </ProfileContextProvider>
+                <Setting
+                />
               }
             />
           </Routes>

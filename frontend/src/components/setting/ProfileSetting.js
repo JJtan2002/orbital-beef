@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import userIcon from "../../images/user.png";
-import { toast } from 'react-toastify';
-import { useProfile } from '../../hooks/useProfile';
 import { useNavigate } from 'react-router-dom';
 import { usePro } from '../../contexts/ProfileContext';
 import { useRef } from 'react';
+import { toast } from 'react-toastify';
 
 const ProfileSection = () => {
-    const { isLoggedIn } = useAuth();
-    const { profile, updateName } = usePro();
+    const { isLoggedIn, Logout, refresh } = useAuth();
+    const { profile, updateName, updatePassword } = usePro();
 
     let navigate = useNavigate();
     
@@ -18,21 +17,40 @@ const ProfileSection = () => {
 
     useEffect(() => {
         if (!isLoggedIn)
+    
             navigate("/");
     }, [isLoggedIn, navigate]);
 
     const updateUserName = async (ev) => {
         ev.preventDefault();
         const updateData = {
-            name: ev.target.name.value,
-        }
+            name: ev.target.name.value,     
+        };
+
         try {
             await updateName(updateData);
+            await refresh();
             nameRef.current.reset();
         } catch (err) {
             console.log(err);
         }
-        
+    };
+
+    const updateUserPassword = async (ev) => {
+        ev.preventDefault();
+        const updateData = {
+            confirmPassword: ev.target.confirmPassword.value,
+            resetPassword: ev.target.resetPassword.value,
+        };
+
+        try {
+            await updatePassword(updateData);
+            Logout();
+            toast.info("Please log in with new password");
+            navigate("/login")
+        } catch (err) {
+            toast.error(err);
+        }
     };
 
     return (
@@ -109,7 +127,7 @@ const ProfileSection = () => {
                 </div>
             </form>
 
-            <form ref={passwordRef}>
+            <form onSubmit={updateUserPassword} ref={passwordRef}>
                 <div className="grid gap-6 mb-6 grid-cols-2 mb-4 flex items-center justify-center">
                     <div className='flex flex-col ml-5 mr-5'>
                         <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="confirmPassword">
@@ -121,6 +139,7 @@ const ProfileSection = () => {
                             name='confirmPassword'
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
                             placeholder='password-placeholder'
+                            required
                         />
                     </div>
                     <div className='flex flex-col ml-5 mr-5'>
@@ -133,6 +152,7 @@ const ProfileSection = () => {
                             name='resetPassword'
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
                             placeholder='password-placeholder'
+                            required
                         />
                     </div>
                 </div>
