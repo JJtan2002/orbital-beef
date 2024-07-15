@@ -1,20 +1,57 @@
 import React from 'react';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+
 
 const resources = [
     {
-        title: "Resource 1",
-        description: "Description for resource 1.",
-        link: "https://example.com/resource1"
+        title: "Investopedia",
+        description: "A comprehensive resource for financial education, offering articles, tutorials, and dictionary definitions on a wide range of financial topics.",
+        link: "https://www.investopedia.com"
     },
     {
-        title: "Resource 2",
-        description: "Description for resource 2.",
-        link: "https://example.com/resource2"
+        title: "NerdWallet",
+        description: "Provides expert advice, tools, and recommendations on personal finance, including credit cards, loans, investing, and more.",
+        link: "https://www.nerdwallet.com"
     },
-    // Add more resources as needed
+    {
+        title: "The Balance",
+        description: "Features articles on personal finance, investing, saving, and managing money, with practical tips and strategies.",
+        link: "https://www.thebalance.com"
+    },
+    {
+        title: "Morningstar",
+        description: "Offers investment research, data, and analysis, including insights on stocks, mutual funds, ETFs, and retirement planning.",
+        link: "https://www.morningstar.com"
+    },
+    {
+        title: "Yahoo Finance",
+        description: "Provides financial news, data, and analysis, including stock market updates, investment tips, and tools for tracking your portfolio.",
+        link: "https://finance.yahoo.com"
+    },
+    {
+        title: "Bankrate",
+        description: "Specializes in personal finance, providing advice on mortgages, loans, credit cards, and saving strategies.",
+        link: "https://www.bankrate.com"
+    },
+    {
+        title: "Kiplinger",
+        description: "Delivers personal finance advice, business forecasts, and investment insights to help you manage your money and grow your wealth.",
+        link: "https://www.kiplinger.com"
+    }
 ];
 
 const Resources = () => {
+    // hooks
+    const { isLoggedIn, user } = useAuth();
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isLoggedIn)
+            navigate("/");
+    }, [isLoggedIn]);
+
     return (
         <div className="resources-page bg-gray-100 dark:bg-gray-900 p-6">
             <h1 className="text-2xl font-medium text-gray-900 dark:text-white mb-6">Resources</h1>
