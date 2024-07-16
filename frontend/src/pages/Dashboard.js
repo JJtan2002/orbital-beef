@@ -9,6 +9,8 @@ import BarChart from "../components/dashboard/BarChart";
 import PieChart from "../components/dashboard/PieChart";
 import ExpenseList from "../components/dashboard/ExpenseList";
 import { useDash } from "../contexts/DashBoardContext";
+import { usePro } from "../contexts/ProfileContext";
+
 // const QUERY_LIMIT = 5;
 
 
@@ -17,6 +19,7 @@ const Dashboard = () => {
     // hooks
     const { isLoggedIn, user } = useAuth();
     const { isPending } = useDash();
+    const { isPendingProfile } = usePro()
 
     let navigate = useNavigate();
 
@@ -26,7 +29,7 @@ const Dashboard = () => {
     }, [isLoggedIn]);
 
 
-    return isLoggedIn && user && !isPending && (
+    return isLoggedIn && user && !isPending && !isPendingProfile && (
         <div className="flex flex-row items-center justify-center mt-5">
             <div className="flex flex-col items-center justify-center mt-5">
 

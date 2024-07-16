@@ -2,6 +2,7 @@ import React, { createContext, useContext } from 'react';
 import { useProfile } from '../hooks/useProfile';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useAuth } from './AuthContext';
 
 // create context
 const ProfileContext = createContext();
@@ -9,6 +10,7 @@ const ProfileContext = createContext();
 // create context provider
 const ProfileContextProvider = ({children}) => {
     const { getProfile, editProfile } = useProfile();
+    const { isLoggedIn, user } = useAuth();
 
     // refetch profile information
     const {
@@ -19,7 +21,14 @@ const ProfileContextProvider = ({children}) => {
     } = useQuery({
         queryKey: ["api/profile"],
         queryFn: () => getProfile(),
+        enabled: false,
     });
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            refetchProfile();
+        }
+    }, [isLoggedIn, refetchProfile]);
 
 
     // update name field
