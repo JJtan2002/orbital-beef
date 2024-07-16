@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import { toast } from 'react-toastify';
 
 const ProfileSection = () => {
-    const { isLoggedIn, Logout, refresh } = useAuth();
+    const { isLoggedIn, Logout, refresh, validatePassword } = useAuth();
     const { profile, updateName, updatePassword } = usePro();
 
     let navigate = useNavigate();
@@ -43,11 +43,22 @@ const ProfileSection = () => {
             resetPassword: ev.target.resetPassword.value,
         };
 
+        if (!validatePassword(updateData.resetPassword)) {
+            toast.error("Password should be at least 4 characters long");
+            return;
+        }
+
         try {
-            await updatePassword(updateData);
-            Logout();
-            toast.info("Please log in with new password");
-            navigate("/login")
+            const res = await updatePassword(updateData);
+            if (res.success) {
+                Logout();
+                toast.success(res.success);
+                toast.info("Please login with the new password");
+                navigate("/login");
+            } else {
+                toast.error(res.error);
+                passwordRef.current.reset();
+            }
         } catch (err) {
             toast.error(err);
         }

@@ -149,20 +149,15 @@ class ProfileAPIView(APIView):
         if int(updateField) == 1:
             user.name = name_str
             user.save()
-            # return the success message and refresh the token?
-            # so that the new user info will be displayed correctly on navigation bar?
-            # I guess just use the refresh function in the frontend after calling this function
             return JsonResponse({"message": "name changed"})
         
         if int(updateField) == 2:
-            # confirm password first, if not correct return message that it's wrong
-            
-            # previous password confirmed, set new password
-            # and return success message, not sure if need to refresh token
-            # maybe in the frontend log out and login again?
+            if not user.check_password(old_password):
+                return JsonResponse({"error": "Wrong old password!"})
+            # please remember to check the length of the password in the frontend
             user.set_password(new_password)
             user.save()
-            return JsonResponse({"message": "password changed"})
+            return JsonResponse({"success": "password changed"})
 
         if int(updateField) == 3:
             # need to call the get request again after doing this and refresh the profile context so that can update the page changes

@@ -12,7 +12,6 @@ export function useProfile() {
         try {
             const response = await axiosPrivate.get('/users/profile/');
             const data = response.data;
-            console.log(data);
             return data;
         } catch (err) {
             toast.error(err);
@@ -48,7 +47,6 @@ export function useProfile() {
             }
             const response = await axiosPrivate.put(endpoint);
             const data = response.data;
-            console.log(data.message);
             return data;
         } catch (err) {
             toast.error(err);

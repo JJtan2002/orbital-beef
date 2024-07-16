@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, Children } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useProfile } from '../hooks/useProfile';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
@@ -42,6 +42,7 @@ const ProfileContextProvider = ({children}) => {
                 2,
                 updateData,
             );
+            return response;
         } catch (err) {
             toast.error(err);
         }
