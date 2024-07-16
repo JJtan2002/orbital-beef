@@ -9,4 +9,4 @@ class WatchlistSerializer(serializers.ModelSerializer):
 class StockDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockData
-        fields = ['id', 'ticker', 'close_price', 'date']
+        fields = ['id', 'ticker', 'open_price', 'close_price', 'high', 'low', 'date']

@@ -33,8 +33,13 @@ class Watchlist(models.Model):
 class StockData(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     ticker = models.CharField(max_length=10)
+    open_price = models.FloatField()
     close_price = models.FloatField()
-    date = models.DateTimeField()
+    high = models.FloatField()
+    low = models.FloatField()
+    change = models.FloatField()
+    change_percent = models.FloatField()
+    date = models.CharField(max_length=10)
 
     def __str__(self):
         return f"{self.ticker} - {self.date}"
