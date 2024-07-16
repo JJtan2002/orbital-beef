@@ -67,6 +67,16 @@ const ProfileContextProvider = ({children}) => {
         setFontSize(profile?.font_size);
     }, [profile]);
 
+    useEffect(() => {
+        if (themeType === 'dark') {
+            console.log("It's dark!");
+            document.documentElement.classList.add('dark');
+        } else {
+            console.log("nothing");
+            document.documentElement.classList.remove('dark');
+        }
+    }, [themeType]);
+
     const updateDisplay = async () => {
         const updateData = {
             theme: themeType,
