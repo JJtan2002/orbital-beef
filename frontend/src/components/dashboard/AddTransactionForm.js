@@ -7,14 +7,6 @@ const AddTransactionForm = () => {
     const { setTransactionType, handleDateChange, handleTransaction } = useDash();
     const { expenseCategories, incomeCategories, transactionType, dateValue } = useDash();
 
-    // const [formState, setFormState] = useState({
-    //     title: '',
-    //     amount: '',
-    //     type: '',
-    //     label: '',
-    //     // date: dateValue,
-    // });
-
     const formRef = useRef(null);
 
     const cleanAfterSubmit = async (ev) => {

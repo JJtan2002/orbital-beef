@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useProfile } from '../hooks/useProfile';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
@@ -11,6 +11,9 @@ const ProfileContext = createContext();
 const ProfileContextProvider = ({children}) => {
     const { getProfile, editProfile } = useProfile();
     const { isLoggedIn } = useAuth();
+
+    const [themeType, setThemeType] = useState("");
+    const [fontSize, setFontSize] = useState("");
 
     // refetch profile information
     const {
@@ -59,11 +62,38 @@ const ProfileContextProvider = ({children}) => {
 
 
     // TODO: update the displaysetting
+    useEffect(() => {
+        setThemeType(profile?.theme);
+        setFontSize(profile?.font_size);
+    }, [profile]);
+
+    const updateDisplay = async () => {
+        const updateData = {
+            theme: themeType,
+            fontsize: fontSize,
+        }
+
+        try {
+            await editProfile(
+                3,
+                updateData,
+            );
+            await refetchProfile();
+            toast.success("updateDisplay!");
+        } catch (err) {
+            toast.error("Some error occurred!");
+        }
+        
+    };
+
+
 
     return (
         <ProfileContext.Provider value = {{
             profile,
-            refetchProfile, updateName, updatePassword,
+            refetchProfile, updateName, updatePassword, updateDisplay,
+            themeType, fontSize,
+            setThemeType, setFontSize,
             isPendingProfile,
         }}>
             {children}
