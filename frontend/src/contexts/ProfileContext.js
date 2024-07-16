@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { useProfile } from '../hooks/useProfile';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
@@ -10,7 +10,7 @@ const ProfileContext = createContext();
 // create context provider
 const ProfileContextProvider = ({children}) => {
     const { getProfile, editProfile } = useProfile();
-    const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn } = useAuth();
 
     // refetch profile information
     const {
@@ -34,7 +34,7 @@ const ProfileContextProvider = ({children}) => {
     // update name field
     const updateName = async (updateData) => {
         try {
-            const response = await editProfile(
+            await editProfile(
                 1, 
                 updateData,
             );

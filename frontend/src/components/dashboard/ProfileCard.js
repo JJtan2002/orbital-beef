@@ -5,7 +5,7 @@ import { usePro } from "../../contexts/ProfileContext";
 
 
 const ProfileCard = () => {
-    const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn } = useAuth();
     const { profile, isPendingProfile } = usePro();
     
     return isLoggedIn && !isPendingProfile && profile && (
