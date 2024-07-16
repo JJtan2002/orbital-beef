@@ -62,6 +62,12 @@ const AppNavBar = () => {
                     {isLoggedIn && (
                         <Navbar.Link href="/transactions" className="text-lg">Transactions</Navbar.Link>
                     )}
+                    {isLoggedIn && (
+                        <Navbar.Link href="/watchlist" className="text-lg">Watchlist</Navbar.Link>
+                    )}
+                    {isLoggedIn && (
+                        <Navbar.Link href="/resources" className="text-lg">Resources</Navbar.Link>
+                    )}
                     {!isLoggedIn && (
                         <Navbar.Link href="/login" className="text-lg">Login</Navbar.Link>
                     )}
