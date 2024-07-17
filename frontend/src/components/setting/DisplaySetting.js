@@ -16,7 +16,7 @@ const DisplaySetting = () => {
 
     const updateUserDisplay = async (ev) => {
         ev.preventDefault();
-        updateDisplay();
+        updateDisplay(ev);
     };
 
     return (

@@ -12,6 +12,7 @@ const ProfileContextProvider = ({children}) => {
     const { getProfile, editProfile } = useProfile();
     const { isLoggedIn } = useAuth();
 
+    const [theme, setTheme] = useState("");
     const [themeType, setThemeType] = useState("");
     const [fontSize, setFontSize] = useState("");
 
@@ -63,24 +64,23 @@ const ProfileContextProvider = ({children}) => {
 
     // TODO: update the displaysetting
     useEffect(() => {
+        setTheme(profile?.theme);
         setThemeType(profile?.theme);
         setFontSize(profile?.font_size);
     }, [profile]);
 
     useEffect(() => {
-        if (themeType === 'dark') {
-            console.log("It's dark!");
+        if (theme === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
-            console.log("nothing");
             document.documentElement.classList.remove('dark');
         }
-    }, [themeType]);
+    }, [theme]);
 
-    const updateDisplay = async () => {
+    const updateDisplay = async (ev) => {
         const updateData = {
-            theme: themeType,
-            fontsize: fontSize,
+            theme: ev.target.theme.value,
+            fontsize: ev.target.fontsize.value,
         }
 
         try {
@@ -88,7 +88,7 @@ const ProfileContextProvider = ({children}) => {
                 3,
                 updateData,
             );
-            await refetchProfile();
+            refetchProfile();
             toast.success("updateDisplay!");
         } catch (err) {
             toast.error("Some error occurred!");
