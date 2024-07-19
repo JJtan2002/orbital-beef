@@ -2,11 +2,14 @@ from supabase import create_client, Client
 from django.conf import settings
 import os
 import io
+import time
+import httpx
 
 supabase_url = settings.SUPABASE_URL
 supabase_key = settings.SUPABASE_KEY
 
 supabase: Client = create_client(supabase_url, supabase_key)
+
 
 
 
@@ -26,18 +29,33 @@ def upload_file(file, storage_bucket, file_name):
         # Get the bucket instance
         bucket = supabase.storage.from_(storage_bucket)
 
-        # Check if the file already exists
-        existing_file = bucket.download(file_name)
-        if existing_file is not None:
-            print(f"File {file_name} already exists.")
-            # Optionally handle the duplicate case, like renaming the file or skipping upload
-            return None
+        # Generate a new file name if the file already exists
+        original_file_name, file_extension = os.path.splitext(file_name)
+        new_file_name = file_name
+        while True:
+            try:
+                # Check if the file already exists
+                bucket.download(new_file_name)
+                # If it exists, rename the file by appending a timestamp
+                timestamp = int(time.time())
+                new_file_name = f"{original_file_name}_{timestamp}{file_extension}"
+            except Exception:
+                # If file does not exist, break the loop
+                break
+
+        print(f"Final file name to upload: {new_file_name}")
 
         # Upload the file to Supabase
-        response = bucket.upload(file_name, file_content)
-        if response['error']:
-            raise Exception(response['error']['message'])
-        return response['data']['public_url']
+        response = bucket.upload(new_file_name, file_content)
+        print(response)
+        if isinstance(response, httpx.Response):
+            response_json = response.json()
+            if 'error' in response_json:
+                raise Exception(response_json['error'].get('message', 'Unknown error occurred'))
+            return response_json.get('data', {}).get('public_url', None)
+        else:
+            print(f"Unexpected response type: {type(response)}")
+            return None
     except Exception as e:
         print(f"Error uploading file: {e}")
         return None
