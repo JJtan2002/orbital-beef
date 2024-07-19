@@ -9,7 +9,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate';
 const ProfileContext = createContext();
 
 // create context provider
-const ProfileContextProvider = ({children}) => {
+const ProfileContextProvider = ({ children }) => {
     const { getProfile, editProfile } = useProfile();
     const { isLoggedIn } = useAuth();
     const axiosPrivate = useAxiosPrivate();
@@ -23,7 +23,7 @@ const ProfileContextProvider = ({children}) => {
         refetch: refetchProfile,
         data: profile,
         isPendingProfile,
-        isErrorProfile,        
+        isErrorProfile,
     } = useQuery({
         queryKey: ["api/profile"],
         queryFn: () => getProfile(),
@@ -37,10 +37,12 @@ const ProfileContextProvider = ({children}) => {
     }, [isLoggedIn, refetchProfile]);
 
     // update profile_picture field
-    const updateAvatar = async (avatar) => {
+    const updateAvatar = async (formData) => {
         try {
-            const res = await axiosPrivate.put('/users/profile/?updateField=4', {
-                profilepic: avatar,
+            const res = await axiosPrivate.put('/users/profile/?updateField=4', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             console.log(res);
             await refetchProfile();
@@ -54,7 +56,7 @@ const ProfileContextProvider = ({children}) => {
     const updateName = async (updateData) => {
         try {
             await editProfile(
-                1, 
+                1,
                 updateData,
             );
             await refetchProfile();
@@ -74,7 +76,7 @@ const ProfileContextProvider = ({children}) => {
         } catch (err) {
             toast.error(err);
         }
-     }
+    }
 
 
     // TODO: update the displaysetting
@@ -108,13 +110,13 @@ const ProfileContextProvider = ({children}) => {
         } catch (err) {
             toast.error("Some error occurred!");
         }
-        
+
     };
 
 
 
     return (
-        <ProfileContext.Provider value = {{
+        <ProfileContext.Provider value={{
             profile,
             refetchProfile, updateName, updatePassword, updateDisplay, updateAvatar,
             themeType, fontSize,
