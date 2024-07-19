@@ -44,8 +44,8 @@ const ProfileContextProvider = ({ children }) => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log(res);
             await refetchProfile();
+            console.log(profile);
         } catch (err) {
             console.log(err);
         }

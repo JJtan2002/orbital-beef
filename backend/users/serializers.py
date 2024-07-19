@@ -44,4 +44,4 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = Profile
-        fields = ('theme', 'font_size', 'name', 'email')
+        fields = ('theme', 'font_size', 'profile_picture', 'name', 'email')

@@ -11,7 +11,7 @@ const ProfileCard = () => {
     return isLoggedIn && !isPendingProfile && profile && (
         <div className="w-7/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div className="flex flex-col items-center pb-10">
-                <img alt="User Icon" width="96" height="96" src={UserIcon} className="mb-3 rounded-full shadow-lg" />
+                <img alt="User Icon" width="96" height="96" src={profile?.profile_picture} className="mb-3 rounded-full shadow-lg" />
                 <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{profile.name}</h5>
                 <span className="text-sm text-gray-500 dark:text-gray-400">{profile.email}</span>
                 <div className="mt-4 flex space-x-3 lg:mt-6">

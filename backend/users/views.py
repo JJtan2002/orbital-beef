@@ -169,10 +169,9 @@ class ProfileAPIView(APIView):
         
         if int(updateField) == 4:
             data = request.data
-            print(request)
-            print(data)
             url = upload_file(data.get("avatar"), "profile-pictures", "user.png")
-            print(url)
+            profile.profile_picture = url
+            profile.save()
             return JsonResponse({"message": "Profile Image Uploaded."})
 
 

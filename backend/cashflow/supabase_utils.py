@@ -52,7 +52,8 @@ def upload_file(file, storage_bucket, file_name):
             response_json = response.json()
             if 'error' in response_json:
                 raise Exception(response_json['error'].get('message', 'Unknown error occurred'))
-            return response_json.get('data', {}).get('public_url', None)
+            public_url = f"https://cucxcdakmhqmirsalodf.supabase.co/storage/v1/object/public/{response_json.get('Key')}"
+            return public_url
         else:
             print(f"Unexpected response type: {type(response)}")
             return None
