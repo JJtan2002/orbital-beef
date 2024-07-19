@@ -13,6 +13,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from cashflow.supabase_utils import upload_file
 
 
 UserModel = get_user_model()
@@ -165,6 +166,13 @@ class ProfileAPIView(APIView):
             profile.font_size = fontsize_str
             profile.save()
             return JsonResponse({"message": "success"})
+        
+        if int(updateField) == 4:
+            data = request.data
+            print(data)
+            url = upload_file("/avatars", "profile-pictures", "user.png")
+            print(url)
+            return JsonResponse({"message": "Profile Image Uploaded."})
 
 
         return JsonResponse({"message": "This is setProfile view"})

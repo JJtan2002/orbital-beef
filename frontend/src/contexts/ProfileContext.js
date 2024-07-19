@@ -3,6 +3,7 @@ import { useProfile } from '../hooks/useProfile';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 // create context
 const ProfileContext = createContext();
@@ -11,6 +12,7 @@ const ProfileContext = createContext();
 const ProfileContextProvider = ({children}) => {
     const { getProfile, editProfile } = useProfile();
     const { isLoggedIn } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
 
     const [theme, setTheme] = useState("");
     const [themeType, setThemeType] = useState("");
@@ -33,6 +35,19 @@ const ProfileContextProvider = ({children}) => {
             refetchProfile();
         }
     }, [isLoggedIn, refetchProfile]);
+
+    // update profile_picture field
+    const updateAvatar = async (avatar) => {
+        try {
+            const res = await axiosPrivate.put('/users/profile/?updateField=4', {
+                profilepic: avatar,
+            });
+            console.log(res);
+            await refetchProfile();
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
 
     // update name field
@@ -101,7 +116,7 @@ const ProfileContextProvider = ({children}) => {
     return (
         <ProfileContext.Provider value = {{
             profile,
-            refetchProfile, updateName, updatePassword, updateDisplay,
+            refetchProfile, updateName, updatePassword, updateDisplay, updateAvatar,
             themeType, fontSize,
             setThemeType, setFontSize,
             isPendingProfile,

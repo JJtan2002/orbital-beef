@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const ProfileSection = () => {
     const { isLoggedIn, Logout, refresh, validatePassword } = useAuth();
-    const { profile, updateName, updatePassword } = usePro();
+    const { profile, updateName, updatePassword, updateAvatar } = usePro();
 
     let navigate = useNavigate();
     
@@ -35,6 +35,12 @@ const ProfileSection = () => {
             console.log(err);
         }
     };
+
+    const updateUserAvatar = async (ev) => {
+        ev.preventDefault();
+        const avatar = ev.target.avatar.value;
+        await updateAvatar(avatar);
+    }
 
     const updateUserPassword = async (ev) => {
         ev.preventDefault();
@@ -73,17 +79,19 @@ const ProfileSection = () => {
             </div>
 
 
-            <form className="w-full mb-8">
+            <form className="w-full mb-8" onSubmit={updateUserAvatar}>
                 <div className="grid gap-6 mb-6 grid-cols-1 mb-4 flex items-center justify-center">
                 <div className='flex flex-col ml-5 mr-5'>
                         <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="profile_picture">
                         Profile Picture        
                         </label>
                         <input
+                                id='avatar'
                                 type="file"
                                 accept="image/*"
                                 // onChange={handleImageChange}
                                 className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
+                                required
                         />
                     </div>
                     <div className="flex items-center justify-center">

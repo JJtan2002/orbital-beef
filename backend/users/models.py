@@ -48,6 +48,7 @@ class UserManager(BaseUserManager):
         profile = Profile.objects.create(
             user_id = user.pk,
         )
+        profile.profile_picture="https://cucxcdakmhqmirsalodf.supabase.co/storage/v1/object/sign/profile-pictures/user.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9maWxlLXBpY3R1cmVzL3VzZXIucG5nIiwiaWF0IjoxNzIxMzIwNDgyLCJleHAiOjE4MTU5Mjg0ODJ9.IBUPjXodry73OLAXevK7DxgT4hc0obiLrRVp0dKver4&t=2024-07-18T16%3A34%3A42.770Z"
         profile.save()
             
         return user
@@ -127,6 +128,6 @@ class Profile(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile')
     # email = user.email
-    profile_picture = models.ImageField(null=True, blank=True)
+    profile_picture = models.URLField(null=True, blank=True)
     theme = models.CharField(max_length=10, choices=THEME_CHOICES, default='light')
     font_size = models.CharField(max_length=10, choices=FONT_SIZE_CHOICES, default='medium')
