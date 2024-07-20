@@ -19,7 +19,7 @@ const AppNavBar = () => {
     };
 
     return (
-        <Navbar fluid style={{ backgroundColor: "#99cccc" }} rounded>
+        <Navbar fluid className="bg-[#99cccc] dark:bg-[#333333] dark:border-gray-600" rounded>
             <Navbar.Brand>
                 <img
                     src={CashFlowIcon}
