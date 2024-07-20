@@ -12,7 +12,7 @@ const BarChart = () => {
 
     return (
         <div className="w-full max-w-4xl mt-6">
-            <div className="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-medium text-gray-900 dark:text-white">Daily Expenses</h2>
                     <select

@@ -40,7 +40,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="md:h-screen #d1fae5">
+    <div className="min-h-screen bg-white dark:bg-gray-800 dark:text-gray-100">
       <BrowserRouter>
         <ToastContainer />
         <AppNavBar

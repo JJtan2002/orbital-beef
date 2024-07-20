@@ -106,8 +106,8 @@ const Wallet = () => {
     return isLoggedIn && user && !isPendingWallet && !isPendingLabels && (
         <div className="flex flex-col items-center justify-center mt-5">
             {/* Wallet Information and Forms*/}
-            <div className="flex w-full max-w-4xl bg-white justify-center">
-                <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="flex w-full max-w-4xl bg-white justify-center dark:bg-gray-800">
+                <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                     <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Wallet Balance</h2>
                     <div className="mb-4">
                         <label htmlFor="monthly-balance" className="block text-sm font-medium text-gray-700 dark:text-white">Current Amount</label>
@@ -123,7 +123,7 @@ const Wallet = () => {
                     </form>
                 </div>
                 {/* TODO: Add New Goal form*/}
-                <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                     <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create Expense Label and Goal</h2>
                     <form id="transaction-form" className="w-full" onSubmit={handleLabel}>
                         <div className="mb-4">
@@ -152,7 +152,7 @@ const Wallet = () => {
                     </form>
                 </div>
                 {/* TODO: Adjust Goal form*/}
-                <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                     <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Expense Category and Goal</h2>
                     <form id="transaction-form" className="w-full" onSubmit={handleLabelChange}>
                         <div className="mb-4">
@@ -190,7 +190,7 @@ const Wallet = () => {
             </div>
 
             {/* Goals Grid */}
-            <div className="w-full max-w-4xl p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="w-full max-w-4xl p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                 <h2 className="text-xl font-medium text-gray-900 dark:text-white mb-4">Labels and Goals</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {labels.filter(label => label.is_expense).map(label => {

@@ -41,11 +41,11 @@ const About = () => {
     ];
 
     return (
-        <div className="w-4/5 mx-auto mt-8">
+        <div className="w-4/5 mx-auto mt-8 bg-white dark:bg-gray-800 dark:text-gray-100 min-h-screen flex flex-col">
         {sections.map((section, index) => (
             <div
             key={index}
-            className="mb-6 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            className="mb-6 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600"
             >
             <h2 className="text-2xl font-bold text-left mb-4 text-gray-900 dark:text-white">
                 {section.title}

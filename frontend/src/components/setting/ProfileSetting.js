@@ -85,7 +85,7 @@ const ProfileSection = () => {
 
     return (
         <div className="w-4/5 mx-auto mt-8 flex flex-col">
-            <div className="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                 <div className="text-center mb-4">
                     <img width="96" height="96" src={profile?.profile_picture} alt="Profile Icon" className="mx-auto mb-4 rounded-full" />
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Profile</h2>

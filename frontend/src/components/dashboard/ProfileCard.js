@@ -9,7 +9,7 @@ const ProfileCard = () => {
     const { profile, isPendingProfile } = usePro();
     
     return isLoggedIn && !isPendingProfile && profile && (
-        <div className="w-7/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-7/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
             <div className="flex flex-col items-center pb-10">
                 <img alt="User Icon" width="96" height="96" src={profile?.profile_picture} className="mb-3 rounded-full shadow-lg" />
                 <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{profile.name}</h5>
@@ -20,7 +20,7 @@ const ProfileCard = () => {
                         Add friend
                     </a>
                     <a href="#"
-                        className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                        className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700">
                         Message
                     </a>
                 </div>

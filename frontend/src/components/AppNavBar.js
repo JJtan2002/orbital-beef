@@ -32,7 +32,9 @@ const AppNavBar = () => {
                 {isLoggedIn && (
                     <>
                         <Dropdown arrowIcon={false} inline
-                            label={<Avatar alt="User settings" img={profile?.profile_picture} rounded size="lg" />}>
+                            label={<Avatar alt="User settings" img={profile?.profile_picture} rounded size="lg" />}
+                            backgroundColor=""
+                        >
                             <Dropdown.Header>
                                 <span className="block text-sm">{user.name}</span>
                                 <span className="block truncate text-sm font-medium">{user.email}</span>

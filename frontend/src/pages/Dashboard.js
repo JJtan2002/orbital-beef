@@ -30,25 +30,27 @@ const Dashboard = () => {
 
 
     return isLoggedIn && user && !isPending && !isPendingProfile && (
-        <div className="flex flex-row items-center justify-center mt-5">
-            <div className="flex flex-col items-center justify-center mt-5">
+        <div className="flex flex-col items-center justify-center mt-5 bg-white min-h-screen dark:bg-gray-800">
+            <div className="mx-auto flex flex-col items-center justify-center mt-5 mb-6 min-h-screen dark:bg-gray-800">
 
                 {/* User Profile Card and Transaction Form*/}
-                <div className="flex w-full max-w-4xl bg-white justify-center">
+                <div className="flex w-full max-w-4xl bg-white justify-center dark:bg-gray-800">
                     <ProfileCard/>
                     <AddTransactionForm/>
                     <MonthlySummary/>
                 </div>
 
-                <div className="flex w-full max-w-4xl bg-white justify-center">
+                <div className="flex w-full max-w-4xl bg-white justify-center dark:bg-gray-800">
                     {/* Bar Chart for Daily Expenses */}
                     <BarChart/>
                     {/* Pie Chart for Expense Distribution */}
                     <PieChart/>
                 </div>
 
-                {/* 5 Line Short Expense List */}
-                <ExpenseList/>
+                <div className="flex w-full max-w-4xl bg-white justify-center dark:bg-gray-800">
+                     {/* 5 Line Short Expense List */}
+                    <ExpenseList/>
+                </div>
 
             </div>
         </div>
