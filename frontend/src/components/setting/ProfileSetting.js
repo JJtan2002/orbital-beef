@@ -14,6 +14,7 @@ const ProfileSection = () => {
 
     const nameRef = useRef();
     const passwordRef = useRef();
+    const avatarRef = useRef();
 
     useEffect(() => {
         if (!isLoggedIn)
@@ -49,6 +50,7 @@ const ProfileSection = () => {
 
         try {
             await updateAvatar(formData);
+            avatarRef.current.reset();
             console.log("Avatar updated successfully");
         } catch (error) {
             console.error("Error updating avatar:", error);
@@ -92,7 +94,7 @@ const ProfileSection = () => {
                 </div>
 
 
-                <form className="w-full mb-8" onSubmit={updateUserAvatar}>
+                <form className="w-full mb-8" onSubmit={updateUserAvatar} ref={avatarRef}>
                     <div className="grid gap-6 mb-6 grid-cols-1 mb-4 flex items-center justify-center">
                         <div className='flex flex-col ml-5 mr-5'>
                             <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="profile_picture">

@@ -145,7 +145,7 @@ class ProfileAPIView(APIView):
         old_password = request.query_params.get('confirmPassword')
         new_password = request.query_params.get('resetPassword')
         theme_str = request.query_params.get('theme')
-        fontsize_str = request.query_params.get('fontsize')
+        # fontsize_str = request.query_params.get('fontsize')
        
         if int(updateField) == 1:
             user.name = name_str
@@ -163,7 +163,7 @@ class ProfileAPIView(APIView):
         if int(updateField) == 3:
             # need to call the get request again after doing this and refresh the profile context so that can update the page changes
             profile.theme = theme_str
-            profile.font_size = fontsize_str
+            # profile.font_size = fontsize_str
             profile.save()
             return JsonResponse({"message": "success"})
         

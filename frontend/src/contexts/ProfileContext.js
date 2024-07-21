@@ -97,7 +97,7 @@ const ProfileContextProvider = ({ children }) => {
     const updateDisplay = async (ev) => {
         const updateData = {
             theme: ev.target.theme.value,
-            fontsize: ev.target.fontsize.value,
+            // fontsize: ev.target.fontsize.value,
         }
 
         try {

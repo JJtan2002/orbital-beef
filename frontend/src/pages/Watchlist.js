@@ -126,7 +126,7 @@ const Watchlist = () => {
             </main>
 
 
-            <section className="search-section w-full max-w-4xl p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
+            <section className="search-section w-full max-w-4xl p-6 space-y-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                 <input
                     type="text"
                     id="search"

@@ -53,8 +53,8 @@ const Resources = () => {
     }, [isLoggedIn]);
 
     return (
-        <div className="resources-page bg-gray-100 dark:bg-gray-800 p-6">
-            <h1 className="text-2xl font-medium text-gray-900 dark:text-white mb-6">Resources</h1>
+        <div className="resources-page flex flex-col items-center justify-center bg-white dark:bg-gray-800 p-6">
+            <h1 className="text-2xl font-medium font-semibold text-gray-900 dark:text-white mb-6">Resources</h1>
             <div className="w-full max-w-4xl bg-white justify-center space-y-4 dark:bg-gray-800">
                 {resources.map((resource, index) => (
                     <div key={index} className="resource-item bg-white dark:bg-gray-800 p-4 border border-gray-200 dark:border-gray-600 rounded-lg shadow">

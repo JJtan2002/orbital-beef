@@ -42,7 +42,7 @@ const DisplaySetting = () => {
                             }
                         </select>
                     </div>
-                    <div className='flex flex-col ml-5 mr-5'>
+                    {/* <div className='flex flex-col ml-5 mr-5'>
                         <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="fontsize">
                         Font Size
                         </label>
@@ -55,7 +55,7 @@ const DisplaySetting = () => {
                             ))
                             }
                         </select>
-                    </div>
+                    </div> */}
                 </div>
                     
                 
