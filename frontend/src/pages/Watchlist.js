@@ -90,7 +90,7 @@ const Watchlist = () => {
     function renderUnrealizedProfitAndLoss() {
         const entryPrice = findEntryPrice();
         if (entryPrice) {
-            const unrealizedPL = ((entryPrice - selectedStock.close_price) * 100 / entryPrice).toFixed(2);
+            const unrealizedPL = ((selectedStock.close_price - entryPrice) * 100 / entryPrice).toFixed(2);
             const isPositive = unrealizedPL >= 0;
             const plColorClass = isPositive ? 'text-green-500' : 'text-red-500';
             return (
@@ -147,7 +147,13 @@ const Watchlist = () => {
                                         className={`text-sm ${selectedStock.change > 0 ? 'text-green-500' : 'text-red-500'
                                             }`}
                                     >
-                                        Change: {selectedStock.change}%
+                                        Daily Change: {selectedStock.change}
+                                    </p>
+                                    <p
+                                        className={`text-sm ${selectedStock.change > 0 ? 'text-green-500' : 'text-red-500'
+                                            }`}
+                                    >
+                                        Daily % Change: {selectedStock.change_percent}
                                     </p>
                                     {renderEntryPrice()}
                                     {renderUnrealizedProfitAndLoss()}

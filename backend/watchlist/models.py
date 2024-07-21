@@ -38,7 +38,7 @@ class StockData(models.Model):
     high = models.FloatField()
     low = models.FloatField()
     change = models.FloatField()
-    change_percent = models.FloatField()
+    change_percent = models.CharField(max_length=10)
     date = models.CharField(max_length=10)
 
     def __str__(self):
