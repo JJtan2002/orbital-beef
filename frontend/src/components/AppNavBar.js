@@ -40,7 +40,7 @@ const AppNavBar = () => {
                                 <span className="block truncate text-sm font-medium">{user.email}</span>
                             </Dropdown.Header>
                             <Dropdown.Item href="/setting">Settings</Dropdown.Item>
-                            <Dropdown.Item>Your Orders</Dropdown.Item>
+                            {/* <Dropdown.Item>Your Orders</Dropdown.Item> */}
                             <Dropdown.Divider />
                             <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
                         </Dropdown>

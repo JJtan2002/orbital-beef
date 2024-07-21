@@ -18,11 +18,14 @@ const About = () => {
                 "3. Forget Password: find the link in Login Page.",
                 "4. Reset Password: the link in the reset password email will take you to the page.",
                 "5. Add Transaction Record: there is a add transaction card in the Dashboard page.",
-                "6. 6-Day Expense Amount and Distribution Chart: check these charts are in the Dashboard page.",
+                "6. 5/10/15/30-Day Expense Amount and Distribution Chart: check these charts are in the Dashboard page.",
                 "7. Transaction List: you can either check 5 latest added transaction records in the Dashboard page, or check all the transaction records in the Transactions page.",
                 "8. Add and Edit Expense Labels and Goals: you can approach these features in the Wallet page, where you can adjust the goal amount and color(to be displayed on pie chart), also decide whether it is a monthly goal or accumulative goal from the very beginning.",
                 "9. Edit Balance: this feature can be found in Wallet page.",
-                "10. Delete Transaction Records and Labels: there is a trash bin icon with each records, click it will do."
+                "10. Delete Transaction Records and Labels: there is a trash bin icon with each records, click it will do.",
+                "11. Watchlist:",
+                "12. Resource Page: you can access a list of links to finance education websites. We also offer a brief introduction to the websites as guidance for beginers.",
+                "13. Update Settings: you can update your profile photo, account name, password and display theme in the setting page."
             ],
         },
         {

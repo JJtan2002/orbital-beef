@@ -87,7 +87,7 @@ const DashboardContextProvider = ({ children }) => {
         queryFn: () => {
             const endDate = new Date();
             const startDate = new Date();
-            startDate.setDate(endDate.getDate() - barDays);
+            startDate.setDate(endDate.getDate() - barDays + 1);
             return getTransactions(
             /*limit:*/ 0,
             /*charType:*/ 1,
