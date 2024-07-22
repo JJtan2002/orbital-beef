@@ -5,7 +5,7 @@ import django
 from datetime import datetime
 
 API_KEY = 'NBVT8WXYHNR8FKTB'
-TEST_STOCK = 'IBM'  # Using IBM for the test
+TEST_STOCK = 'MSFT'
 
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cashflow.settings')

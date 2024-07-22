@@ -58,6 +58,8 @@ const Watchlist = () => {
             ticker: ev.target.ticker.value,
             entry: ev.target.entry.value,
         };
+        setSelectedTicker('');
+        setEntry('');
         await createWatchlist({ counter: formData });
         await refetchWatchlist();
         toast.success("Ticker added!");
@@ -71,6 +73,18 @@ const Watchlist = () => {
         setSearch(e.target.value);
     };
 
+    const [selectedTicker, setSelectedTicker] = useState('');
+
+
+    const handleSelectTicker = (event) => {
+        setSelectedTicker(event.target.value);
+    };
+
+    const [entry, setEntry] = useState('');
+    
+    const handleInputEntry = (event) => {
+        setEntry(event.target.value);
+    }
     function renderEntryPrice() {
         const entryPrice = findEntryPrice();
         if (entryPrice) {
@@ -115,6 +129,8 @@ const Watchlist = () => {
                                 id="ticker"
                                 name="ticker"
                                 className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white"
+                                value={selectedTicker}
+                                onChange={handleSelectTicker}
                             >
                                 <option value="" disabled>Select a ticker</option>
                                 {stockdata.filter(stock => !watchlist.find(item => item.symbol.toLowerCase() === stock.ticker.toLowerCase()))
@@ -126,7 +142,7 @@ const Watchlist = () => {
                         </div>
 
                         <div className="mb-4">
-                            <input name="entry" type="number" step="0.01" id="entry" placeholder="Entry Price" required className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white" />
+                            <input name="entry" value = {entry} onChange={handleInputEntry} type="number" step="0.01" id="entry" placeholder="Entry Price" required className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white" />
                         </div>
 
                         <button
