@@ -4,7 +4,7 @@ import os
 import django
 from datetime import datetime
 
-API_KEY = 'your_api_key'
+API_KEY = 'NBVT8WXYHNR8FKTB'
 TEST_STOCK = 'IBM'  # Using IBM for the test
 
 # Set up Django environment

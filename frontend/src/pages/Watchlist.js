@@ -141,6 +141,7 @@ const Watchlist = () => {
                         <div id="stock-info">
                             {selectedStock ? (
                                 <div>
+                                    <p className="text-sm text-gray-900 dark:text-white">Date: {selectedStock.date}</p>
                                     <p className="text-sm text-gray-900 dark:text-white">Name: {selectedStock.ticker}</p>
                                     <p className="text-sm text-gray-900 dark:text-white">Price: ${selectedStock.close_price}</p>
                                     <p
