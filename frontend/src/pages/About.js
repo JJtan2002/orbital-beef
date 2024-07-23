@@ -4,14 +4,14 @@ import { toast } from "react-toastify";
 
 const About = () => {
     const FeedbackURL = process.env.REACT_APP_BACKEND_URL + "/users/feedback/";
-    const handleSubmit = (ev) => {
+    const handleSubmit = async (ev) => {
         try {
             const formData = {
                 subject: ev.target.subject.value,
                 content: ev.target.content.value,
             };
-            const res = axios.post(FeedbackURL, formData);
-            const data = res.data;
+            const res = await axios.post(FeedbackURL, formData);
+            const data = await res.data;
             if (data.success)
                 toast.success(data.message);
         } catch (err) {
