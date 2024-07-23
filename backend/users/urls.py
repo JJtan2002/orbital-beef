@@ -11,4 +11,5 @@ urlpatterns = [
     path('forgotPassword/', views.forgetpassword, name="forgetpassword"),
     path('resetPassword/', views.resetPassword, name="resetPassword"),
     path('profile/', ProfileAPIView.as_view(), name='profile'),
+    path('feedback/', views.feedback, name='feedback'),
 ]

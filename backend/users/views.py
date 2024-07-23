@@ -177,3 +177,24 @@ class ProfileAPIView(APIView):
 
         return JsonResponse({"message": "This is setProfile view"})
     
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def feedback(request):
+    subject = request.data.get('subject')
+    content = request.data.get('content')
+
+    send_mail(
+        f'Feedback from CashFlow: {subject}',
+        f'Dear Developer, below is the feedback from CashFlow user:\n\n{content}\n',
+        settings.DEFAULT_FROM_EMAIL,
+        ['jqm002@hotmail.com', 'tanjiajun2002@gmail.com'],
+        fail_silently=False,
+    )
+
+    return JsonResponse({
+        'success': 'true',
+        'message': 'Feedback sent',
+    }, status=200)
+    

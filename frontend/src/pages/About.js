@@ -1,7 +1,22 @@
+import axios from "axios";
 import React, { useRef } from "react";
+import { toast } from "react-toastify";
 
 const About = () => {
-    const handleSubmit = () => {
+    const FeedbackURL = process.env.REACT_APP_BACKEND_URL + "/users/feedback/";
+    const handleSubmit = (ev) => {
+        try {
+            const formData = {
+                subject: ev.target.subject.value,
+                content: ev.target.content.value,
+            };
+            const res = axios.post(FeedbackURL, formData);
+            const data = res.data;
+            if (data.success)
+                toast.success(data.message);
+        } catch (err) {
+            toast.error(err);
+        }
 
     };
 
