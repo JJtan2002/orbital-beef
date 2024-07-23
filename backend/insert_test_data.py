@@ -12,9 +12,9 @@ from watchlist.models import StockData  # Adjusted import path
 
 # Example data to insert
 test_data = [
-    {'ticker': 'AAPL', 'close_price': 150.0, 'date': datetime(2023, 7, 7)},
-    {'ticker': 'MSFT', 'close_price': 280.0, 'date': datetime(2023, 7, 7)},
-    {'ticker': 'GOOGL', 'close_price': 2700.0, 'date': datetime(2023, 7, 7)},
+    {'ticker': 'AAPL', 'open_price': 150.0, 'high': 150.0, 'low': 150.0, 'close_price': 150.0, 'date': "2023-07-07", 'change': 0.0, 'change_percent': '0%'},
+    {'ticker': 'MSFT', 'open_price': 150.0, 'high': 150.0, 'low': 150.0, 'close_price': 150.0, 'date': "2023-07-07", 'change': 0.0, 'change_percent': '0%'},
+    {'ticker': 'GOOGL', 'open_price': 150.0, 'high': 150.0, 'low': 150.0, 'close_price': 150.0, 'date': "2023-07-07", 'change': 0.0, 'change_percent': '0%'},
 ]
 
 # Insert test data
