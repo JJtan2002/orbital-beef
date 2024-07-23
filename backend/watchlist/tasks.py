@@ -8,6 +8,7 @@ STOCKS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'BRK.B', 'XOM','JPM',
           'JNJ', 'V', 'PG', 'MA', 'AVGO', 'CVX', 'COST',
           'PEP', 'ADBE', 'NVDA', 'META', 'WMT'] 
 
+@shared_task
 def fetch_stock_data():
     ticker = TEST_STOCK
     response = requests.get(f'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={API_KEY}')
