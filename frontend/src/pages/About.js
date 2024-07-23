@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 const About = () => {
     const FeedbackURL = process.env.REACT_APP_BACKEND_URL + "/users/feedback/";
     const handleSubmit = async (ev) => {
+        ev.preventDefault();
         try {
             const formData = {
                 subject: ev.target.subject.value,
@@ -12,8 +13,10 @@ const About = () => {
             };
             const res = await axios.post(FeedbackURL, formData);
             const data = await res.data;
-            if (data.success)
+            if (data.success) {
                 toast.success(data.message);
+                formRef.current.reset()   
+            }
         } catch (err) {
             toast.error(err);
         }
@@ -21,6 +24,7 @@ const About = () => {
     };
 
     const contentRef = useRef();
+    const formRef = useRef();
 
     const autoResize = () => {
         const textarea = contentRef.current;
@@ -89,7 +93,7 @@ const About = () => {
         ))}
             <div className="w-full  p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                 <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">Feedback</h5>
-                <form className="flex flex-col flex-col gap-4" onSubmit={handleSubmit}>
+                <form className="flex flex-col flex-col gap-4" onSubmit={handleSubmit} ref={formRef}>
                     <div>
                         <div className="mb-2 block">
                             <label htmlFor="subject" className="text-sm font-medium required">Subject</label>
