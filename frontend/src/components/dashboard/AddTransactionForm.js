@@ -7,14 +7,6 @@ const AddTransactionForm = () => {
     const { setTransactionType, handleDateChange, handleTransaction } = useDash();
     const { expenseCategories, incomeCategories, transactionType, dateValue } = useDash();
 
-    // const [formState, setFormState] = useState({
-    //     title: '',
-    //     amount: '',
-    //     type: '',
-    //     label: '',
-    //     // date: dateValue,
-    // });
-
     const formRef = useRef(null);
 
     const cleanAfterSubmit = async (ev) => {
@@ -31,7 +23,7 @@ const AddTransactionForm = () => {
 
 
     return (
-        <div className="w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full md:w-1/3 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
             <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Transaction</h2>
             <form id="transaction-form" className="w-full" onSubmit={cleanAfterSubmit} ref={formRef}>
                 <div className="mb-4">

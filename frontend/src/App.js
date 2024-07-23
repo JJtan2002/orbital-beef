@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useAuth } from "./contexts/AuthContext";
 import { DashboardContextProvider } from "./contexts/DashBoardContext";
+import { ProfileContextProvider } from "./contexts/ProfileContext";
 import About from "./pages/About";
 import Setting from "./pages/Setting";
 import Watchlist from "./pages/Watchlist";
@@ -39,7 +40,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="md:h-screen #d1fae5">
+    <div className="min-h-screen bg-white dark:bg-gray-800 dark:text-gray-100">
       <BrowserRouter>
         <ToastContainer />
         <AppNavBar

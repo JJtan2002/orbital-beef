@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Profile
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, Token
 
@@ -36,3 +36,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                   'is_active', 'is_staff', 'is_superuser')
         # fields = ('name', 'email', 'password',
         #           'active', 'is_staff', 'admin')
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='user.name', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
+
+    class Meta: 
+        model = Profile
+        fields = ('theme', 'font_size', 'profile_picture', 'name', 'email')

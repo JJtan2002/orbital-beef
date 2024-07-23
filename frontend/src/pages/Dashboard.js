@@ -9,6 +9,8 @@ import BarChart from "../components/dashboard/BarChart";
 import PieChart from "../components/dashboard/PieChart";
 import ExpenseList from "../components/dashboard/ExpenseList";
 import { useDash } from "../contexts/DashBoardContext";
+import { usePro } from "../contexts/ProfileContext";
+
 // const QUERY_LIMIT = 5;
 
 
@@ -17,6 +19,7 @@ const Dashboard = () => {
     // hooks
     const { isLoggedIn, user } = useAuth();
     const { isPending } = useDash();
+    const { isPendingProfile } = usePro()
 
     let navigate = useNavigate();
 
@@ -26,26 +29,28 @@ const Dashboard = () => {
     }, [isLoggedIn]);
 
 
-    return isLoggedIn && user && !isPending && (
-        <div className="flex flex-row items-center justify-center mt-5">
-            <div className="flex flex-col items-center justify-center mt-5">
+    return isLoggedIn && user && !isPending && !isPendingProfile && (
+        <div className="flex flex-col items-center justify-center mt-5 bg-white min-h-screen dark:bg-gray-800">
+            <div className="mx-auto flex flex-col items-center justify-center mt-5 mb-6 min-h-screen dark:bg-gray-800">
 
                 {/* User Profile Card and Transaction Form*/}
-                <div className="flex w-full max-w-4xl bg-white justify-center">
+                <div className="flex flex-wrap w-full max-w-4xl bg-white justify-center dark:bg-gray-800">
                     <ProfileCard/>
                     <AddTransactionForm/>
                     <MonthlySummary/>
                 </div>
 
-                <div className="flex w-full max-w-4xl bg-white justify-center">
+                <div className="flex flex-wrap w-full max-w-4xl bg-white justify-center dark:bg-gray-800">
                     {/* Bar Chart for Daily Expenses */}
                     <BarChart/>
                     {/* Pie Chart for Expense Distribution */}
                     <PieChart/>
                 </div>
 
-                {/* 5 Line Short Expense List */}
-                <ExpenseList/>
+                <div className="flex w-full max-w-4xl bg-white justify-center dark:bg-gray-800">
+                     {/* 5 Line Short Expense List */}
+                    <ExpenseList/>
+                </div>
 
             </div>
         </div>

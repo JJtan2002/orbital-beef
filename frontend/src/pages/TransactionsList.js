@@ -65,10 +65,10 @@ const TransactionsList = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center mt-5">
+        <div className="flex flex-col items-center justify-center mt-5 mb-5">
 
             {/* Transactions List */}
-            <div className="w-full max-w-4xl bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="w-full max-w-4xl bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                 <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Transactions List</h2>
 
                 {/* Filter */}

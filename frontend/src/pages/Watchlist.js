@@ -119,7 +119,7 @@ const Watchlist = () => {
         <div className="flex flex-col items-center justify-center mt-5">
             <main className="w-full max-w-4xl p-6 space-y-6">
                 <div className="flex flex-wrap -mx-3">
-                    <form className="watchlist bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-full md:w-1/2 px-3 mb-6 md:mb-0"
+                    <form className="watchlist bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600 w-full md:w-1/2 px-3 mb-6 md:mb-0"
                         onSubmit={handleAddTicker}>
                         <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add to Watchlist</h2>
 
@@ -152,7 +152,7 @@ const Watchlist = () => {
                             Add Ticker
                         </button>
                     </form>
-                    <div className="stock-details bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-full md:w-1/2 px-3">
+                    <div className="stock-details bg-white p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600 w-full md:w-1/2 px-3">
                         <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Stock Details</h2>
                         <div id="stock-info">
                             {selectedStock ? (
@@ -184,7 +184,7 @@ const Watchlist = () => {
             </main>
 
 
-            <section className="search-section w-full max-w-4xl p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <section className="search-section w-full max-w-4xl p-6 space-y-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                 <input
                     type="text"
                     id="search"

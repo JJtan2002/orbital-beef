@@ -49,7 +49,6 @@ class TransactionsQueryset(models.QuerySet):
 
         for d in all_dates:
             if d not in all_transactions_dates:
-                print(d)
                 grouped_transactions_list.append({'date': d, 'value': 0})
 
         for item in grouped_transactions_list:

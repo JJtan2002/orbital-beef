@@ -1,8 +1,11 @@
 from rest_framework.permissions import AllowAny
 from .models import User
+from .serializers import ProfileSerializer
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import permission_classes, api_view
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -10,6 +13,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from cashflow.supabase_utils import upload_file
 
 
 UserModel = get_user_model()
@@ -34,7 +38,6 @@ def signup(request):
             refresh = RefreshToken.for_user(user)
             refresh['name']=user.name
             refresh['email']=user.email 
-            print(refresh)
             return JsonResponse({
                 'access': str(refresh.access_token),
                 'refresh': str(refresh),
@@ -69,7 +72,6 @@ def forgetpassword(request):
     user = UserModel.objects.get(email=email)
     token = RefreshToken.for_user(user)
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-    print(uidb64)
     frontend_base_url = settings.FRONTEND_BASE_URL
     reset_link = f"{frontend_base_url}/resetPassword/{uidb64}/{token}/"
 
@@ -115,26 +117,63 @@ def resetPassword(request):
     except ( ValueError, User.DoesNotExist):
         return JsonResponse({'error': 'Invalid request'}, status=400)
     
+class ProfileAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileSerializer
 
-@api_view(["GET", "PUT"])
-@permission_classes([IsAuthenticated])
-def setProfile(request):
-    user = request.user
+    def get(self, request):
+        user: User = request.user
 
-    # TODO: implement getProfile view
-    if request.method == "GET":
-        print(user)
-        name = user.name
-        email = user.email
-        print(name)
-        print(email)
-        return JsonResponse({
-            "message": "That is profile information",
-            "name": name,
-            "email": email,
-        })
+        profile = user.get_profile()
+        profile_serialized = ProfileSerializer(profile)
+        return Response(profile_serialized.data)
     
-    # TODO: implement editProfile view
-    if request.method == "PUT":
+
+    # /**
+    #  * Edit Profile Information
+    #  * updateField=1 --> change name
+    #  * updateField=2 --> comfirm old password and change to new password
+    #  * updateField=3 --> update display settings
+    #  */
+    def put(self, request):
+        user: User = request.user
+        profile = user.get_profile()
+
+        # get info from endpoint, if there then para exist, if not undefined
+        updateField = request.query_params.get('updateField')
+        name_str = request.query_params.get('name')
+        old_password = request.query_params.get('confirmPassword')
+        new_password = request.query_params.get('resetPassword')
+        theme_str = request.query_params.get('theme')
+        # fontsize_str = request.query_params.get('fontsize')
+       
+        if int(updateField) == 1:
+            user.name = name_str
+            user.save()
+            return JsonResponse({"message": "name changed"})
+        
+        if int(updateField) == 2:
+            if not user.check_password(old_password):
+                return JsonResponse({"error": "Wrong old password!"})
+            # please remember to check the length of the password in the frontend
+            user.set_password(new_password)
+            user.save()
+            return JsonResponse({"success": "password changed"})
+
+        if int(updateField) == 3:
+            # need to call the get request again after doing this and refresh the profile context so that can update the page changes
+            profile.theme = theme_str
+            # profile.font_size = fontsize_str
+            profile.save()
+            return JsonResponse({"message": "success"})
+        
+        if int(updateField) == 4:
+            data = request.data
+            url = upload_file(data.get("avatar"), "profile-pictures", "user.png")
+            profile.profile_picture = url
+            profile.save()
+            return JsonResponse({"message": "Profile Image Uploaded."})
+
+
         return JsonResponse({"message": "This is setProfile view"})
     

@@ -66,7 +66,7 @@ const AuthContextProvider = ({ children }) => {
      * @returns 
      */
     const validatePassword = (password) => {
-    return password.length >= 4; // Ensure password is at least 4 characters long
+        return password.length >= 4; // Ensure password is at least 4 characters long
     };
 
     /**

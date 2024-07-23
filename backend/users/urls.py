@@ -2,6 +2,7 @@ from rest_framework import routers
 from django.urls import path, include
 
 from . import views
+from .views import ProfileAPIView
 
 
 urlpatterns = [
@@ -9,5 +10,5 @@ urlpatterns = [
     path('verify/', views.verification, name="verification"),
     path('forgotPassword/', views.forgetpassword, name="forgetpassword"),
     path('resetPassword/', views.resetPassword, name="resetPassword"),
-    path('setProfile/', views.setProfile, name="setProfile"),
+    path('profile/', ProfileAPIView.as_view(), name='profile'),
 ]

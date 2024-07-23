@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import CashFlowIcon from "../images/cashflow.png"
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
+import { usePro } from "../contexts/ProfileContext";
 
 const AppNavBar = () => {
     let navigate = useNavigate();
 
     const { isLoggedIn, user, Logout } = useAuth();
+    const { profile } = usePro();
 
     const handleLogout = () => {
         Logout();
@@ -17,7 +19,7 @@ const AppNavBar = () => {
     };
 
     return (
-        <Navbar fluid style={{ backgroundColor: "#99cccc" }} rounded>
+        <Navbar fluid className="bg-[#99cccc] dark:bg-[#333333] dark:border-gray-600" rounded>
             <Navbar.Brand>
                 <img
                     src={CashFlowIcon}
@@ -30,13 +32,15 @@ const AppNavBar = () => {
                 {isLoggedIn && (
                     <>
                         <Dropdown arrowIcon={false} inline
-                            label={<Avatar alt="User settings" img={UserIcon} rounded size="lg" />}>
+                            label={<Avatar alt="User settings" img={profile?.profile_picture} rounded size="lg" />}
+                            backgroundColor=""
+                        >
                             <Dropdown.Header>
                                 <span className="block text-sm">{user.name}</span>
                                 <span className="block truncate text-sm font-medium">{user.email}</span>
                             </Dropdown.Header>
                             <Dropdown.Item href="/setting">Settings</Dropdown.Item>
-                            <Dropdown.Item>Your Orders</Dropdown.Item>
+                            {/* <Dropdown.Item>Your Orders</Dropdown.Item> */}
                             <Dropdown.Divider />
                             <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
                         </Dropdown>
