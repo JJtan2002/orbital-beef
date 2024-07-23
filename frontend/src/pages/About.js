@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useRef } from "react";
 
 const About = () => {
+    const handleSubmit = () => {
+
+    };
+
+    const contentRef = useRef();
+
+    const autoResize = () => {
+        const textarea = contentRef.current;
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
     const sections = [
         {
             title: "Our Mission",
@@ -60,6 +72,43 @@ const About = () => {
             ))}
             </div>
         ))}
+            <div className="w-full  p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
+                <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">Feedback</h5>
+                <form className="flex flex-col flex-col gap-4" onSubmit={handleSubmit}>
+                    <div>
+                        <div className="mb-2 block">
+                            <label htmlFor="subject" className="text-sm font-medium required">Subject</label>
+                        </div>
+                        <input id="subject" type="text" name="subject" placeholder="Enter your subject" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+                        />
+                    </div>
+                    <div>
+                        <div className="mb-2 block">
+                            <label htmlFor="content" className="text-sm font-medium required">Content</label>
+                        </div>
+                        <textarea 
+                            id="content" 
+                            type="text" 
+                            name="content" 
+                            placeholder="Enter your content" 
+                            required
+                            ref={contentRef}
+                            rows={1}
+                            style={{ overflow: 'hidden', resize: 'vertical' }}
+                            onInput={autoResize}
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500 resize:vertical overflow:hidden"
+                        />
+                    </div>
+                    <div className="mt-2 block">
+                        <button type="submit" class="w-full focus:outline-none hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 font-bold rounded-lg text-sm px-5 py-2.5 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
+                            style={{ backgroundColor: "#66cccc" }}
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
