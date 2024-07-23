@@ -2,11 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useWatchlist } from "../hooks/useWatchlist";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+
 
 const Watchlist = () => {
-    const [ticker, setTicker] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
+    const { isLoggedIn, user } = useAuth();
     const { getWatchlist, createWatchlist, deleteWatchlist, getStockData } = useWatchlist();
+
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isLoggedIn)
+            navigate("/");
+    }, [isLoggedIn]);
 
     const { refetch: refetchWatchlist } = useQuery({
         queryKey: ["api/watchlist"],
@@ -49,6 +58,8 @@ const Watchlist = () => {
             ticker: ev.target.ticker.value,
             entry: ev.target.entry.value,
         };
+        setSelectedTicker('');
+        setEntry('');
         await createWatchlist({ counter: formData });
         await refetchWatchlist();
         toast.success("Ticker added!");
@@ -62,18 +73,48 @@ const Watchlist = () => {
         setSearch(e.target.value);
     };
 
-    /*const handleAddToWatchlist = (stock) => {
-        setWatchlist([...watchlist, stock.name]);
+    const [selectedTicker, setSelectedTicker] = useState('');
+
+
+    const handleSelectTicker = (event) => {
+        setSelectedTicker(event.target.value);
     };
 
-    const handleRemoveFromWatchlist = (stock) => {
-        setWatchlist(watchlist.filter(item => item !== stock.name));
-    };
-    console.log(stockdata);
-    const filteredStocks = stockdata.filter(stock =>
-        stock.ticker.toLowerCase().includes(search.toLowerCase())
-    );*/
-    console.log(watchlist);
+    const [entry, setEntry] = useState('');
+    
+    const handleInputEntry = (event) => {
+        setEntry(event.target.value);
+    }
+    function renderEntryPrice() {
+        const entryPrice = findEntryPrice();
+        if (entryPrice) {
+            return <p className="text-sm text-gray-900 dark:text-white">Entry Price: ${entryPrice}</p>;
+        }
+        return null;
+    }
+
+    function findEntryPrice() {
+        if (watchlist) {
+            const foundStock = watchlist.find(item => item.symbol.toLowerCase() === selectedStock.ticker.toLowerCase());
+            return foundStock ? foundStock.entry_price : null;
+        }
+        return null;
+    }
+
+    function renderUnrealizedProfitAndLoss() {
+        const entryPrice = findEntryPrice();
+        if (entryPrice) {
+            const unrealizedPL = ((selectedStock.close_price - entryPrice) * 100 / entryPrice).toFixed(2);
+            const isPositive = unrealizedPL >= 0;
+            const plColorClass = isPositive ? 'text-green-500' : 'text-red-500';
+            return (
+                <p className={`text-sm ${plColorClass} dark:text-white`}>
+                    Unrealized P&L: {unrealizedPL}%
+                </p>
+            );
+        }
+        return null;
+    }
     return !isPendingWatchlist && !isPendingStockData && ((
         <div className="flex flex-col items-center justify-center mt-5">
             <main className="w-full max-w-4xl p-6 space-y-6">
@@ -88,17 +129,20 @@ const Watchlist = () => {
                                 id="ticker"
                                 name="ticker"
                                 className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white"
+                                value={selectedTicker}
+                                onChange={handleSelectTicker}
                             >
                                 <option value="" disabled>Select a ticker</option>
-                                {stockdata.map((stock) => (
-                                    <option id="ticker" name="ticker" key={stock.ticker} value={stock.ticker}>{stock.ticker}</option>
-                                ))
+                                {stockdata.filter(stock => !watchlist.find(item => item.symbol.toLowerCase() === stock.ticker.toLowerCase()))
+                                    .map((stock) => (
+                                        <option id="ticker" name="ticker" key={stock.ticker} value={stock.ticker}>{stock.ticker}</option>
+                                    ))
                                 }
                             </select>
                         </div>
 
                         <div className="mb-4">
-                            <input name="entry" type="number" step="0.01" id="entry" placeholder="Entry Price" required className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white" />
+                            <input name="entry" value = {entry} onChange={handleInputEntry} type="number" step="0.01" id="entry" placeholder="Entry Price" required className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white" />
                         </div>
 
                         <button
@@ -113,9 +157,23 @@ const Watchlist = () => {
                         <div id="stock-info">
                             {selectedStock ? (
                                 <div>
+                                    <p className="text-sm text-gray-900 dark:text-white">Date: {selectedStock.date}</p>
                                     <p className="text-sm text-gray-900 dark:text-white">Name: {selectedStock.ticker}</p>
                                     <p className="text-sm text-gray-900 dark:text-white">Price: ${selectedStock.close_price}</p>
-                                    <p className="text-sm text-gray-900 dark:text-white">Change: {selectedStock.change}%</p>
+                                    <p
+                                        className={`text-sm ${selectedStock.change > 0 ? 'text-green-500' : 'text-red-500'
+                                            }`}
+                                    >
+                                        Daily Change: {selectedStock.change}
+                                    </p>
+                                    <p
+                                        className={`text-sm ${selectedStock.change > 0 ? 'text-green-500' : 'text-red-500'
+                                            }`}
+                                    >
+                                        Daily % Change: {selectedStock.change_percent}
+                                    </p>
+                                    {renderEntryPrice()}
+                                    {renderUnrealizedProfitAndLoss()}
                                 </div>
                             ) : (
                                 <p className="text-sm text-gray-900 dark:text-white">Select a stock to see details</p>
@@ -142,6 +200,7 @@ const Watchlist = () => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Change</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">View</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -149,29 +208,35 @@ const Watchlist = () => {
                             watchlist.some(item => item.symbol.toLowerCase() === stock.ticker.toLowerCase()))
                             .filter(stock =>
                                 stock.ticker.toLowerCase().includes(search.toLowerCase()))
-                            .map(stock => (
-                                <tr key={stock.name} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.ticker}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${stock.close_price}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.change}%</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                        <button
-                                            onClick={() => setSelectedStock(stock)}
-                                            className="text-green-600 hover:text-green-900"
+                            .map(stock => {
+                                return (
+                                    <tr key={stock.name} className="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.ticker}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${stock.close_price}</td>
+                                        <td
+                                            className={`px-6 py-4 whitespace-nowrap text-sm ${stock.change > 0 ? 'text-green-500' : 'text-red-500'
+                                                }`}
                                         >
-                                            View Details
-                                        </button>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                        <button
-                                            onClick={() => handleDelete(stock)}
-                                            className="text-red-600 hover:text-red-900"
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                                            {stock.change}%
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                            <button
+                                                onClick={() => setSelectedStock(stock)}
+                                                className="text-green-600 hover:text-green-900"
+                                            >
+                                                View Details
+                                            </button>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                            <button
+                                                onClick={() => handleDelete(stock)}
+                                                className="text-red-600 hover:text-red-900"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>);
+                            })}
                     </tbody>
                 </table>
             </section>
