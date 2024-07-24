@@ -10,14 +10,14 @@
         },
         {
             "src": "vercel-build.sh",
-            "use": "@vercel/python",
-            "config": {
-                "maxLambdaSize": "15mb",
-                "runtime": "python3.12"
-            }
+            "use": "@vercel/static-build"
         }
     ],
     "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/$1"
+        },
         {
             "src": "/(.*)",
             "dest": "cashflow/wsgi.py"
