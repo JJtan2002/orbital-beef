@@ -195,8 +195,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     # "http://localhost:8000",
     # "http://localhost:3000",
-    "https://orbital-beef-m3.vercel.app",
-    "https://orbital-beef-6446-m3.vercel.app"
+    "https://orbital-beef.vercel.app",
+    "https://orbital-beef-6446.vercel.app"
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -224,7 +224,7 @@ CORS_ALLOW_METHODS = [
 CORS_ALLOW_CREDENTIALS = True
 
 # FRONTEND_BASE_URL = 'http://localhost:3000'
-FRONTEND_BASE_URL = "https://orbital-beef-6446-m3.vercel.app"
+FRONTEND_BASE_URL = "https://orbital-beef-6446.vercel.app"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
