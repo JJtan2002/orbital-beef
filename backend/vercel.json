@@ -10,8 +10,5 @@
             "dest": "cashflow/wsgi.py"
         }
     ],
-    "regions": ["sin1"],
-    "hooks": { 
-        "postbuild": "python manage.py migrate" 
-    }
+    "regions": ["sin1"]
 }
