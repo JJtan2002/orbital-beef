@@ -11,8 +11,8 @@
     ],
     "routes": [
         {
-            "src": "/static/(.*)",
-            "dest": "/static/$1"
+            "src": "/(.*)",
+            "dest": "cashflow/wsgi.py"
         }
     ],
     "regions": ["sin1"],
@@ -21,8 +21,5 @@
             "path": "/api/fetch-stock-data",
             "schedule": "0 0 * * *"
         }
-    ],
-    "scripts": {
-        "build": "./deploy.sh"
-    }
+    ]
 }
