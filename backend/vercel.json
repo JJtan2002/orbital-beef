@@ -1,6 +1,10 @@
 {
     "builds": [
         {
+            "src": "vercel-build.sh",
+            "use": "@vercel/static-build"
+        },
+        {
             "src": "cashflow/wsgi.py",
             "use": "@vercel/python",
             "config": { 
@@ -10,6 +14,10 @@
         }
     ],
     "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/$1"
+        },
         {
             "src": "/(.*)",
             "dest": "cashflow/wsgi.py"
