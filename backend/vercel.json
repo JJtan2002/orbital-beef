@@ -29,5 +29,6 @@
             "path": "/api/fetch-stock-data",
             "schedule": "0 0 * * *"
         }
-    ]
+    ],
+    "outputDirectory": "build"
 }
