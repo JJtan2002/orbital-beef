@@ -76,7 +76,7 @@ const DashboardContextProvider = ({ children }) => {
         queryFn: () => getLabels(),
     });
 
-    
+
     const {
         refetch: refetchBardata,
         data: bardata,
@@ -222,7 +222,7 @@ const DashboardContextProvider = ({ children }) => {
         await refetchExpenses();
         await refetchBardata();
         await refetchPiedata();
-        toast.success("Transaction added!");
+        toast.success(`Transaction ${ev.target.title.value} added!`);
     }
 
     const handleDeleteTransaction = async (transactionId) => {
@@ -231,7 +231,7 @@ const DashboardContextProvider = ({ children }) => {
         await refetchExpenses();
         await refetchBardata();
         await refetchPiedata();
-        toast.warning("Transaction deleted!");
+        toast.warning(`Transaction deleted!`);
     };
 
     return (

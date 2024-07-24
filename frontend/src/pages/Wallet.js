@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useTransactions } from "../hooks/useTransactions";
 import { useWallet } from "../hooks/useWallet";
 import { useLabels } from "../hooks/useLabels";
 import { useQuery } from "@tanstack/react-query";
@@ -16,8 +15,6 @@ const Wallet = () => {
     const { isLoggedIn, user } = useAuth();
     const { getWallet, updateWallet } = useWallet();
     const { getLabels, createLabel, deleteLabel, editLabel } = useLabels();
-    const [expenseCategories, setExpenseCategories] = useState([]);
-    const [incomeCategories, setIncomeCategories] = useState([]);
 
     let navigate = useNavigate();
 
@@ -111,7 +108,7 @@ const Wallet = () => {
                     <h2 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Wallet Balance</h2>
                     <div className="mb-4">
                         <label htmlFor="monthly-balance" className="block text-sm font-medium text-gray-700 dark:text-white">Current Amount</label>
-                        <input type="text" id="monthly-balance" className="w-full p-2 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-800 dark:text-white" value={wallet.current_amount} readOnly />
+                        <input type="text" id="monthly-balance" className="bg-gray-50 rounded-lg block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value={wallet.current_amount} readOnly />
                     </div>
                     <form id="wallet-form" className="w-full" onSubmit={handleWallet}>
                         <div className="mb-4">
