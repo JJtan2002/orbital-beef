@@ -3,16 +3,9 @@
         {
             "src": "vercel-build.sh",
             "use": "@vercel/static-build"
-        },
-        {
-            "src": "cashflow/wsgi.py",
-            "use": "@vercel/python",
-            "config": { 
-                "maxLambdaSize": "15mb", 
-                "runtime": "python3.12" 
-            }
         }
     ],
+    "buildCommand": "python3 -m pip install -r requirements.txt && python3 manage.py makemigrations && python3 manage.py migrate --output dist",
     "routes": [
         {
             "src": "/(.*)",
