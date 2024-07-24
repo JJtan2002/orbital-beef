@@ -10,5 +10,11 @@
             "dest": "cashflow/wsgi.py"
         }
     ],
-    "regions": ["sin1"]
+    "regions": ["sin1"],
+    "crons": [
+        {
+            "path": "/api/fetch-stock-data",
+            "schedule": "*/5 * * * *"
+        }
+    ]
 }
