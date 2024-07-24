@@ -1,4 +1,4 @@
-#!/usr/bin.env bash
+#!/bin.env bash
 
 echo "Building project packaged..."
 python -m pip install -r requirements.txt
