@@ -127,7 +127,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER' : 'postgres.nzzwbbmkhzqkapbyjzhp',
-        'PASSWORD' : 'FUvpKyBXu8aA0H00',
+        'PASSWORD' : 'OfMUYOzpclPNTHuU',
         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
         'PORT': '5432',
     }
@@ -248,7 +248,7 @@ CELERY_TIMEZONE = 'UTC+8'
 
 # supabase configuration
 SUPABASE_URL = 'https://nzzwbbmkhzqkapbyjzhp.supabase.co'
-SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56endiYm1raHpxa2FwYnlqemhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE4Mzc1MDIsImV4cCI6MjAzNzQxMzUwMn0.6ZlI75yQH7fAVjnJadurJoLqNuYYWy1Uw3NBqwYFGBo'
+SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56endiYm1raHpxa2FwYnlqemhwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyMTgzNzUwMiwiZXhwIjoyMDM3NDEzNTAyfQ.aA3O-rl_lRbZ23cvEFxVy6jbpuPz1thSmF96NeSAmlQ'
 
 # Default file storage setting
 # DEFAULT_FILE_STORAGE = 'django_storage_supabase.supabase'
