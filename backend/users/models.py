@@ -48,7 +48,7 @@ class UserManager(BaseUserManager):
         profile = Profile.objects.create(
             user_id = user.pk,
         )
-        profile.profile_picture="https://cucxcdakmhqmirsalodf.supabase.co/storage/v1/object/public/profile-pictures/user%20(1).png"
+        profile.profile_picture="https://nzzwbbmkhzqkapbyjzhp.supabase.co/storage/v1/object/public/profile-pictures/user.png"
         profile.save()
             
         return user
