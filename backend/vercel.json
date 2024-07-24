@@ -30,5 +30,5 @@
             "schedule": "0 0 * * *"
         }
     ],
-    "outputDirectory": "build"
+    "outputDirectory": "dist"
 }
