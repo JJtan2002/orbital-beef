@@ -6,6 +6,6 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     supportFile: 'cypress/support/e2e.js',
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://orbital-beef-6446.vercel.app',
   },
 });
