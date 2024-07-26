@@ -28,7 +28,7 @@ const AppNavBar = () => {
                 />
                 <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">CashFlow</span>
             </Navbar.Brand>
-            <div className="flex md:order-2">
+            <div className="flex md:order-2 ml-5">
                 {isLoggedIn && (
                     <>
                         <Dropdown arrowIcon={false} inline
@@ -36,8 +36,8 @@ const AppNavBar = () => {
                             backgroundColor=""
                         >
                             <Dropdown.Header>
-                                <span className="block text-sm">{user.name}</span>
-                                <span className="block truncate text-sm font-medium">{user.email}</span>
+                                <span className="block text-sm">{profile?.name}</span>
+                                <span className="block truncate text-sm font-medium">{profile?.email}</span>
                             </Dropdown.Header>
                             <Dropdown.Item href="/setting">Settings</Dropdown.Item>
                             {/* <Dropdown.Item>Your Orders</Dropdown.Item> */}

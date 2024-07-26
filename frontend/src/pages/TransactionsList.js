@@ -94,14 +94,14 @@ const TransactionsList = () => {
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white">
                             {currentTransactions.map((transaction) => (
                                 <tr key={transaction.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.value}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.label.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.title}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(transaction.date).toLocaleDateString()}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm">{transaction.value}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm">{transaction.label.name}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm">{transaction.title}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm">{new Date(transaction.date).toLocaleDateString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         <button onClick={() => {
                                             handleDeleteTransaction({ transactionId: transaction.id });
                                         }} className="text-red-600 hover:text-red-900">Delete</button>

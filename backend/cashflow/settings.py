@@ -19,6 +19,10 @@ from celery.schedules import crontab
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -121,17 +125,17 @@ WSGI_APPLICATION = 'cashflow.wsgi.application'
 #     }
 # }"""
 
-# # Official
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER' : 'postgres.cucxcdakmhqmirsalodf',
-#         'PASSWORD' : 'qQUvqDf0QgE67w2Z',
-#         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
-#         'PORT': '5432',
-#     }
-# }
+# Official
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER' : 'postgres.nzzwbbmkhzqkapbyjzhp',
+        'PASSWORD' : 'OfMUYOzpclPNTHuU',
+        'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
+        'PORT': '5432',
+    }
+}
 
 # for testing
 #DATABASES = {
@@ -144,12 +148,12 @@ WSGI_APPLICATION = 'cashflow.wsgi.application'
 #        'PORT': '6543',
 #    }
 #}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -193,10 +197,10 @@ AUTH_USER_MODEL = 'users.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://localhost:3000",
-    # "https://orbital-beef.vercel.app",
-    # "https://orbital-beef-6446.vercel.app"
+    # "http://localhost:8000",
+    # "http://localhost:3000",
+    "https://orbital-beef.vercel.app",
+    "https://orbital-beef-6446.vercel.app"
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -223,8 +227,8 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-FRONTEND_BASE_URL = 'http://localhost:3000'
-# FRONTEND_BASE_URL = "https://orbital-beef-6446.vercel.app"
+# FRONTEND_BASE_URL = 'http://localhost:3000'
+FRONTEND_BASE_URL = "https://orbital-beef-6446.vercel.app"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
@@ -247,8 +251,8 @@ CELERY_BEAT_SCHEDULE = {
 CELERY_TIMEZONE = 'UTC+8'
 
 # supabase configuration
-SUPABASE_URL = 'https://cucxcdakmhqmirsalodf.supabase.co'
-SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3hjZGFrbWhxbWlyc2Fsb2RmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxOTM5NzczNiwiZXhwIjoyMDM0OTczNzM2fQ.Yx6eKJHu7BlRi_DLSq-vTdbMkujRDQ60v_6jXpq94CM'
+SUPABASE_URL = 'https://nzzwbbmkhzqkapbyjzhp.supabase.co'
+SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56endiYm1raHpxa2FwYnlqemhwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyMTgzNzUwMiwiZXhwIjoyMDM3NDEzNTAyfQ.aA3O-rl_lRbZ23cvEFxVy6jbpuPz1thSmF96NeSAmlQ'
 
 # Default file storage setting
 # DEFAULT_FILE_STORAGE = 'django_storage_supabase.supabase'

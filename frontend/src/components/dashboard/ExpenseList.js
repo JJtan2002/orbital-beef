@@ -23,14 +23,14 @@ const ExpenseList = () => {
                         {loading ? (
                             <p>Loading...</p>
                         ) : expenses && (
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-white text-gray-900 divide-y divide-gray-200 dark:bg-gray-700 dark:text-white">
                                 {expenses.map((transaction) => (
                                     <tr key={transaction.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.value}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.label.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.title}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(transaction.date).toLocaleDateString()}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">{transaction.value}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">{transaction.label.name}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">{transaction.title}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">{new Date(transaction.date).toLocaleDateString()}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             <button onClick={() => {
                                                 handleDeleteTransaction({ transactionId: transaction.id });
                                             }} className="text-red-600 hover:text-red-900">Delete</button>
