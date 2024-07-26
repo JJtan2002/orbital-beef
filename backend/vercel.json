@@ -7,17 +7,14 @@
             "config": {
                 "outputDirectory": "dist/"
             }
-        },
-        {
-            "src": "cashflow/wsgi.py",
-            "use": "@vercel/python",
-            "config": { 
-                "maxLambdaSize": "15mb", 
-                "runtime": "python3.12" 
-            }
         }
     ],
     "functions": {
+        "cashflow/wsgi.py": {
+            "runtime": "python3.12",
+            "memory": 3009,
+            "maxDuration": 30
+        },
         "api/fetch-stock-data.py": {
             "runtime":"python3.12",
             "memory": 3009,
