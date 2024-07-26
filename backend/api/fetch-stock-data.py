@@ -2,7 +2,6 @@ import os
 import sys
 import logging
 from django.core.management import execute_from_command_line
-import cashflow
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
