@@ -28,13 +28,12 @@ const AppNavBar = () => {
                 />
                 <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">CashFlow</span>
             </Navbar.Brand>
-            <div className="flex md:order-2">
+            <div className="flex md:order-2 ml-3">
                 {isLoggedIn && (
                     <>
                         <Dropdown arrowIcon={false} inline
                             label={<Avatar alt="User settings" img={profile?.profile_picture} rounded size="lg" />}
                             backgroundColor=""
-                            className="ml-3"
                         >
                             <Dropdown.Header>
                                 <span className="block text-sm">{profile?.name}</span>
