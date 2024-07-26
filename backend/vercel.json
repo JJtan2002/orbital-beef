@@ -15,15 +15,15 @@
                 "maxLambdaSize": "15mb", 
                 "runtime": "python3.12" 
             }
-        },
+        }
+    ],
+    "functions": [
         {
-            "src": "api/fetch-stock-data.py",
-            "use": "@vercel/python",
-            "config": {
-                "maxLambdaSize": "15mb",
-                "runtime": "python3.12"
-            }
-          }
+           "api/fetch-stock-data.py": {
+            "memory": 3009,
+            "maxDuration": 30
+           } 
+        }
     ],
     "routes": [
         {
