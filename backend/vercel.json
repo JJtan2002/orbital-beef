@@ -20,9 +20,10 @@
     "functions": [
         {
            "api/fetch-stock-data.py": {
-            "memory": 3009,
-            "maxDuration": 30
-           } 
+                "runtime":"python3.12",
+                "memory": 3009,
+                "maxDuration": 30
+            } 
         }
     ],
     "routes": [
