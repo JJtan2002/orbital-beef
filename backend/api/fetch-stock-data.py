@@ -7,6 +7,12 @@ from django.core.management import execute_from_command_line
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # This should be the 'backend' directory
+print(project_root)
+sys.path.append(project_root)
+
+# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cashflow.settings')
 
 def handler(event, context):
