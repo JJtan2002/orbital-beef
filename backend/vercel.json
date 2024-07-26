@@ -16,14 +16,14 @@
             }
         },
         {
-            "src": "api/fetch-stock-data.js",
+            "src": "api/fetch-stock-data.py",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/api/fetch-stock-data",
-            "dest": "/api/fetch-stock-data.js"
+            "dest": "/api/fetch-stock-data.py"
         },
         {
             "src": "/(.*)",
@@ -34,7 +34,7 @@
     "crons": [
         {
             "path": "/api/fetch-stock-data",
-            "schedule": "50 9 * * *"
+            "schedule": "0 15 * * *"
         }
     ],
     "outputDirectory": "dist/"
