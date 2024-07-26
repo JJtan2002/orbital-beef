@@ -22,19 +22,19 @@
     ],
     "routes": [
         {
-            "src": "/(.*)",
-            "dest": "cashflow/wsgi.py"
-        },
-        {
             "src": "/api/fetch-stock-data",
             "dest": "/api/fetch-stock-data.js"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "cashflow/wsgi.py"
         }
     ],
     "regions": ["sin1"],
     "crons": [
         {
             "path": "/api/fetch-stock-data",
-            "schedule": "0 3 * * *"
+            "schedule": "40 9 * * *"
         }
     ],
     "outputDirectory": "dist/"
