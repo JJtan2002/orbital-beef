@@ -93,7 +93,7 @@ const About = () => {
             ))}
             <div className="w-full  p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                 <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">Feedback</h5>
-                <form className="flex flex-col flex-col gap-4" onSubmit={handleSubmit} ref={formRef}>
+                <form className="flex flex-col flex-col gap-4 mb-4" onSubmit={handleSubmit} ref={formRef}>
                     <div>
                         <div className="mb-2 block">
                             <label htmlFor="subject" className="text-sm font-medium required">Subject</label>

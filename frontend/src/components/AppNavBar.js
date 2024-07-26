@@ -28,7 +28,7 @@ const AppNavBar = () => {
                 />
                 <span className="self-center whitespace-nowrap text-3xl font-semibold dark:text-white">CashFlow</span>
             </Navbar.Brand>
-            <div className="flex md:order-2 ml-3">
+            <div className="flex md:order-2 ml-5">
                 {isLoggedIn && (
                     <>
                         <Dropdown arrowIcon={false} inline
