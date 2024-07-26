@@ -34,7 +34,7 @@
     "crons": [
         {
             "path": "/api/fetch-stock-data",
-            "schedule": "31 2 * * *"
+            "schedule": "35 2 * * *"
         }
     ],
     "outputDirectory": "dist/"
