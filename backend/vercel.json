@@ -1,4 +1,5 @@
 {
+    "version": 2,
     "builds": [
         {
             "src": "vercel-build.sh",
@@ -14,9 +15,21 @@
                 "maxLambdaSize": "15mb", 
                 "runtime": "python3.12" 
             }
-        }
+        },
+        {
+            "src": "api/fetch-stock-data.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "15mb",
+                "runtime": "python3.12"
+            }
+          }
     ],
     "routes": [
+        {
+            "src": "/api/fetch-stock-data",
+            "dest": "/api/fetch-stock-data.py"
+        },
         {
             "src": "/(.*)",
             "dest": "cashflow/wsgi.py"
