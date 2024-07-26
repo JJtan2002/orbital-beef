@@ -16,9 +16,13 @@
             }
         },
         {
-            "src": "api/fetch-stock-data.py",
-            "use": "@vercel/node"
-        }
+            "src": "api/fetch_stock_data.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "15mb",
+                "runtime": "python3.12"
+            }
+          }
     ],
     "routes": [
         {
