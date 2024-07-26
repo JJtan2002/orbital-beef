@@ -210,7 +210,7 @@ const Watchlist = () => {
                                 stock.ticker.toLowerCase().includes(search.toLowerCase()))
                             .map(stock => {
                                 return (
-                                    <tr key={stock.name} className="hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-500">
+                                    <tr key={stock.name} className="hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600">
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{stock.ticker}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${stock.close_price}</td>
                                         <td

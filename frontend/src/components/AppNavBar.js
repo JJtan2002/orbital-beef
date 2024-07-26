@@ -34,6 +34,7 @@ const AppNavBar = () => {
                         <Dropdown arrowIcon={false} inline
                             label={<Avatar alt="User settings" img={profile?.profile_picture} rounded size="lg" />}
                             backgroundColor=""
+                            className="ml-3"
                         >
                             <Dropdown.Header>
                                 <span className="block text-sm">{profile?.name}</span>
@@ -70,7 +71,7 @@ const AppNavBar = () => {
                         <Navbar.Link href="/watchlist" className="text-lg">Watchlist</Navbar.Link>
                     )}
                     {isLoggedIn && (
-                        <Navbar.Link href="/resources" className="text-lg">Resources     </Navbar.Link>
+                        <Navbar.Link href="/resources" className="text-lg">Resources</Navbar.Link>
                     )}
                     {!isLoggedIn && (
                         <Navbar.Link href="/login" className="text-lg">Login</Navbar.Link>

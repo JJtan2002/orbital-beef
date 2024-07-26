@@ -32,6 +32,7 @@ const ProfileSection = () => {
             await updateName(updateData);
             await refresh();
             nameRef.current.reset();
+            toast.success("Username updated!");
         } catch (err) {
             console.log(err);
         }
@@ -51,7 +52,7 @@ const ProfileSection = () => {
         try {
             await updateAvatar(formData);
             avatarRef.current.reset();
-            console.log("Avatar updated successfully");
+            toast.success("Avatar updated successfully");
         } catch (error) {
             console.error("Error updating avatar:", error);
         }
