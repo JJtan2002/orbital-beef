@@ -14,19 +14,27 @@
                 "maxLambdaSize": "15mb", 
                 "runtime": "python3.12" 
             }
+        },
+        {
+            "src": "api/fetch-stock-data.js",
+            "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
             "dest": "cashflow/wsgi.py"
+        },
+        {
+            "src": "/api/fetch-stock-data",
+            "dest": "/api/fetch-stock-data.js"
         }
     ],
     "regions": ["sin1"],
     "crons": [
         {
             "path": "/api/fetch-stock-data",
-            "schedule": "0 0 * * *"
+            "schedule": "20 10 * * *"
         }
     ],
     "outputDirectory": "dist/"

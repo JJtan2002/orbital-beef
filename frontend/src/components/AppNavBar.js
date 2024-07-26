@@ -36,8 +36,8 @@ const AppNavBar = () => {
                             backgroundColor=""
                         >
                             <Dropdown.Header>
-                                <span className="block text-sm">{user.name}</span>
-                                <span className="block truncate text-sm font-medium">{user.email}</span>
+                                <span className="block text-sm">{profile?.name}</span>
+                                <span className="block truncate text-sm font-medium">{profile?.email}</span>
                             </Dropdown.Header>
                             <Dropdown.Item href="/setting">Settings</Dropdown.Item>
                             {/* <Dropdown.Item>Your Orders</Dropdown.Item> */}
@@ -70,7 +70,7 @@ const AppNavBar = () => {
                         <Navbar.Link href="/watchlist" className="text-lg">Watchlist</Navbar.Link>
                     )}
                     {isLoggedIn && (
-                        <Navbar.Link href="/resources" className="text-lg">Resources</Navbar.Link>
+                        <Navbar.Link href="/resources" className="text-lg">Resources  </Navbar.Link>
                     )}
                     {!isLoggedIn && (
                         <Navbar.Link href="/login" className="text-lg">Login</Navbar.Link>
