@@ -27,14 +27,14 @@
         },
         {
             "src": "/api/fetch-stock-data",
-            "dest": "/api/fetch-stock-data.js"
+            "dest": "api/fetch-stock-data.js"
         }
     ],
     "regions": ["sin1"],
     "crons": [
         {
-            "path": "/api/fetch-stock-data",
-            "schedule": "0 3 * * *"
+            "path": "api/fetch-stock-data",
+            "schedule": "30 9 * * *"
         }
     ],
     "outputDirectory": "dist/"
